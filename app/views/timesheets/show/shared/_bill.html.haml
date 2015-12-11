@@ -1,0 +1,74 @@
+%table.table.table-hover.bill-sheet
+  %thead
+    %tr
+      %thead.text-left{:style=> "padding-left:29px"}
+        %th Item
+        %th.text-right Price ($)
+  %tbody
+    %tr 
+      %td Salary
+      %td.text-right= number_to_currency(@timesheet.user.fixed_salery)
+    - if @user_bonus
+      %tr
+        %td
+          .text-accent Bonus
+        %td.text-right= @user_bonus.payable.price
+
+    - if @approved_visits
+      - if @approved_visits.any?
+        %tr
+          %td
+            .text-accent Visits 
+          %td= ""
+      - @approved_visits.each do |visit|
+        %tr
+          %td= link_to billed_visit_title(visit), main_app.visit_path(visit)
+          %td.text-right= number_to_currency(visit.total_price)
+
+    - if @approved_hours 
+      - if @approved_hours.any?
+        %tr
+          %td
+            .text-accent Hours 
+          %td= ""
+      - @approved_hours.each do |hour|
+        %tr
+          %td= link_to billed_hour_title(hour), main_app.hour_path(hour)
+          %td.text-right= number_to_currency(hour.total_price)
+
+    - if @approved_on_calls
+      - if @approved_on_calls.any?
+        %tr
+          %td
+            .text-accent On Call 
+          %td= ""
+      - @approved_on_calls.each do |on_call|
+        %tr
+          %td= on_call.payable.date.strftime("%Y/%m/%d")
+          %td.text-right= number_to_currency(on_call.payable.user.on_call_price)
+
+    - if @approved_reimb
+      - if @approved_reimb.any?
+        %tr
+          %td
+            .text-accent Reimbursements
+          %td= ""
+      - @approved_reimb.each do |reimb|
+        %tr
+          %td= reimb.payable.reimbursement.title
+          %td.text-right
+            = reimbursement_price(reimb)
+    %tr
+      %td= ""
+      %td= ""
+    %tr
+      %td.text-accent Total
+      %td.text-right
+        - total_price_hash = {}
+        - total_price_hash[:fixed_salery] = @timesheet.user.fixed_salery if @timesheet.user.fixed_salery
+        - total_price_hash[:visits] = @approved_visits if @pending_visits
+        - total_price_hash[:hours] = @approved_hours if @pending_hours
+        - total_price_hash[:on_call] = @approved_on_calls if @pending_on_calls
+        - total_price_hash[:reimb] = @approved_reimb if @pending_reimb
+        - total_price_hash[:bonus] = @user_bonus.payable.price if @user_bonus
+        %strong.text-accent= number_to_currency(calculate_total_price(total_price_hash))

@@ -1,0 +1,67 @@
+
+<section class="content">
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Default box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Form Types</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" ><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+          <div class="box-body">
+
+            <table id="form_types" class="table table-bordered table-striped">
+
+
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Create</th>
+              <th>Edit</th>
+              <th>View</th>
+              <th>Controls</th>
+
+            </tr>
+            </thead>
+            <tr>
+              <td>100</td>
+              <td><a href="/form_type_edit">HR Form</a></td>
+              <td>HR</td>
+              <td>HR</td>
+              <td>Employee</td>
+              <td class="text-center"><button class="btn btn-box-tool" ><i class="fa fa-eye"></i></button> <button class="btn btn-box-tool" ><i class="fa fa-edit"></i></button> <button class="btn btn-box-tool" ><i class="fa fa-times"></i></button></td>            </tr>
+            <tr>
+              <td>101</td>
+              <td><a href="/form_type_edit">Timesheet</a></td>
+              <td>Employee</td>
+              <td>Supervisor</td>
+              <td>Supervisor, Employee</td>
+              <td class="text-center"><button class="btn btn-box-tool" ><i class="fa fa-eye"></i></button> <button class="btn btn-box-tool" ><i class="fa fa-edit"></i></button> <button class="btn btn-box-tool" ><i class="fa fa-times"></i></button></td>            </tr>
+
+            <tr>
+              <td>101</td>
+              <td><a href="/form_type_edit">Nurse Visit</a></td>
+              <td>Nurse</td>
+              <td>Nurse</td>
+              <td>Nurse, Supervisor</td>
+              <td class="text-center"><button class="btn btn-box-tool" ><i class="fa fa-eye"></i></button> <button class="btn btn-box-tool" ><i class="fa fa-edit"></i></button> <button class="btn btn-box-tool" ><i class="fa fa-times"></i></button></td>
+            </tr>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- page script -->
+<script type="text/javascript">
+
+  $(function () {
+    $('#form_types').dataTable({ });
+  });
+</script>

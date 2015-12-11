@@ -1,0 +1,23 @@
+%h1 Listing user_documents
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Document type
+      %th
+      %th
+      %th
+
+  %tbody
+    - @user_documents.each do |user_document|
+      %tr
+        %td= user_document.user_id
+        %td= user_document.document_type_id
+        %td= link_to 'Show', user_document
+        %td= link_to 'Edit', edit_user_document_path(user_document)
+        %td= link_to 'Destroy', user_document, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New User document', new_user_document_path

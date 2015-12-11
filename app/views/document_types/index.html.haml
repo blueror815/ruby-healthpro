@@ -1,0 +1,23 @@
+%h1 Listing document_types
+
+%table
+  %thead
+    %tr
+      %th Document name
+      %th Job type
+      %th
+      %th
+      %th
+
+  %tbody
+    - @document_types.each do |document_type|
+      %tr
+        %td= document_type.document_name
+        %td= document_type.job_type_id
+        %td= link_to 'Show', document_type
+        %td= link_to 'Edit', edit_document_type_path(document_type)
+        %td= link_to 'Destroy', document_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Document type', new_document_type_path

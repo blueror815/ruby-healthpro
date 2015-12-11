@@ -1,0 +1,31 @@
+.card.card-underline
+  .card-head
+    %header.text-lg
+      Payroll 
+  .card-body
+    .row
+      .col-md-3
+        %dl
+          %dt.text-md
+            Payroll Start
+          %dd.text-sm
+            = date @timesheet.payroll.start_date
+      .col-md-3
+        %dl      
+          %dt.text-md
+            Payroll Ends
+          %dd.text-sm
+            = date @timesheet.payroll.end_date
+      - if  @timesheet.payroll.submission_date
+        .col-md-3
+          %dl
+            %dt.text-md
+              Submission Deadline
+            %dd.text-sm
+              = date @timesheet.payroll.submission_date
+
+
+- content_for :header_title do 
+  = @timesheet.user.display_name  + "'s Timesheet [#{@timesheet.state.humanize}]"
+  - if ["submitted", "created"].include?(@timesheet.state)  && ((can? :admit, Timesheet) || (can? :pay, Timesheet))
+    = link_to '', send_email_to_owner_timesheet_path(@timesheet), remote: true,style:"float:none; margin-left:20px;padding-top:0;",class:"fa fa-envelope"

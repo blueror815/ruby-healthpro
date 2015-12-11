@@ -1,0 +1,1 @@
+$(function(){$(".datepicker").datepicker({changeMonth:!0,changeYear:!0,dateFormat:"dd-mm-yy",yearRange:"c-100:c+0"})});

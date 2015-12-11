@@ -1,0 +1,12 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover#availabilities-table{"data-source" => availabilities_path(format: :json)}
+          %thead
+            %tr
+              %th Name
+              %th Description
+
+- content_for :header_title do 
+  Availabilities

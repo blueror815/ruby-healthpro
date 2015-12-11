@@ -1,0 +1,22 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header  
+            Coverage areas
+          - if current_user.admin?
+            .tools  
+              = link_to '', new_coverage_area_path, class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-plus'
+
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.datatable.people-table
+          %thead
+            %tr
+              %th name
+          %tbody
+            - @coverage_areas.each do |coverage_area|
+              %tr
+                %td= link_to coverage_area.name, edit_coverage_area_path(coverage_area)

@@ -1,0 +1,81 @@
+= form_tag(update_task_state_path, method: :get, remote:true, id: "update_task") do 
+  = hidden_field_tag :id, @timesheet.id
+  = hidden_field_tag :state, 'visited'
+  = hidden_field_tag :task_type, 'visit'
+  - if visits 
+    - visits.each do |v|
+      = check_box_tag 'task_id[]',  v.id, false, class: "hidden" if submittable?(@timesheet)
+
+.col-md-12
+  - if visits
+    .card
+      .card-head.style-primary
+        %header.text-lg
+          Submitted Visits
+        - if @timesheet.user == current_user and @timesheet.state == "created"
+          .tools
+            %a.pull-right.btn.btn-floating-action.ink-reaction.btn-info.btn-xs{href: "#offcanvas-visits" , "data-toggle": "offcanvas", "data-backdrop": "false"}
+              %i.fa.fa-plus
+      .card-body#visits_table
+        = render 'timesheets/show/shared/visits_table', visits: visits
+  
+  - if hours
+    .card
+      .card-head.style-primary
+        %header.text-lg
+          Submitted Hours
+        - if @timesheet.user == current_user and @timesheet.state == "created"
+          .tools
+            = link_to new_hour_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+              %i.fa.fa-plus
+    .card
+      .card-body
+        #hours_table
+          = render 'timesheets/show/shared/hours_table', hours: hours
+
+        - if submittable?(@timesheet) && visits.try(:count).to_i > 0
+          .card-actionbar
+            .card-actionbar-row
+              = submit_tag 'remove', class: "btn btn-primary", onclick:"$('#update_task').submit()"
+
+  - if on_calls_line_items
+    .card
+      .card-head.style-primary
+        %header.text-lg
+          Submitted on calls
+        - if @timesheet.user == current_user and @timesheet.state == "created"
+          .tools
+            = link_to new_on_call_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+              %i.fa.fa-plus
+    .card-body#on_call_table
+      = render 'timesheets/show/shared/on_calls_table', on_calls_line_items: on_calls_line_items
+
+    - if submittable?(@timesheet) && visits.try(:count).to_i > 0
+      .card-actionbar
+        .card-actionbar-row
+          = submit_tag 'remove', class: "btn btn-primary", onclick:"$('#update_task').submit()"
+
+  - if reimbursement_timesheets_line_items
+    .card
+      .card-head.style-primary
+        %header.text-lg
+          Submitted Reimbursements
+        - if @timesheet.user == current_user and @timesheet.state == "created"
+          .tools
+            = link_to new_reimbursement_timesheet_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+              %i.fa.fa-plus
+    #reimbursement_timesheet_table
+      = render 'timesheets/show/shared/reimb_table', reimbursement_timesheets_line_items: reimbursement_timesheets_line_items
+
+    - if submittable?(@timesheet) && visits.try(:count).to_i > 0
+      .card-actionbar
+        .card-actionbar-row
+          = submit_tag 'remove', class: "btn btn-primary", onclick:"$('#update_task').submit()"
+
+
+:javascript
+  $(document).ready(function() {
+    setup_visit_events();
+    setup_card_collapse(); 
+    $('#unbilled-visits-datatable').DataTable();
+  });

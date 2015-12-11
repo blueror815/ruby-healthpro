@@ -1,0 +1,116 @@
+.section-body  
+  .card
+    .card-head.style-primary
+      %header.text-xl
+        Patient ##{@patient.id} - Edit
+
+  - if @patient.errors.any?
+    .card
+      .alert.alert-callout.alert-danger.no-margin
+        %h2= "#{pluralize(@patient.errors.count, "error")} prohibited this form from being saved:"
+        %ul
+          - @patient.errors.full_messages.each do |msg|
+            %li= msg
+      / Your Page Content Here
+  = form_for @patient do |patient|
+    .card.card-underline
+      .card-head
+        %header.text-lg Personal Information
+      .card-body
+        .row
+        .form-horizontal
+          .col-md-2.pull-left 
+            .text-center
+              = image_tag(@patient.image.url, class: "img-thumbnail")
+            .text-center
+              = patient.file_field :image, id: 'imgInp',style:"margin: 15px 0 0 40px !important;"
+          .col-md-10
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Email
+              .col-sm-10.text-sm
+                = patient.text_field :email, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Display name
+              .col-sm-10.text-sm
+                = patient.text_field :display_name, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Home phone
+              .col-sm-10.text-sm
+                = patient.text_field :phone, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Start of care
+              .col-sm-10.text-sm
+                = patient.text_field :soc_date, class: 'form-control datePickerField'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Discharged date
+              .col-sm-10.text-sm
+                = patient.text_field :discharged_date, class: 'form-control datePickerField'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Zipcode
+              .col-sm-10.text-sm
+                = patient.text_field :zipcode, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} City
+              .col-sm-10.text-sm
+                = patient.text_field :city, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} State
+              .col-sm-10.text-sm
+                = patient.text_field :state, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Street
+              .col-sm-10.text-sm
+                = patient.text_field :street, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Suit/apt#
+              .col-sm-10.text-sm
+                = patient.text_field :apartment_number, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Emergency Contact
+              .col-sm-10.text-sm
+                = patient.text_field :emergency_contact, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Emergency Contact phone
+              .col-sm-10.text-sm
+                = patient.text_field :emergency_contact_phone, class: 'form-control'
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Agency
+              .col-sm-10.text-sm
+                = patient.select :agency_id, options_from_collection_for_select(Agency.all, :id, :name, @patient.agency_id), { include_blank: true, class: "form-control" }
+            .form-group
+              %label.col-sm-2.control-label{:for => ""} Insurances
+              .col-sm-10.text-sm
+                = patient.select :insurance_company_ids, options_from_collection_for_select(InsuranceCompany.all, :id, :name, @patient.insurance_company_ids), { include_blank: true, class: "form-control" }, { multiple: true }
+            - if @custom_forms_collection.try(:any?)
+              .form-group
+                %label.col-sm-2.control-label{:for => ""} Assigned Forms
+                .col-sm-10.text-sm
+                  - form_ids = @patient.form_data.map(&:custom_form).uniq.map(&:id)
+                  = select_tag :custom_form_ids, options_from_collection_for_select(@custom_forms_collection, :id, :title, form_ids), {:include_blank => true, multiple: true, disabled: true}
+                  - forms_collection = @custom_forms_collection.reject {|i| form_ids.include?i.id }
+                  = select_tag :custom_form_id, options_from_collection_for_select(forms_collection, :id, :title, form_ids), { :include_blank => true, class: "form-control" }
+    = patient.fields_for :form_data, @patient_forms_data do |form|
+      = render 'shared/forms/form_container', user_forms_form: form
+    
+    - content_for :footer do
+      = section_submit_action "Submit", patient.options[:html][:id]
+      - path = if @patient.persisted?
+        - patient_path(@patient)
+      - else 
+        - patients_path
+      = section_action "reply",path, ""
+
+  = javascript_include_tag 'users'
+  :javascript
+    $('select#custom_form_id').change(function(){
+      if($('select#custom_form_ids').val() == null){
+        count = 0
+      }else{
+        count = $('select#custom_form_ids').val().length + #{@patient_forms.length}
+      }
+      $.ajax({
+        url: "#{update_forms_patient_path(@patient.id || 0 )}",
+        method: 'PUT',
+        data: {custom_form_id: $(this).val(), form_data_count: count}
+      })
+    })

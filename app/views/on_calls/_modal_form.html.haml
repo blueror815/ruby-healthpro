@@ -1,0 +1,33 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title On Call
+    .modal-body
+      = form_for @on_call, remote: true do |f|
+        = f.hidden_field :user_id
+        = f.hidden_field :timesheet_id
+        = f.hidden_field :progress_state
+        = hidden_field_tag :timesheet_id , @timesheet_id if @timesheet_id
+
+        #on_call-errors
+          = render "on_calls/errors", errors: @on_call.errors
+
+        .form-horizontal
+          .form-group
+            = f.label :date, class: "col-sm-2 control-label"
+            .col-sm-10#date.date
+              = f.text_field :date, class: 'form-control'
+              .form-control-line
+          .form-group
+            = f.label :note, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.text_field :note, class: 'form-control'
+              .form-control-line
+        .card-actionbar
+          .deactivate-btn.card-title
+          = f.submit "Save", class: 'save-form btn btn-info pull-right'
+
+
+
+

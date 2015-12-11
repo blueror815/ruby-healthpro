@@ -1,0 +1,7 @@
+= CustomForms
+
+This project rocks and uses MIT-LICENSE.
+
+ rake custom_forms:install:migrations
+  mount CustomForms::Engine => "/custom_forms"
+ 

@@ -1,0 +1,9 @@
+- if @reimbursement.value_type == 3
+  $("#reimbursement_timesheet_action_count").parents(".form-group").addClass("hide");
+  $("#reimbursement_timesheet_amount").parents(".form-group").removeClass("hide");
+- elsif @reimbursement.value_type == 2
+  $("#reimbursement_timesheet_action_count").parents(".form-group").removeClass("hide");
+  $("#reimbursement_timesheet_amount").parents(".form-group").addClass("hide");
+- else
+  $("#reimbursement_timesheet_action_count").parents(".form-group").addClass("hide");
+  $("#reimbursement_timesheet_amount").parents(".form-group").addClass("hide");

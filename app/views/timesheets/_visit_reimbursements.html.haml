@@ -1,0 +1,28 @@
+- not_included_reimbursements = v.visit_type.reimbursements - v.reimbursements
+- @new_reimbursements_visits = []
+- not_included_reimbursements.each do |reimbursement|
+  - @new_reimbursements_visits << reimbursement.reimbursements_visits.new
+  - @new_reimbursements_visits.last.visit = v
+.row.visit-reimbursements-form
+  .col-sm-6
+    %dl.dl-horizontal
+      = form_for v , class: "visit_form", remote: true do |f|
+        = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+          = builder.hidden_field :reimbursement_id
+          %dt
+            = builder.object.reimbursement.title
+          %dd
+            - if builder.object.reimbursement.value_type == 1
+              = builder.check_box :action_count, class: "form-control single_instance input-sm"
+            - else
+              = builder.number_field :action_count, class: "form-control multiple-instances input-sm", min: 0, step: 1
+            
+  .col-sm-6
+    %dl.dl-horizontal
+      = form_for v , class: "visit_form", remote: true do |f|
+        = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+          = builder.hidden_field :reimbursement_id
+          %dt
+            Comment
+          %dd
+            = builder.text_field :comment, class: "form-control comment input-sm"

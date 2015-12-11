@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  phone: MyString
+  fax: MyString
+  zipcode: MyString
+  state: MyString
+  city: MyString
+  devero_id: 1
+  display_name: MyString
+  short_name: MyString
+  address: MyString
+  address2: MyString
+  email: MyString
+  name: MyString
+  medicare_provider_number: MyString
+  hha_agency_id: 1
+  rate: MyString
+  fax_service_username: MyString
+  fax_service_account_id: 1
+  timezone: MyString
+
+two:
+  phone: MyString
+  fax: MyString
+  zipcode: MyString
+  state: MyString
+  city: MyString
+  devero_id: 1
+  display_name: MyString
+  short_name: MyString
+  address: MyString
+  address2: MyString
+  email: MyString
+  name: MyString
+  medicare_provider_number: MyString
+  hha_agency_id: 1
+  rate: MyString
+  fax_service_username: MyString
+  fax_service_account_id: 1
+  timezone: MyString

@@ -1,0 +1,17 @@
+%table.table.table-hover#bills_datatable
+  %thead
+    %tr
+      %th SOC Date
+      %th Through Date
+      %th Claim
+      %th Payor
+      %th Patient Name
+      %th Billed Amt.
+      %th Billed Date
+      %th Paid Amt.
+      %th Paid Date
+      %th Actions
+:javascript
+  datatable_handler.editor.on("open", function(a, b, c){
+    $("select").select2();
+  });

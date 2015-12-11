@@ -1,0 +1,21 @@
+.section-body
+  .card.card-underline
+    = render 'payroll_report_header', origin_page: 'employees_with_reimb'
+    .card-head
+      %header.text-xl  
+        Employees With Reimbursements
+    .card-body
+      .table-responsive
+        %table.table.table-condensed.text-xs#employees_with_reimb
+          %thead
+            %tr
+              %th Employee Name 
+              %th No of Reimbursements
+          - @groupd_reimb.each do |emp_avg|
+            %tr
+              %td
+                = emp_avg[:employee_name]
+              %td.text-sm
+                = emp_avg[:reimb_count]
+:javascript
+  var table = $('#employees_with_reimb').dataTable({ "bLengthChange": false, "bPaginate": false});

@@ -1,0 +1,28 @@
+.section-body
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-xl 
+            Reimbursements
+        .card-body
+          .table-responsive
+            %table.table.table-hover.datatable.people-table
+              %thead
+                %tr
+                  %th Reimbursement Name
+                  %th Number of reimbursements 
+                  %th Total paid
+              - reimbursements  = []
+              - visits.each do |v| 
+                - reimbursements <<  v.reimbursements.flatten if v.reimbursements.count  > 0
+              - reimbursements.flatten!
+
+              - reimbursements.uniq.each do |reimb|
+                %tr
+                  %td= reimb.title
+                  %td= reimb.reimbursements_visits.where(visit_id: visits.map(&:id)).count
+                  - total_price = 0 
+                  - reimb.reimbursements_visits.where(visit_id: visits.map(&:id)).each do |r_v|
+                    - total_price += r_v.action_count.to_i * reimb.price.to_i
+                  %td= total_price

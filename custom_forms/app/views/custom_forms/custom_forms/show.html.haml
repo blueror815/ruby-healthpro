@@ -1,0 +1,22 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @custom_form.title
+%p
+  %b Permissions:
+  = @custom_form.permissions
+%p
+  %b Sections:
+  - @custom_form.sections.each do |sec_key, sec_val|
+    %p
+      %b= "Sections #{sec_key}:"
+      %p
+        %b= "permissions"
+        %p= sec_val["permissions"]
+        %b= "fields"
+        %p= sec_val["fields"]
+
+= link_to 'Edit', edit_custom_form_path(@custom_form)
+\|
+= link_to 'Back', custom_forms_path

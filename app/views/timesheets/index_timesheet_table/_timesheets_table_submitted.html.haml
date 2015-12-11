@@ -1,0 +1,26 @@
+.table-responsive
+  %table.table.table-hover#submitted-timesheets-datatable
+    %thead
+      %tr
+        %th User name
+        %th No. of pending items
+        %th No. of rejected items
+        %th No. of visits
+        %th Controls
+    - timesheets.each do |timesheet|
+      - present timesheet do |timesheet_presenter|
+        %tr
+          %td= timesheet_presenter.assignee_link
+          %td= timesheet_presenter.pending_items_count
+          %td= timesheet_presenter.rejected_items_count
+          %td= timesheet_presenter.total_visits_numbers
+          %td.text-center
+            - if ( admittable?(timesheet, current_user) && (can? :admit, Timesheet))
+              - title, action_path, icon = "Pay", timesheet.user ? admit_user_timesheet_path(timesheet.user, timesheet.id, pay: 'true', table_type: 'submitted') : admit_timesheet_path(timesheet.id, pay: 'true'), "money"
+              = link_to "Pay", action_path, method: :put, confirm: "are you sure?", 'data-message' => "the timesheet wasn't approved and it yet has pending items, finalize anyway?", 'data-severity' => 'danger', :remote => true 
+            = link_to '<i class="fa fa-eye"></i>'.html_safe, user_timesheet_path(timesheet.user_id, timesheet), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+
+:javascript
+  $(function(){
+    $("#submitted-timesheets-datatable").DataTable({});
+  });

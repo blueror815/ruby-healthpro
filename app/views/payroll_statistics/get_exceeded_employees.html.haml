@@ -1,0 +1,19 @@
+.section-body
+  .card.card-underline
+    = render 'payroll_report_header', origin_page: 'exceeded_page'
+    .card-head
+      %header.text-xl  
+        Over Employees
+    .card-body
+      .table-responsive
+        %table.table.table-hover#pay-periods-datatable
+          %thead
+            %tr
+              %th Employee Name 
+              %th Last Timesheet Average
+          - @payroll_timesheets.each do |timesheet|
+            %tr
+              %td.text-sm
+                = timesheet.user.display_name
+              %td.text-sm
+                = timesheet.timesheet_visits_avg

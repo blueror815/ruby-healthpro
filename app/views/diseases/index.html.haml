@@ -1,0 +1,17 @@
+.section-body
+  %h2 
+    diseases
+    = link_to '', new_disease_path , class: 'pull-right btn btn-floating-action ink-reaction btn-primary btn-xs fa fa-plus'
+  - @diseases.each do |disease|
+    .col-md-6.col-lg-4.col-sm-6
+      .card
+        .alert.alert-callout.alert-info.no-margin
+          %strong.text-xl
+            %i.fa.fa-clock-o.text-primary
+            - if disease.name
+              = disease.name.humanize
+          %br
+            %span.opacity-50
+              = link_to 'Edit', edit_disease_path(disease), class: "pull-right btn ink-reaction btn-raised btn-sm"
+              = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete"
+              = link_to '', disease, :method => :delete, class: "hide"

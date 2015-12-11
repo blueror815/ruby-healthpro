@@ -1,0 +1,13 @@
+%li.gui-folder
+  %a{:class => ('active' if(!@timesheet.nil? && request.path == main_app.timesheet_path(@timesheet))) }
+    .gui-icon
+      %i.fa.fa-clock-o.fa-fw
+    %span.title Payroll
+  %ul
+    - if Payroll.last
+      %li
+        %a{:class => ('active' if(!@timesheet.nil? && request.path == main_app.timesheet_path(@timesheet))) , :href => main_app.latest_timesheet_path}
+          - label = Payroll.last.timesheets.where(user_id: current_user.id).present? ? "Latest Timesheet" : "Latest Payroll"
+          %span.title= label
+    = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.user_timesheets_path(current_user), folder_item_title: 'Personal Timesheets'}
+    

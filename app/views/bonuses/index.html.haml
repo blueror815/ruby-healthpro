@@ -1,0 +1,25 @@
+%h1 Listing bonuses
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Price
+      %th Timesheet
+      %th
+      %th
+      %th
+
+  %tbody
+    - @bonuses.each do |bonuse|
+      %tr
+        %td= bonuse.user_id
+        %td= bonuse.price
+        %td= bonuse.timesheet_id
+        %td= link_to 'Show', bonuse
+        %td= link_to 'Edit', edit_bonuse_path(bonuse)
+        %td= link_to 'Destroy', bonuse, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Bonuse', new_bonuse_path

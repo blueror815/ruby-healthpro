@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @hour_type.title
+%p
+  %b Price factor:
+  = @hour_type.price_factor
+
+= link_to 'Edit', edit_hour_type_path(@hour_type)
+\|
+= link_to 'Back', hour_types_path

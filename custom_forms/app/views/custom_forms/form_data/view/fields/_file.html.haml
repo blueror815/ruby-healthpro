@@ -1,0 +1,4 @@
+- unless value.blank?
+  - unless value.file.url.include?('placeholder.jpg')
+    = link_to '', value.file.url, download: value.file_file_name , class: 'fa fa-download'
+  

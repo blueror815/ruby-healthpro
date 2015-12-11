@@ -1,0 +1,49 @@
+%p#notice= notice
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Pay period ##{@payroll.id}
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.datatable.people-table
+          %thead
+            %tr
+              %th Id
+              %th User name
+              %th Payroll
+              %th Payroll End Date
+              %th Payroll Submission Deadline
+              %th Payroll Admission Deadline
+              %th State
+              %th Controls
+          - @timesheets.each do |timesheet|
+            %tr
+              %td
+                = link_to timesheet.id, user_timesheet_path(timesheet.user_id, timesheet)
+              %td
+                = link_to timesheet.user.display_name, user_path(timesheet.user_id)
+              %td
+                = link_to timesheet.payroll.id, payroll_path(timesheet.payroll)
+              %td
+                = date timesheet.payroll.end_date
+              %td
+                = date timesheet.payroll.submission_date
+              %td
+                = date timesheet.payroll.admission_date
+              %td
+                = timesheet.state
+              %td.text-center
+                = link_to '<i class="fa fa-eye"></i>'.html_safe, user_timesheet_path(timesheet.user_id, timesheet), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+                
+- if @visit_types
+  = render 'visits_report', visit_types: @visit_types, timesheet_ids: @timesheet_ids
+- if @hour_types
+  = render 'hours_report', hour_types: @hour_types, timesheet_ids: @timesheet_ids
+- if @hour_types
+  = render 'reimbursements_report', visits: @visits
+- if @users
+  = render 'users_report', users: @users

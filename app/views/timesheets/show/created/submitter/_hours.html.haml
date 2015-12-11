@@ -1,0 +1,30 @@
+.card.card-underline
+  .card-head
+    %header.text-lg
+      Hours
+    - if @timesheet.user == current_user and @timesheet.state == "created"
+      .tools
+        %a.pull-right.btn.btn-floating-action.ink-reaction.btn-info.btn-xs{href: "#offcanvas-hours" , "data-toggle": "offcanvas", "data-backdrop": "false"}
+          %i.fa.fa-list
+        = link_to new_hour_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+          %i.fa.fa-plus
+  .card-body#hours_table
+    - unless hours.empty?
+      %table#unbilled-hours-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+        %thead
+          %tr
+            %th State
+            %th.col-md-2 Date
+            %th.col-md-1 Time in
+            %th.col-md-1 Time out
+            %th.col-md-2 Total time
+            %th.col-md-6 Notes
+            %th.text-right Actions
+            
+        %tbody
+          - hours.each do |hour|
+            %tr
+              = render "timesheets/show/created/submitter/hour_row", hour: hour
+
+    - else
+      Click (+) to log Hours to this timesheet

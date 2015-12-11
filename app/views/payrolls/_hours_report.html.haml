@@ -1,0 +1,27 @@
+.section-body
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-xl 
+            Hours
+        .card-body
+          .table-responsive
+            %table.table.table-hover#hours-datatables
+              %thead
+                %tr
+                  %th Hour type 
+                  %th Number of Hour 
+                  %th Total paid
+              - hour_types.each do |hour_type|
+                %tr
+                  %td= hour_type.try(:title)
+                  %td= hour_type.hours.where(timesheet_id: timesheet_ids).count
+                  - total_price = 0
+                  - total_price = hour_type.hours.where(timesheet_id: timesheet_ids).map(&:total_price).inject{|total_price, price| total_price.to_i + price.to_i}
+                  %td= total_price
+
+:javascript
+  $(function(){
+    $("#hours-datatables").DataTable({});
+  });

@@ -1,0 +1,30 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            People Forms
+          .tools
+            = link_to '', custom_forms.new_custom_form_path(form_category: @hr_category.id, redirect_path: admin_users_path) , class: 'pull-right btn btn-floating-action ink-reaction btn-info  btn-xs fa fa-plus'
+  .row
+    - @hr_forms.each do |custom_form|
+      .col-md-6.col-lg-4.col-sm-6
+        .card
+          .alert.alert-callout.alert-primary.no-margin
+            %strong.text-lg
+              %i.fa.fa-clock-o.text-primary
+              = custom_form.title.humanize
+              %span.opacity-50
+                - if can? :update, CustomForms::CustomForm
+                  = link_to 'Edit', custom_forms.edit_custom_form_path(custom_form), class: "pull-right btn ink-reaction btn-raised btn-sm"
+                - if custom_form.deletable?
+                  - if can? :destroy, CustomForms::CustomForm
+                    = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete"
+                    = link_to '', custom_forms.custom_form_path(custom_form), :method => :delete, class: "hide"
+  
+
+  = render partial: 'permissions_table', locals: {submission_path: admin_update_users_roles_permissions_path}
+
+- content_for :header_title do 
+  People Forms

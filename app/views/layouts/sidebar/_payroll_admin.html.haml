@@ -1,0 +1,11 @@
+- items = [ {url: main_app.timesheets_path(timesheets_type: 'finalized'), title: 'Finalize'}, {url: main_app.timesheets_path(timesheets_type: 'submitted'), title:'Pending'}, {url: main_app.timesheets_path(timesheets_type: 'paid'),  title: 'Paid'}, {url: main_app.payrolls_path, title:   'Reports'}]
+- if can? :view_all, Timesheet or can? :admit, Timesheet or can? :pay, Timesheet
+  %li.gui-folder
+    %a{:class => ('active' if(!@timesheet.nil? && is_active(items))) }
+      .gui-icon
+        %i.fa.fa-clock-o.fa-fw
+      %span.title Payroll Administration
+    %ul
+      %li      
+        - items.each do |item|
+          = sidebar_folder_item item[:url], item[:title]

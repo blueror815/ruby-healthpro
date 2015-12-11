@@ -1,0 +1,108 @@
+.section-body
+  .card.card-underline
+    .card-head
+      %header
+        #{@agency.name} Agency
+      .tools  
+        = link_to '', edit_agency_path(@agency) , class: 'pull-right btn btn-floating-action ink-reaction btn-primary btn-xs fa fa-edit'
+    .card-body
+      .row
+        .col-md-6
+          %table{style: 'width:100%'}
+            %tr
+              %td.table-right-col
+                %b Phone:
+              %td
+                = @agency.phone
+            %tr
+              %td.table-right-col
+                %b Fax:
+              %td
+                = @agency.fax
+            %tr
+              %td.table-right-col
+                %b Zipcode:
+              %td
+                = @agency.zipcode
+            %tr
+              %td.table-right-col
+                %b State:
+              %td
+                = @agency.state
+            %tr
+              %td.table-right-col
+                %b City:
+              %td
+                = @agency.city
+            %tr
+              %td.table-right-col
+                %b Devero:
+              %td
+                = @agency.devero_id
+            %tr
+              %td.table-right-col
+                %b Display name:
+              %td
+                = @agency.display_name
+            %tr
+              %td.table-right-col
+                %b Short name:
+              %td
+                = @agency.short_name
+            %tr
+              %td.table-right-col
+                %b Address:
+              %td
+                = @agency.address
+            %tr
+              %td.table-right-col
+                %b Suite/Apt #:
+              %td
+                = @agency.address2
+            %tr
+              %td.table-right-col
+                %b Email:
+              %td
+                = @agency.email
+            %tr
+              %td.table-right-col
+                %b Name:
+              %td
+                = @agency.name
+            %tr
+              %td.table-right-col
+                %b Medicare provider number:
+              %td
+                = @agency.medicare_provider_number
+            %tr
+              %td.table-right-col
+                %b Hha agency:
+              %td
+                = @agency.hha_agency_id
+            %tr
+              %td.table-right-col
+                %b Rate:
+              %td
+                = @agency.rate
+            %tr
+              %td.table-right-col
+                %b Fax service username:
+              %td
+                = @agency.fax_service_username
+            %tr
+              %td.table-right-col
+                %b Timezone:
+              %td
+                = @agency.timezone
+            %tr
+              %td.table-right-col
+              %td 
+    .row
+      .col-xs-12
+        .card-actionbar
+          .card-actionbar-row
+            %a.btn.btn-default{href: agencies_path, class: "btn-default-bright"}
+              Back
+                         
+
+              

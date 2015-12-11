@@ -1,0 +1,31 @@
+.table-responsive
+  %table.table.table-hover#timesheets-datatable
+    %thead
+      %tr
+        %th User name
+        %th Payroll Date
+        %th Total Paid Amount
+        %th Un Approved Amount
+        %th Controls
+    - timesheets.each do |timesheet|
+      - present timesheet do |timesheet_presenter|
+        %tr
+          %td= timesheet_presenter.assignee_link
+          %td= timesheet_presenter.payroll_date
+          %td= timesheet_presenter.timesheet_paid_amount
+          %td= timesheet_presenter.timesheet_unapproved_amount
+          %td.text-center
+            - if (payable?(timesheet) && (can? :pay, Timesheet)) 
+              - title, action_path, icon = "Pay", timesheet.user ? pay_user_timesheet_path(timesheet.user, timesheet, table_type: 'finalized') : pay_timesheet_path(timesheet), "money"
+              = link_to 'Pay', action_path, method: :put, "data-placement" => "top", 'data-severity' => 'danger', :remote => true 
+            - if ( admittable?(timesheet, current_user) && (can? :admit, Timesheet))
+              - title, action_path, icon = "Pay", timesheet.user ? admit_user_timesheet_path(timesheet.user, timesheet.id, pay: 'true', table_type: 'finalized') : admit_timesheet_path(timesheet.id, pay: 'true'), "money"
+              = link_to "Pay", action_path, method: :put, confirm: "are you sure?", 'data-message' => "the timesheet wasn't approved and it yet has pending items, finalize anyway?", 'data-severity' => 'danger', :remote => true 
+
+            = link_to '<i class="fa fa-eye"></i>'.html_safe, user_timesheet_path(timesheet.user_id, timesheet), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+
+
+:javascript
+  $(function(){
+    $("#timesheets-datatable").DataTable({});
+  });

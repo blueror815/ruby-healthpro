@@ -1,0 +1,17 @@
+.section-body  
+  .row
+    .col-md-12
+      .card
+        .card-underline
+          .card-head  
+            %header.text-lg
+              New field type
+          .card-body
+            = render 'form'
+  
+- content_for :footer do
+  = section_submit_action "Submit"
+  = section_action "reply", field_types_path, "Field types"
+
+- content_for :header_title do 
+  New field type

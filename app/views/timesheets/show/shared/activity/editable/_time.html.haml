@@ -1,0 +1,15 @@
+= form_for v , class: "visit_form", remote: true do |builder|
+  %dl.dl-horizontal.visit-time-form
+    %dd
+      15/10/2015
+
+= form_for v , class: "visit_form", remote: true do |builder|
+  %dt.text-default-light
+    Time In
+  %dd
+    = builder.time_field :time_in, class: "form-control time-input input-sm "
+
+  %dt.text-default-light
+    Time Out
+  %dd
+    = builder.time_field :time_out, class: "form-control time-input input-sm"

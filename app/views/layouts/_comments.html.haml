@@ -1,0 +1,46 @@
+%h2.text-primary
+  Comments 
+%ul.list-chats
+  %li
+    .chat
+      .chat-avatar
+        = image_tag(current_user.image, class: "img-circle")
+      .chat-body
+        Yes, it is indeed very beautiful.
+        %small 10:03 pm
+    / end .chat
+  %li.chat-left
+    .chat
+      .chat-avatar
+        = image_tag(current_user.image, class: "img-circle")
+      .chat-body
+        Did you see the changes?
+        %small 10:02 pm
+    / end .chat
+  %li
+    .chat
+      .chat-avatar
+        = image_tag(current_user.image, class: "img-circle")
+      .chat-body
+        I just arrived at work, it was quite busy.
+        %small 06:44pm
+    / end .chat
+  %li.chat-left
+    .chat
+      .chat-avatar
+        = image_tag(current_user.image, class: "img-circle")
+      .chat-body
+        The colors are much better now.
+      .chat-body
+        The colors are brighter than before.
+        I have already sent an example.
+        This will make it look sharper.
+        %small Mon
+    / end .chat
+  %li
+    .chat
+      .chat-avatar
+        = image_tag(current_user.image, class: "img-circle")
+      .chat-body
+        Are the colors of the logo already adapted?
+        %small Last week

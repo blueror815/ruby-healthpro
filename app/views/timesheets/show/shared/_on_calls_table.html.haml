@@ -1,0 +1,11 @@
+%table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+  %thead 
+    %tr
+      %th.col-md-2 Date
+      %th.col-md-7 Notes
+      %th.col-md-1 Action
+  %tbody
+    - if on_calls_line_items
+      - on_calls_line_items.map(&:payable).each do |on_call|
+        %tr
+          = render "timesheets/show/shared/on_call_row", on_call: on_call

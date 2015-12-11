@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: user
+  short_name: user
+
+two:
+  name: admin
+  short_name: admin
+
+three:
+  name: hr
+  short_name: hr

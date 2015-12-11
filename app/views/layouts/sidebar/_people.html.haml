@@ -1,0 +1,9 @@
+%li.gui-folder
+  %a{:class => ('active' unless request.path != main_app.users_path and request.path != "/" and main_app.admin_users_path)}
+    .gui-icon
+      %i.fa.fa-user-md.fa-fw
+    %span.title People
+  %ul
+    = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.users_path, folder_item_title: 'Directory'}
+    - if can? :administrate, User
+      = render partial: 'layouts/sidebar/people/reports' 

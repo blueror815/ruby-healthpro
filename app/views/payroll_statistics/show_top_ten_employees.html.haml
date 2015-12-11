@@ -1,0 +1,21 @@
+.section-body
+  .card.card-underline
+    = render 'payroll_report_header', origin_page: 'top_ten'
+    .card-head
+      %header.text-xl  
+        Top Ten Visits
+    .card-body
+      .table-responsive
+        %table.table.table-condensed.text-xs#top_ten_visits
+          %thead
+            %tr
+              %th Employee Name 
+              %th No of visits
+          - @grouped_visits.each do |emp_avg|
+            %tr
+              %td
+                = emp_avg[:employee_name]
+              %td.text-sm
+                = emp_avg[:visits_count]
+:javascript
+  var table = $('#top_ten_visits').dataTable({ "bLengthChange": false, "bPaginate": false}).rowGrouping({bExpandableGrouping: true});

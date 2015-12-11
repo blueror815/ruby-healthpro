@@ -1,0 +1,26 @@
+.row
+  .col-md-12
+    .card.card-underline
+      .card-head
+        %header.text-lg
+          User Forms
+        - if @custom_forms_collection.any?
+          .tools
+            - if @user.persisted?
+              - form_ids = @user.form_data.map(&:custom_form).uniq.map(&:id)
+            - else
+              - form_ids = @user_hr_forms_data.map(&:custom_form).map(&:id)
+            - forms_collection = @custom_forms_collection.reject {|i| form_ids.include?i.id }
+            = select_tag :custom_form_id, options_from_collection_for_select(forms_collection, :id, :title, form_ids), { :include_blank => true, class: "form-control", placeholder: "Select a Form" }
+      .card-body.card-no-margin.style-default-bright
+        = render "users/edit/forms_tabs", user_form: user_form
+
+:javascript
+  $('select#custom_form_id').change(function(){
+    $.ajax({
+      url: "#{update_forms_user_path(@user.id || 0 )}",
+      method: 'PUT',
+      data: {custom_form_id: $(this).val(), form_data_count: new Date().getTime()}
+    })
+  })
+    

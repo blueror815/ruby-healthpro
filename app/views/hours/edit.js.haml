@@ -1,0 +1,3 @@
+$("#hour_modal").html("#{escape_javascript(render('modal_form')).html_safe}");
+$("#hour_modal").modal('show');
+$('#date input').datetimepicker({format: 'YYYY/MM/DD'});

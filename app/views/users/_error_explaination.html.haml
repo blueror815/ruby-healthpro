@@ -1,0 +1,6 @@
+- if @user && @user.errors.any?
+  .alert.alert-callout.alert-danger.no-margin
+    %h2= "#{pluralize(@user.errors.count, "error")} prohibited this form from being saved:"
+    %ul
+      - @user.errors.full_messages.each do |msg|
+        %li= msg

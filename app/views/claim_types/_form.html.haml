@@ -1,0 +1,18 @@
+.form-horizontal
+  .form-group
+    = label @model, :name, class: "col-sm-1 control-label"
+    .col-sm-11
+      = text_field @model, :name, class: 'form-control'
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model,  :description, class: "col-sm-1 control-label"
+    .col-sm-11
+      = text_field @model, :description, class: 'form-control'
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model,  :monthly_paid, class: "col-sm-1 control-label"
+    .col-sm-11
+      = text_field @model, :monthly_paid, class: 'form-control'
+      .form-control-line

@@ -1,0 +1,5 @@
+- if @reimbursement_timesheet.errors.any?
+  $('#reimbursement_timesheet-errors').html("#{escape_javascript(render('reimbursement_timesheets/errors', errors: @reimbursement_timesheet.errors)).html_safe}")
+- else
+  $("#on_call_modal").modal('hide');
+  window.location.reload()

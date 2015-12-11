@@ -1,0 +1,39 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Notifications
+  .card.card-underline
+    .card-body
+      - if @notifications.any? || @submission_notifications.any? || @admission_notifications.any?
+        - if @notifications.any?
+          %ul.timeline.collapse-lg.timeline-hairline
+            - @notifications.each do |notification|
+              %li.timeline-inverted
+                .timeline-circ
+                .timeline-entry
+                  .card.style-default-bright
+                    .card-body.small-padding
+                      = render "notifications/#{notification.notifiable_type.underscore}/#{notification.action}", notification: notification
+        - if current_user.admitter? && @submission_notifications.any?
+          %h4 Submissions
+          %ul.timeline.collapse-lg.timeline-hairline
+            %li.timeline-inverted
+              .timeline-circ
+              .timeline-entry
+                .card.style-default-bright
+                  .card-body.small-padding
+                    = render "notifications/timesheet/submit", notifications: @submission_notifications
+        - if current_user.payer? && @admission_notifications.any?
+          %h4 Admissions
+          %ul.timeline.collapse-lg.timeline-hairline
+            %li.timeline-inverted
+              .timeline-circ
+              .timeline-entry
+                .card.style-default-bright
+                  .card-body.small-padding
+                    = render "notifications/timesheet/admit_notify_payers", notifications: @admission_notifications
+      - else
+        Horray! You have no notifications.

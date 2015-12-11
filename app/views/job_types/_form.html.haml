@@ -1,0 +1,48 @@
+.row
+  .col-md-12
+    .form-horizontal
+      .form-group
+        =  label :job_type, :title, class: "col-sm-1 control-label"
+        .col-sm-11
+          =  text_field :job_type, :title, class: 'form-control'
+          .form-control-line
+    .form-horizontal
+      .form-group
+        =  label :job_type, :job_class, class: "col-sm-1 control-label"
+        .col-sm-11
+          =  text_field :job_type, :job_class, class: 'form-control'
+          .form-control-line
+    .form-horizontal
+      .form-group
+        =  label :job_type, "Job Forms", class: "col-sm-1 control-label"
+        .col-sm-11
+          =  select :job_type, :custom_form_ids, @available_custom_forms, { include_blank: true }, { multiple: true }
+          .form-control-line
+    .form-horizontal{ class: ('hide' if !@job_type.payment_method_ids.include?('3')) }
+      .form-group
+        =  label :job_type, "salary amount", class: "col-sm-1 control-label"
+        .col-sm-11
+          =  text_field :job_type, :salary_amount, class: 'form-control'
+          .form-control-line
+    .form-horizontal{ class: ('hide' if !@job_type.payment_method_ids.include?('2')) }
+      .form-group
+        =  label :job_type, "hour price", class: "col-sm-1 control-label"
+        .col-sm-11
+          =  text_field :job_type, :hour_price, class: 'form-control'
+          .form-control-line
+    .form-horizontal
+      .form-group{ class: ('hide' if !@job_type.payment_method_ids.include?('5')) }
+        =  label :job_type, "on call price", class: "col-sm-1 control-label"
+        .col-sm-11
+          =  text_field :job_type, :on_call_price, class: 'form-control'
+          .form-control-line
+    .form-horizontal
+      .form-group
+        =  label :job_type, "Payment Method", class: "col-sm-1 control-label"
+        .col-sm-11
+          =  collection_check_boxes :job_type, :payment_method_ids, JobType::PAYMENT_METHODS.reject{ |k| k == '4' }, :first, :last, checked: @job_type.payment_method_ids do |b|
+            .checkbox-inline.checkbox-styled
+              = b.label  do
+                = b.check_box
+              = b.label
+            .form-control-line

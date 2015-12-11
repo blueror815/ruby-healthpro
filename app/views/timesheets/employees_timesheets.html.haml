@@ -1,0 +1,24 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Employees Timesheet
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.datatable.people-table
+          %thead
+            %tr
+              %th Timesheet id
+              %th Employee name
+              %th Timesheet State
+              %th submission date
+          - @timesheets.each do |timesheet|
+            %tr
+              %td
+                = link_to timesheet.id, timesheet_path(id: timesheet.id, user_id: timesheet.user.id)
+              %td= timesheet.user.display_name
+              %td= timesheet.state
+              %td= timesheet.payroll.end_date.strftime("%d/%m/%Y")

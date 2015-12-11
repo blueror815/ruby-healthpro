@@ -1,0 +1,36 @@
+!!!
+/
+  This is a starter template page. Use this page to start your new project from
+  scratch. This page gets rid of all links and provides the needed markup only.
+%html
+  %head
+    %meta{:charset => "UTF-8"}
+      %title AdminLTE 2 | Dashboard
+      %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", :name => "viewport"}
+        / Bootstrap 3.3.2        / Font Awesome Icons
+        %link{:href => "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css", :rel => "stylesheet", :type => "text/css"}/
+        / Ionicons
+        %link{:href => "http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css", :rel => "stylesheet", :type => "text/css"}/
+
+        = stylesheet_link_tag    'custom_forms/application', media: 'all'
+        = javascript_include_tag 'custom_forms/application'
+        = csrf_meta_tags
+  %body.skin-blue
+    .wrapper
+      %header.main-header
+        %a.logo{:href => "/"}
+          %b> Pro
+          Health
+        %nav.navbar.navbar-static-top{:role => "navigation"}
+          %a.sidebar-toggle{"data-toggle" => "offcanvas", :href => "#", :role => "button"}
+            %span.sr-only
+          .navbar-custom-menu
+            %ul.nav.navbar-nav
+      %aside.main-sidebar
+        %li.header
+        %li{:class => ( 'active' ) }
+          %a{:href => main_app.root_path}
+            %span Main app
+            %i.fa.fa-inbox.pull-right
+      .content-wrapper
+        = yield

@@ -1,0 +1,41 @@
+- if can? :read, JobType or can? :administrate, User or can? :read, CustomForms::CustomForm or can? :read, CustomForms::FieldType or can? :read, FormCategory
+  %li.gui-folder
+    %a{:class => ('active' if request.path.match ".*(#{@controller_names.join '|'})" ) , :href => 'javascript:void'}
+      .gui-icon
+        %i.fa.fa-cogs.fa-fw
+      %span.title Administration
+    %ul
+      - if can? :administrate, User
+        = sidebar_folder_item main_app.admin_users_path,  'People Administration'
+        = sidebar_folder_item main_app.reports_path,  'Reports' 
+      - if can? :read, CustomForms::CustomForm
+        = sidebar_folder_item custom_forms.custom_forms_path,  'Schemas'
+      - if can? :read, CustomForms::FieldType
+        = sidebar_folder_item custom_forms.field_types_path,  'Field Types'
+      - if can? :read, FormCategory
+        = sidebar_folder_item custom_forms.form_categories_path,  'Form Categories'  
+      - if can? :read, Availability
+        =  sidebar_folder_item main_app.availabilities_path, 'Availability Types'
+      - if can? :read, VisitType
+        = sidebar_folder_item main_app.visit_types_path, 'Visit Types'
+      - if can? :read, HourType
+        = sidebar_folder_item main_app.hour_types_path, 'Hour Types'
+      - if can? :read, Reimbursement
+        = sidebar_folder_item main_app.reimbursements_path, 'Reimbursement Types'
+      - if can? :read, JobType
+        = sidebar_folder_item main_app.job_types_path, 'Job Types'
+      - if can? :read, Role
+        = sidebar_folder_item main_app.roles_path, 'Roles'
+      
+      - if can? :read, CoverageArea
+        = sidebar_folder_item main_app.coverage_areas_path, 'Coverage Areas'
+      - if can? :read, Department
+        = sidebar_folder_item main_app.departments_path, 'Departments'
+      - if can? :read, Agency
+        = sidebar_folder_item main_app.agencies_path,  'Agancies'
+      - if can? :read, ClaimType
+        = sidebar_folder_item main_app.claim_types_path,  'Claims'
+      - if can? :read, PaymentType
+        = sidebar_folder_item main_app.payment_types_path,  'Payment Types'
+      - if can? :read, InsuranceCompany
+        = sidebar_folder_item main_app.insurance_companies_path,  'Insurances'

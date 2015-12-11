@@ -1,0 +1,38 @@
+.section-body
+  - if @field_types.empty?
+    .card
+      .card-body
+        .text-center
+          %h2 No Field Types available
+  - else
+    .card
+      .card-body
+        %table.table.datatable
+          %thead
+            %tr
+              %th Name
+          %tbody
+            - @field_types.each do |field_type|
+              %tr
+                %td 
+                  = field_type.name.humanize
+                  .pull-right
+                    - if ( can? :update, CustomForms::FieldType ) && field_type.section_fields.empty?
+                      = link_to '', edit_field_type_path(field_type), class: "btn btn-floating-action ink-reaction  btn-xs fa fa-edit text-primary"
+                    - disabled = ''
+                    - if ( can? :destroy, CustomForms::FieldType ) && field_type.section_fields.empty?
+                      = link_to '', 'javascript:void(0)',class: "btn btn-floating-action ink-reaction  btn-xs fa fa-trash text-primary swal swal-delete", style: disabled
+                      = link_to '', field_type, :method => :delete, class: "hide"
+
+- if can? :create, CustomForms::FieldType
+  - content_for :footer do
+    = section_floating_action "plus", new_field_type_path, "New field types"
+
+- content_for :header_title do 
+  Field Types
+      
+:javascript
+  $(function(){
+    $(".datatable").DataTable({});
+  });
+

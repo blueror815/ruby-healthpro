@@ -1,0 +1,7 @@
+.offcanvas-head
+  .text-lg.text-primary Visits
+  .offcanvas-tools
+    %a.btn.btn-icon-toggle.btn-floating-action.pull-right.hide_offcanvas.ink-reaction.btn-info.btn-xs{ "data-dismiss" => "offcanvas" }
+      %i.fa.fa-minus
+.offcanvas-body#visits_offcanvas
+  = render 'timesheets/show/shared/visits_offcanvas'

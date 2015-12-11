@@ -1,0 +1,6 @@
+- if @reimbursement_timesheet.errors.any?
+  .alert.alert-callout.alert-danger.no-margin
+    %p= "#{pluralize(@reimbursement_timesheet.errors.count, "error")} prohibited this form from being saved:"
+    %ul
+      - errors.full_messages.each do |msg|
+        %li.text-xs= msg

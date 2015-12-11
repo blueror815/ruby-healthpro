@@ -1,0 +1,28 @@
+- @admin_configurations.each do |admin_configuration|
+  = form_for(admin_configuration, url: admin_configuration_path(admin_configuration), method: 'put') do |f|
+    .section  
+      .section-body
+        .row
+          .col-md-12
+            .card
+              .card-head.style-primary
+                %header.text-lg 
+                  = admin_configuration.title.humanize
+        .card.card-underline
+          .card-body
+            .row
+              - if @latest_payroll
+                .col-md-3
+                  %dl
+                    %dt
+                      Next Payroll starts on
+                    %dd#payroll-start-date
+                      = @latest_payroll.end_date
+              .col-md-12
+                .form-horizontal
+                  = f.fields_for :configurations, OpenStruct.new(admin_configuration.configurations) do |builder|
+                    - admin_configuration.configurations.each do |configuration_line|
+                      = render partial: 'configuration', locals: {builder: builder, period_type: configuration_line[0], configuration_line: configuration_line[1]}
+        
+        - content_for :footer do
+          = section_submit_action "Submit", f.options[:html][:id]

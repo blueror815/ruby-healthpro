@@ -1,0 +1,105 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title Reimbursements
+    .modal-body
+      = form_for @visit, remote:true  do |f|
+        = hidden_field_tag :timesheet_id , @timesheet_id if @timesheet_id
+        - if @visit.errors.any?
+          #error_explanation
+            .alert.alert-callout.alert-info.no-margin
+              %h2= "#{pluralize(@visit.errors.count, "error")} prohibited this form from being saved:"
+              %ul
+                - @visit.errors.full_messages.each do |msg|
+                  %li= msg
+        .form-horizontal
+          .form-group
+            = f.label :time_in, class: "col-sm-2 control-label"
+            .col-sm-10.mini_datetime_select
+              = f.datetime_select :time_in, class: 'form-control'
+              .form-control-line
+          .form-group
+            = f.label :time_out, class: "col-sm-2 control-label"
+            .col-sm-10.mini_datetime_select
+              = f.datetime_select :time_out, class: 'form-control'
+              .form-control-line
+
+
+        %table.table-no-border
+          %tr
+            %td.table-right-col
+              - if @visit.errors.any?
+                #error_explanation
+                  .alert.alert-callout.alert-info.no-margin
+                    %h2= "#{pluralize(@visit.errors.count, "error")} prohibited this form from being saved:"
+                    %ul
+                      - @visit.errors.full_messages.each do |msg|
+                        %li= msg
+          %table.table.table-hover
+            %thead
+              %tr
+                %th.text-md Title
+                %th.text-md Price
+                %th.text-md Action Count
+                %th.text-md Comment
+            = f.fields_for :reimbursements_visits, @visit.reimbursements_visits do |builder|
+              %tr
+                %td
+                  = builder.object.reimbursement.title
+                %td
+                  = builder.object.reimbursement.riembursement_price(@visit.assignee)
+                %td.action-count-field
+                  - if builder.object.reimbursement.value_type == 1
+                    %label
+                      = check_box_tag :remove_field, nil, @visit.reimbursement_ids.include?(builder.object.reimbursement.id) ? true : false , { onchange: 'count_switcher(this)'}
+                      = builder.hidden_field :action_count, {class: 'action-count-field'}
+                      = builder.hidden_field :_destroy, {class: 'destroy-field', value: false}
+                  - else
+                    = builder.number_field :action_count, class: "form-control multiple-instances", min: 0, :step => 1, onchange: "counter_listener(this)"
+                    = builder.hidden_field :_destroy, {class: 'destroy-field', value: false}
+                %td
+                  = builder.text_field :comment, {class: "form-control"}
+            = f.fields_for :reimbursements_visits, @new_reimbursements_visits do |builder|
+              = builder.hidden_field :reimbursement_id
+              %tr
+                %td
+                  = builder.object.reimbursement.title
+                %td
+                  = builder.object.reimbursement.riembursement_price(@visit.assignee)
+                %td.action-count-field
+                  - if builder.object.reimbursement.value_type == 1
+                    %label
+                      = check_box_tag :remove_field, nil, @visit.reimbursement_ids.include?(builder.object.reimbursement.id) ? true : false , { onchange: 'count_switcher(this)'}
+                      = builder.hidden_field :action_count, {class: 'action-count-field', value: 0}
+                      = builder.hidden_field :_destroy, {class: 'destroy-field', value: true}
+                  - else
+                    = builder.number_field :action_count, class: "form-control multiple-instances", min: 0, :step => 1, value: 0, onchange: "counter_listener(this)"
+                    = builder.hidden_field :_destroy, {class: 'destroy-field', value: true}
+                %td
+                  = builder.text_field :comment, {class: "form-control"}
+        .modal-footer
+          %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
+          = f.submit "Save", class: 'btn btn-primary'
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title Comments
+    .modal-body
+      = render partial: 'comments/comments', locals: {commentable: @visit}
+      .clearfix
+      = render partial: 'comments/form', locals: {commentable: @visit}
+
+
+/ :javascript 
+/   function get_dependant_data(selectElm){
+/     $.ajax({
+/       url: "#{get_visit_type_dependant_data_path}",
+
+/       type: "GET",
+/       data: {id:  selectElm.value}
+/     })
+/   }
+
+:javascript
+
+

@@ -1,0 +1,43 @@
+.section-body
+  .card
+    .card-body
+      %table.table.datatableAutoInitializer
+        %thead
+          %tr
+            %th Name
+            %th Schema
+            %th Field
+            %th Query
+            %th
+
+        %tbody
+          - @reports.each do |report|
+            %tr
+              %td= report.name.humanize
+              %td= CustomForms::CustomForm.find(report.custom_form_id).title.humanize if report.custom_form_id
+              - field_type = report.report_fields.first.field_type
+              %td= field_type.humanize
+              %td
+                - if field_type == "boolean"
+                  - field_value = report.report_fields.first.field_value
+                  = !field_value.to_i.zero?
+                - elsif field_type == "date_interval"
+                  - field_value = report.report_fields.first.value_options
+                  = "#{field_value['from']}:#{field_value['to']}"
+                - elsif ["date", 'expirable_file'].include? field_type 
+                  - field_value = report.report_fields.first.value_options
+                  = "Report date range: #{field_value['days']} day(s)"
+
+
+              %td
+                .pull-right
+                  = link_to '', generate_instance_report_path(report), class: "btn btn-floating-action ink-reaction  btn-xs fa fa-eye text-primary "
+                  = link_to '', edit_report_path(report), class: "btn btn-floating-action ink-reaction  btn-xs fa fa-edit text-primary"
+                  = link_to '', '', class: "btn btn-floating-action ink-reaction  btn-xs fa fa-trash text-primary swal swal-delete"
+                  = link_to '', report, :method => :delete
+
+- content_for :footer do
+  = section_floating_action "plus", new_report_path, "Add New Report"
+
+- content_for :header_title do 
+  Listing reports

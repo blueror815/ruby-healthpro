@@ -1,0 +1,8 @@
+- if @user.job_type && @user.job_type.payment_method_ids.include?('2')
+  %dl.dl-horizontal
+    = f.fields_for :payment_rates, @user.payment_rates.find_by(payment_method_id: 2) || @user.payment_rates.new do |payment_rate|
+      = payment_rate.hidden_field :payment_method_id, value: 2
+      %dt
+        Hour price
+      %dd
+        = payment_rate.text_field :price, class: 'form-control numbers_only input-xs', placeholder: "#{ number_to_currency @user.job_type.try(:hour_price) }"

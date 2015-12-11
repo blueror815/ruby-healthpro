@@ -1,0 +1,70 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl
+            Bills
+          .tools
+            = form_tag import_bills_path, multipart: true do
+              - if can? :view, Bill
+                = link_to "", bills_path(format: :xls), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+              - if can? :edit, Bill 
+                %a.btn.btn-floating-action.ink-reaction.btn-accent.btn-xs.fa.fa-upload{ onclick: "$(this).next().click()",  class: "#{@uploading  ? 'overlay_button' : ''}"}
+                = file_field_tag :file, class: "hide", onchange: "this.form.submit()", disabled: @uploading
+                = link_to 'Delete All', bills_delete_all_bills_path
+
+  .card.card-underline
+    .card-body
+      .table-responsive#bill_table
+        = render 'bill_table'
+  - if can? :edit, Bill
+    .card.card-underline
+      .card-head
+        %header.text-lg
+          Add New Bill
+      .card-body
+        #error_explanation
+        #new_bill_row
+          = render 'bill_form_row'
+#payment_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "simpleModalLabel", :role => "dialog", :tabindex => "-1"}
+
+- content_for :header_title do 
+  Bills
+
+- if can? :edit, Bill
+  - content_for :footer do
+    .section-floating-action-row
+      = form_tag import_bills_path, multipart: true do
+        %a.btn.btn-floating-action.ink-reaction.btn-accent.btn-lg
+          .fa.fa-upload{ onclick: "$(this).next().click()" }
+          = file_field_tag :file, class: "hide", onchange: "this.form.submit()"
+
+
+:javascript
+  edit_fields = [
+        { label: 'Patient Name', name: 'patient_id', type: 'select', options: #{ patient_model_options }},
+        { label: 'Insurance Company', name: 'insurance_company_id', type: 'select', options: #{ model_options(InsuranceCompany) }},
+        { label: 'Claim Type', name: 'claim_type_id', type: 'select', options: #{ model_options(ClaimType) }},
+        { label: 'SOC Date', name: 'claim_start_date', type: 'date', dateFormat: 'MM dd, yy' },
+        { label: 'Through Date', name: 'claim_end_date', type: 'date', dateFormat: 'MM dd, yy' },
+        { label: 'Bill Amount', name: 'amount' }, 
+        { label: 'Bill Date', name: 'date', type: 'date', dateFormat: 'MM dd, yy'},
+        { label: 'Note', name: 'note', type: 'textarea'}
+                 
+    ];
+  editable_params = ['patient_id', 'insurance_company_id' , 'claim_type_id', 'amount', 'date', 'note', 'claim_start_date', 'claim_end_date'];
+  columns = [
+        {data :'claim_start_date'},
+        {data :'claim_end_date'},
+        {data :'claim_type_name'},
+        {data :'insurance_company_name'},
+        {data :'patient_name'},
+        {data :'amount_in_dollars'},
+        {data :'date'},
+        {data :'paid_amount'},
+        {data :'paid_date'},
+        {data :'action'}
+      ]
+  var datatable_handler = new DataTableHandler('/bills', 'bill', '#bills_datatable', edit_fields, editable_params, columns, {"columnDefs": [{ "orderable": false, "targets": 9 }], showButtons: #{can? :edit, Bill}, "order": [[ '6', "desc" ]] });
+

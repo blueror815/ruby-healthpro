@@ -1,0 +1,20 @@
+.card.card-underline{id: user_forms_form.object.try(:id), class: 'form-card'}
+  = user_forms_form.hidden_field :creator_user_id, value: user_forms_form.object.creator_user_id
+  = user_forms_form.hidden_field :custom_form_id, value: user_forms_form.object.custom_form_id
+  = user_forms_form.hidden_field :row_order, class: 'row-order-field'
+  .card-head
+    %header.text-lg
+      = user_forms_form.object.custom_form.title
+    .tools
+      - if user_forms_form.object.persisted?
+        = link_to '', 'javascript:void', class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-times', onclick: 'remove_fields(this , "NULL")'
+        = link_to '', custom_forms.custom_form_form_datum_path(user_forms_form.object.custom_form, user_forms_form.object), method: :delete, remote: true, class: 'hide'
+      - else
+        = link_to '', 'javascript:void', class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-times', onclick: "remove_fields(this , '.card.card-underline_#{user_forms_form.object.custom_form_id}')"
+  .card-body
+    .row
+      .col-md-12
+
+        - user_forms_form.object.custom_form.form_sections.each do |user_forms_section_form|
+          = render partial: 'custom_forms/form_data/edit/section', locals: {user_forms_section_form: user_forms_section_form, user_forms_form: user_forms_form}
+

@@ -1,0 +1,9 @@
+= f.fields_for :value_options, OpenStruct.new(f.object.value_options) do |value_option|
+  .form-group
+    = value_option.label :from, { class: "col-sm-1 control-label text-right" }
+    .col-sm-11
+      = value_option.text_field :from, class: "form-control datePickerField"
+  .form-group
+    = value_option.label :to, { class: "col-sm-1 control-label text-right" }
+    .col-sm-11
+      = value_option.text_field :to, class: "form-control datePickerField"

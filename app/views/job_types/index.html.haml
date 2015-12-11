@@ -1,0 +1,25 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header 
+            Disciplines
+          .tools  
+            = link_to '', new_job_type_path , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-plus'
+  - @job_types.each do |job_type|
+    .col-md-6.col-lg-4.col-sm-6
+      .card
+        .alert.alert-callout.alert-primary.no-margin
+          %strong.text-xl
+            %i.fa.fa-clock-o.text-primary
+            - if job_type.title
+              = job_type.title.humanize
+          %br
+            %span.opacity-50
+              = link_to 'Edit', edit_job_type_path(job_type), class: "pull-right btn ink-reaction btn-raised btn-sm"
+              - disabled = ''
+              - unless job_type.users.empty? 
+                - disabled = " pointer-events: none; cursor: default;"
+              = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete", style: disabled
+              = link_to '', job_type, method: :delete, class: "hide"

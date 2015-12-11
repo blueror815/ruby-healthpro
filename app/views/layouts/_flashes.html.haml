@@ -1,0 +1,5 @@
+- unless flash.empty?
+  .card
+    .alert.alert-callout.no-margin{class: "alert-#{flash.first.first}"}
+      - flash.each do |name, msg|
+        = content_tag :div, msg

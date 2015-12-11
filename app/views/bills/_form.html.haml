@@ -1,0 +1,66 @@
+- model_name = @model == 'job_type' ? 'discipline' : @model
+.section-body
+  .card
+    .card-head.style-primary
+      %header.text-xl
+        #{model_name.humanize.capitalize} ##{@id}
+      .tools
+      
+= form_for @instance do |f|
+  .card.card-underline
+    .card-head
+      %header.text-lg
+        New #{model_name.humanize.capitalize}
+    .card-body
+      .row
+        .col-md-12
+          - if @instance.errors.any?
+            #error_explanation
+              .alert.alert-callout.alert-error.no-margin
+                %h2= "#{pluralize(@instance.errors.count, "error")} prohibited this #{model_name.humanize} from being saved:"
+                %ul
+                  - @instance.errors.full_messages.each do |msg|
+                    %li= msg
+    .card-body
+      .form-horizontal
+        .form-group
+          = label @model, :date, class: "col-sm-1 control-label"
+          .col-sm-11#date.input-group.date
+            = text_field @model, :date, class: 'datepicker form-control'
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = label @model, :payment_date, class: "col-sm-1 control-label"
+          .col-sm-11#date.input-group.date
+            = text_field @model, :payment_date, class: 'datepicker form-control'
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = label @model,  :amount, class: "col-sm-1 control-label"
+          .col-sm-11
+            = text_field @model, :amount, class: 'form-control numbers_only'
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = label @model,  :paied_amount, class: "col-sm-1 control-label"
+          .col-sm-11
+            = text_field @model, :paied_amount, class: 'form-control numbers_only'
+            .form-control-line
+
+      .form-horizontal
+        .form-group
+          = label @model, :patient, class: "col-sm-1 control-label"
+          .col-sm-11
+            = select @model, :patient_id, options_from_collection_for_select(Patient.all, :id, :display_name, @bill.patient_id), {:include_blank => true}, {multiple: true, class: "form-control"}
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = label @model, :claim_type, class: "col-sm-1 control-label"
+          .col-sm-11
+            = select @model, :claim_type_id, options_from_collection_for_select(ClaimType.all, :id, :name, @bill.claim_type_id), {:include_blank => true}, {multiple: true, class: "form-control"}
+            .form-control-line
+
+  = f.submit 'Save', class: "btn  btn-raised btn-info ink-reaction pull-right"
+  %a.fa.fa-reply{href: "/" + @model.pluralize, class: "btn btn-floating-action ink-reaction btn-info btn-xs fa fa-reply"}@id
+
+

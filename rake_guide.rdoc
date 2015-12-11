@@ -1,0 +1,2 @@
+run scrap_users rake task in order to scrap legacy system users data by command
+$ rake scrap_users

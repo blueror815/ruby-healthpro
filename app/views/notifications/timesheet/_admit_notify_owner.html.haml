@@ -1,0 +1,9 @@
+= link_to main_app.mark_as_read_notifications_path(notification_ids: [notification.id], redirect_path: main_app.polymorphic_path([notification.notifiable.user, notification.notifiable])) do
+  .notification-element{id: "#{notification.id}"}
+    = image_tag notification.senders.first.image, class: 'img-circle img-responsive pull-left width-1'
+    %span.text-primary= notification.senders.first.display_name
+    admitted 
+    %span.text-medium
+      = 'your timesheet #' + notification.notifiable.id.to_s
+    %br
+    %span.opacity-50= notification.notifiable.created_at

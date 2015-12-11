@@ -1,0 +1,21 @@
+%table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+  %thead 
+    %tr
+      %th= check_box_tag 'task_id[]',  "0", false, class: "task_checkbox" if submittable?(@timesheet)
+      %th Patient
+      %th Visit
+      %th Date
+      %th Time In 
+      %th Time Out
+      %th Complex Visit
+      %th Comment
+      %th Out of Area
+      %th Comment
+      %th Mileage
+      %th Comment
+
+
+  %tbody
+    - visits.each do |v|
+      %tr
+        = render partial: "timesheets/show/shared/visit_row", locals: { v: v }

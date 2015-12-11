@@ -1,0 +1,175 @@
+.section-body
+  .card.card-underline
+    .card-head
+      %header.text-xl.text-primary Payments Summary
+      .tools
+        = link_to "", payments_summary_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], total_summary: true), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+
+  = render "bills/date_filter", report_url: payments_summary_path
+  .row
+    .col-md-7
+      .card.card-underline
+        .card-head
+          %header.text-lg.text-primary Payments
+          .tools
+            = link_to "", payments_summary_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], export_summary: false, total_summary: false), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+        .card-body
+          %table.table.table-condensed#payments.text-xs
+            %thead
+              %th.col-md-2 Start Date
+              %th.col-md-2 Discharged Date
+              %th.col-md-2 Payor
+              %th.col-md-2 Patient
+              %th.col-md-1 Amount
+              %th.col-md-2 Date
+              %th.col-md-1 Claim
+
+    .col-md-5
+      .card.card-underline
+        .card-head
+          %header.text-lg.text-primary Summary
+          .tools
+            = link_to "", payments_summary_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], export_summary: true, total_summary: false, filter_type: params[:filter_type]), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+        .card-body
+          %table.table.table-condensed#payments-summary.text-xs.bills-summary-datatable
+            %thead
+              %tr
+                %th{"colspan": "2"}= ""
+                %th.text-center{"colspan": "2", style: "border-top: solid rgb(230, 231, 231) 1px; ;"}= params[:to]
+                %th.text-center{"colspan": "2", style: "border-top: solid rgb(230, 231, 231) 1px; border-left: solid rgb(230, 231, 231) 1px;"}= "#{params[:from]} - #{params[:to]}"
+              %tr
+                - if @summary_filter_keys.first != :claim_type
+                  %th Claim
+                  %th Payor
+                -else
+                  %th Payor
+                  %th Claim
+                %th.col-md-2 Amount
+                %th.col-md-2 Files No.
+                %th.col-md-2{style: "border-left: solid rgb(230, 231, 231) 1px;"} Amount
+                %th.col-md-2 Files No.
+
+
+            %tbody
+              - total_payment_count = 0
+              - @payments_in_interval_grouped.each do |payment|
+                %tr
+                  %td
+                    = payment[@summary_filter_keys.first]
+                    %span
+                      = number_to_currency @payments_summary[payment[@summary_filter_keys.first]][:amount_recent]
+                    %span
+                      = @payments_summary[payment[@summary_filter_keys.first]][:count_recent]
+                    %span
+                      = number_to_currency @payments_summary[payment[@summary_filter_keys.first]][:amount]
+                    %span
+                      = @payments_summary[payment[@summary_filter_keys.first]][:count]
+                  %td.text-right= payment[@summary_filter_keys.last]
+                  %td= number_to_currency payment[:amount_recent]
+                  %td.hover-red.today.individual-count= payment[:count_recent]
+                  %td= number_to_currency payment[:amount]
+                  %td.individual-count.hover-red
+                    - total_payment_count += payment[:count]
+                    = payment[:count]
+              %tr
+                %td
+                  Total
+                  %span
+                  %span
+                  %span
+                  %span
+                %td= "Total"
+                %td=  number_to_currency @payments_recent_total
+                %td= @payments_recent_count
+                %td= number_to_currency(@payments_in_interval_grouped.map{|s| s[:amount]}.reduce(:+).to_f.round(2).to_s)
+                %td#summary_total= total_payment_count
+
+- content_for :header_title do 
+  Payments Summary
+
+:javascript
+  $(function(){
+    function getUrlVar(key) {
+      var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+      return result && unescape(result[1]) || "";
+    }
+
+    $('.date-picker input').datetimepicker({
+      format: 'MM-DD-YYYY'
+    });
+    columns = [
+          {data :'claim_start_date'},
+          {data :'claim_end_date'},
+          {data :'payor'},
+          {data :'patient_name'},
+          {data :'amount'},
+          {data :'date'},
+          {data :'claim_type_name'}
+        ]
+
+    var datatable_handler = new DataTableHandler('/payments?to=#{params[:to]}&from=#{params[:from]}', 'payment', '#payments', [], [], columns, {"order": [[ '5', "desc" ]] , showButtons: false });
+
+    var table = $('#payments-summary').dataTable({ "bLengthChange": false, "bPaginate": false}).rowGrouping({bExpandableGrouping: true});
+
+    var payments = $('#payments').dataTable();
+
+    var filter_type = getUrlVar('filter_type');
+    var search_prefix = "filterkey:";
+
+    var group_column_id = filter_type === 'Claim' ? 6 : 2;
+    var individual_column_id = filter_type === 'Claim' ? 2 : 6;
+
+    function clear_selection() {
+      payments.fnFilter("", individual_column_id);
+      payments.fnFilter("", group_column_id);
+      payments.fnFilter("", 5);
+    };
+
+    $('#summary_total').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $('#payments-summary_wrapper tr').not('[role=row]').children('td').not('[id=summary_total]').not('[data-group-level=0]').not('[class]').not('[rowspan]').closest("tr").siblings().removeClass("highlight-filter");
+      $('.individual-count').closest("tr").siblings().removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      payments.fnFilter("");
+    });
+
+    $('#payments-summary_wrapper tr').not('[role=row]').children('td').not('[data-group-level=0]').not('[class]').not('[rowspan]').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $("#summary_total").parents("tr").removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      if ($('.highlight-filter').length > 0) {
+        payments.fnFilter(search_prefix + $('.highlight-filter').html().split('</td>')[0].split('>')[1].trim(), group_column_id, true);
+        if($(this).next().length != 0){
+          payments.fnFilter("date:" + new Date("#{ params[:to] }"), 5, true);
+        }
+      } else {
+        payments.fnFilter("");
+      }
+    });
+
+    $('.individual-count').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $("#summary_total").parents("tr").removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      if ($('.highlight-filter').length > 0) {
+        var highlighted = $('.highlight-filter').prevAll('tr').not('[role=row]')[0];
+        payments.fnFilter(search_prefix + $(highlighted).html().split('</td>')[0].split('>')[1].trim(), group_column_id, true);
+        payments.fnFilter(search_prefix + $('.highlight-filter').html().split('</td>')[0].split('>')[1].trim(), individual_column_id, true);
+        if($(this).hasClass('today')){
+          payments.fnFilter("date:" + new Date("#{ params[:to] }"), 5, true);
+        }
+      } else {
+        payments.fnFilter("");
+      }
+    });
+  })
+  

@@ -1,0 +1,29 @@
+.card
+  .card-head
+    %header.text-lg
+      Reimbursements
+    - if @timesheet.user == current_user and @timesheet.state == "created"
+      .tools
+        = link_to new_reimbursement_timesheet_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+          %i.fa.fa-plus
+
+  .card-body#reimbursement_timesheet_table
+    - if reimbursement_timesheets_line_items and !reimbursement_timesheets_line_items.empty?
+      %table.table.table-condensed.text-sm{"cellspacing":"0"}
+        %thead 
+          %tr
+            %th.col-md-1 State
+            %th.col-md-2 Date
+            %th.col-md-2 Reimbursement
+            %th.col-md-6 Amount
+            %th.col-md-6 Notes
+            %th.col-md-1.text-right Actions
+            
+        %tbody
+          - reimbursement_timesheets_line_items.map(&:payable).each do |reimb|
+            %tr
+              = render "timesheets/show/submitted/owner/reimbursement_row", reimb: reimb
+    - else
+      Click (+) to add Reimbursements to this timesheet
+
+   

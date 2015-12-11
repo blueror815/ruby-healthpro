@@ -1,0 +1,11 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-lg
+            #{@custom_form.title} ##{@form_datum.id} - Edit
+.section-body
+  .card.card-underline
+    .card-body
+      = render 'form'

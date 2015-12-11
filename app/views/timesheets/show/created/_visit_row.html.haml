@@ -1,0 +1,37 @@
+- visit = "Visit ##{v.id}"
+- if v.visit_type and v.visit_type.title
+  - visit = "#{v.visit_type.title} ##{v.id}"
+%form
+  .row
+    %div
+      = check_box_tag 'task_id[]',  v.id, false, class: "task_checkbox" if submittable?(@timesheet)
+    .col-md-4
+      %dl.dl-horizontal
+        %dt Patient
+        %dd= v.patient.display_name
+        %dt Visit
+        %dd= visit
+        %dt State
+        %dd= v.progress_state
+        
+    .col-md-3
+      = render_row_time_data(v)
+    .col-md-4
+      = render_row_reimbursements_data(v)
+
+    .col-md-1
+      - if v.user == current_user
+        - if v.progress_state == "visited" && submittable?(@timesheet)
+          = link_to  update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'pending', task_type: 'visit'), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+            %i.fa.fa-arrow-right
+        - else
+          = link_to  update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'visited', task_type: 'visit'), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+            %i.fa.fa-remove
+      - if admittable?(@timesheet, @user) && (can? :admit, Timesheet)
+        - user = @user ? @user : current_user
+        .text-right
+          = link_to "", update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'approved', user_id: user.id), class: "btn-icon-toggle fa fa-arrow-right", title: 'Approve' , remote: true
+
+  .row
+    .col-md-12
+      = render partial: "comments/comments_collapsed_card", locals: {commentable: v}

@@ -1,0 +1,84 @@
+
+.row
+  .col-md-7
+    .card
+      .card-head.text-center.style-primary
+        %header Unbilled visits
+      .card-body
+        %table.datatable-no-pagination.table.table-hover.unbilled-visits
+          %thead
+            %tr
+              %th ID
+              %th Date
+              %th Form Name
+              %th Price
+              %th Add
+          %tbody
+            %tr.arrow-bill
+              %td 2
+              %td 04/23/2015
+              %td Nurse Visit
+              %td.text-right $385.00
+              %td.text-right
+                %a.btn.btn-icon-toggle
+                  %i.fa.fa-arrow-right
+            %tr
+              %td 2
+              %td 04/23/2015
+              %td Nurse Visit
+              %td.text-right $385.00
+              %td.text-right
+                %a.btn.btn-icon-toggle
+                  %i.fa.fa-arrow-right
+            %tr
+              %td 2
+              %td 04/23/2015
+              %td Nurse Visit
+              %td.text-right $385.00
+              %td.text-right
+                %a.btn.btn-icon-toggle
+                  %i.fa.fa-arrow-right
+            %tr
+              %td 2
+              %td 04/23/2015
+              %td Nurse Visit
+              %td.text-right $385.00
+              %td.text-right
+                %a.btn.btn-icon-toggle
+                  %i.fa.fa-arrow-right
+
+  .col-md-5
+    .card
+      .card-head.text-center.style-primary
+        %header Bill sheet
+      .card-body
+        / BEGIN INVOICE PRODUCTS
+        %table.table.table-hover.bill-sheet
+          %thead
+            %tr
+              %th.text-left{:style=> "padding-left:29px"} Visit
+              %th.text-right Total Price
+          %tbody
+            %tr
+              %td
+                %a.close-icon
+                  %i.fa.fa-close
+                Nostrud exerci
+              %td.text-right $770.00
+            %tr
+              %td
+                %a.close-icon
+                  %i.fa.fa-close
+                Nostrud exerci
+              %td.text-right $770.00
+              %tr
+                %td
+                  %a.close-icon
+                    %i.fa.fa-close
+                  Nostrud exerci
+                %td.text-right $770.00
+            %tr
+              %td{:style=> "padding-left:27px"}
+                %strong.text-lg.text-accent Total
+              %td.text-right
+                %strong.text-lg.text-accent $2,606.00

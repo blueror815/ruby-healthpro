@@ -1,0 +1,71 @@
+%header#header
+  .headerbar
+    / Brand and toggle get grouped for better mobile display
+    .headerbar-left
+      %ul.header-nav.header-nav-options
+        %li.header-title-container
+          .header-title.text-lg
+            -if content_for?(:header_title)
+              %a#back-button.btn.btn-xs{href: request.try(:referer)}
+                %i.fa.fa-chevron-left
+              = yield :header_title
+            - else
+              ProHealth - Home Care Services
+    / Collect the nav links, forms, and other content for toggling
+    .headerbar-right
+      - if current_user
+        %ul.header-nav.header-nav-options
+          = render partial: 'notifications/notifications_panel'
+        %ul.header-nav.header-nav-profile
+          %li.dropdown
+            %a.dropdown-toggle.ink-reaction{"data-toggle" => "dropdown", :href => "javascript:void(0);"}
+              = image_tag(current_user.image)
+              %span.profile-info
+                = current_user.display_name
+                %small= current_user.job_type_short_name
+            %ul.dropdown-menu.animation-dock
+              %li
+                %a{:href => main_app.user_path(current_user)}
+                  Profile
+                  %span.pull-right
+                    %i.fa.fa-user
+              %li.divider
+              %li
+                %a{:href => '#', 'data-toggle' => "modal", 'data-target' => '#change-password-modal'}
+                  Change Password
+                  %span.pull-right
+                    %i.fa.fa-building-o
+              %li.divider 
+              %li
+                %a{:href => main_app.destroy_user_session_path, "data-method" => :delete}
+                  Logout
+                  %span.pull-right
+                    %i.fa.fa-fw.fa-power-off.text-danger
+                  
+
+  .modal#change-password-modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4.modal-title Change Password 
+        = form_for current_user, url: main_app.update_password_user_path(current_user), method: :put,remote: true, html: {role: 'form', class: 'form-horizontal', id: 'change-password-form'} do |user|
+          .modal-body
+            #errors-explaination
+              = render 'users/error_explaination'
+            .form-group
+              %label.col-sm-2.control-label{:for => "password"} Old Password
+              .col-sm-10
+                = user.text_field :current_password, type: 'password', class: 'form-control', id: 'password'
+            .form-group
+              %label.col-sm-2.control-label{:for => "password"} Password
+              .col-sm-10
+                = user.text_field :password, type: 'password', class: 'form-control', id: 'password'
+            .form-group
+              %label.col-sm-2.control-label{:for => 'password-confirmation'} Password Confirmaiton
+              .col-sm-10
+                = user.text_field :password_confirmation, type: 'password', class: 'form-control', id: 'password-confirmation'
+          .modal-footer
+            = user.submit "Submit", class: 'save-form btn btn-primary'
+            %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Close

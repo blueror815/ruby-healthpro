@@ -1,0 +1,4 @@
+$("#bonus_modal").html("#{escape_javascript(render('modal_form')).html_safe}");
+$("#bonus_modal").modal('show');
+
+$('#date input').datetimepicker({format: 'YYYY/MM/DD'});

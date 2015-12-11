@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @coverage_area.name
+
+= link_to 'Edit', edit_coverage_area_path(@coverage_area)
+\|
+= link_to 'Back', coverage_areas_path

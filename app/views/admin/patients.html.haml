@@ -1,0 +1,39 @@
+.section-body  
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Patients Forms
+          .tools
+            - if @patient_category && (can? :edit, Patient)
+              = link_to '', custom_forms.new_custom_form_path(form_category: @patient_category.id, redirect_path: admin_patients_path) , class: 'pull-right btn btn-floating-action ink-reaction btn-info  btn-xs fa fa-plus'
+
+  .row
+    - if @patient_forms
+      - @patient_forms.each do |custom_form|
+        .col-md-6.col-lg-4.col-sm-6
+          .card
+            .alert.alert-callout.alert-primary.no-margin
+              %strong.text-lg
+                %i.fa.fa-clock-o.text-primary
+                = custom_form.title.humanize
+              %br
+                %span.opacity-50
+                  - if custom_form.form_category
+                    = custom_form.form_category.name
+                  = link_to 'Edit', custom_forms.edit_custom_form_path(custom_form), class: "pull-right btn ink-reaction btn-raised btn-sm"
+                  - if custom_form.deletable == true
+                    = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete"
+                    = link_to '', custom_forms.custom_form_path(custom_form), :method => :delete, class: "hide"
+    - else
+      .col-md-12
+        .card
+          .card-body
+            No Patients forms to view.
+  .row
+    .col-md-12       
+
+  = render partial: 'permissions_table', locals: {submission_path: admin_update_patients_roles_permissions_path}
+  
+

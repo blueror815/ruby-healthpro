@@ -1,0 +1,48 @@
+.section-body
+  .card
+    .card-head.style-primary
+      %header.text-xl
+        - if @hour.hour_type 
+          = @hour.hour_type.title   + " #" + @hour.id.to_s
+        - else 
+          Hour ##{@hour.id}
+      .tools  
+        - if can? :edit, Visit
+          = link_to '', edit_hour_path(@hour) , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-edit'
+  .card  
+    .card-body
+      .row
+        .col-sm-3.profile-pic-col
+          .profile-img
+            = image_tag(@hour.assignee.image, class: "border-white border-xl img-responsive auto-width")
+          %h3.text-center= @hour.assignee.display_name
+        .col-sm-9.profile-info
+          .form-horizontal
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Progress state
+              .col-sm-10
+                %label{:for => ""}
+                  = @hour.progress_state
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Hours
+              .col-sm-10
+                %label{:for => ""}
+                  = formated_time @hour.hours
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Hour Type
+              .col-sm-10
+                %label{:for => ""}
+                  = @hour.hour_type.title.humanize
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Date
+              .col-sm-10
+                %label{:for => ""}
+                  = @hour.date
+
+  .row
+    .col-md-12
+      .card.style-primary
+        .card-head
+          %header.text-lg
+            Comments  
+      = render partial: 'comments/comments_with_form', locals: {commentable: @hour}

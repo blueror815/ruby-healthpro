@@ -1,0 +1,5 @@
+- if can? :edit, User
+  = section_action "reply", users_path, "Back"
+  = section_floating_action "edit", edit_user_path(@user), "Edit"
+- else
+  = section_floating_action "reply", users_path, "Back"

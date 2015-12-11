@@ -1,0 +1,33 @@
+%section.section-account
+  .img-backdrop{:style => "background-image: url(#{asset_path 'banner.jpg'})"}
+  .spacer
+  .card.contain-sm.style-transparent
+    .card-body
+      .row
+        .col-sm-2
+        .col-sm-8
+          %br/
+          %span.text-lg.text-bold.text-primary PROHEALTH LOGIN
+          %br/
+          %br/
+          = form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form floating-label'}) do |f|
+            .form-group
+              = f.email_field :email, autofocus: true, class: "form-control"
+              %label{:for => "username"} Email
+            .form-group
+              = f.password_field :password, autocomplete: "off", class: "form-control"
+        
+              %label{:for => "password"} Password
+              %p.help-block
+                %a{:href => "#"} Forgotten?
+            %br/
+            .row
+              .col-xs-6.text-left
+                .checkbox.checkbox-styled
+                  %label
+                    %input{:type => "checkbox"}/
+                    %span Remember me
+
+              .col-xs-6.text-right.actions
+                = f.submit "Log in", class:"btn btn-primary btn-raised"
+        .col-sm-2

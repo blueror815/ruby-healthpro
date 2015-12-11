@@ -1,0 +1,41 @@
+- price = 0.0
+.card.card-underline
+  .card-head
+    %header.text-lg
+      Payment Rates
+  .card-body
+    .col-md-12
+    - if @user.job_type.payment_method_ids.include?('3')
+      %dl.dl-horizontal
+        %dt Salary
+        %dd= number_to_currency(@user.fixed_salery)
+
+    - if @user.job_type.payment_method_ids.include?('5')
+      %dl.dl-horizontal
+        %dt On Call
+        %dd= number_to_currency(@user.on_call_price.to_f)
+
+    - if @user.job_type.payment_method_ids.include?('2')
+      %dl.dl-horizontal
+        %dt Hour price
+        %dd
+          - hour_price = @user.payment_rates.find_by(payment_method_id: 2).try(&:price) || @user.job_type.hour_price
+          = number_to_currency(hour_price)
+
+    - if @user.payment_rates.reimbursement_types.any?
+      %dl.dl-horizontal
+        - @user.payment_rates.reimbursement_types.each do |rate|
+          - if rate.reimbursement.value_type != 3
+            - price = rate.price.nil? ? rate.reimbursement.price : rate.price
+            %dt= rate.reimbursement.title
+            %dd= number_to_currency(price)
+
+
+
+    - if @user.job_type.visit_types.any?
+      %dl.dl-horizontal
+        - @user.job_type.visit_types.each do |visit_type|
+          - rate = @user.payment_rates.find_by(visit_type_id: visit_type.id)
+          - price = rate.nil? || rate.price.nil? ? visit_type.price  : rate.price
+          %dt= visit_type.title.to_sym
+          %dd= number_to_currency(price)

@@ -1,0 +1,22 @@
+.card.card-underline.style-default-dark
+  .card-head
+    %header.opacity-75
+      Personal info
+    .tools
+      %a.btn.btn-icon-toggle.ink-reaction{href: edit_user_path(@user)}
+        %i.fa.fa-edit
+      
+    / end .tools
+  / end .card-head
+  .card-body.no-padding
+    %ul.list
+      = tile_list_item @user.email, "Email"
+      = tile_list_item @user.job_type.try(:title), "Job"
+      = tile_list_item @user.role.try(:name), "Role"
+      = tile_list_item @user.deactivated? ?  "Inactive" : "Active", "State"
+      %li.divider-inset
+      = tile_list_item @user.departments.map(&:name).to_sentence, "Departments"
+      = tile_list_item @user.agencies.map(&:name).to_sentence, "Agencies"       
+      = tile_list_item @user.coverage_areas.map(&:name).to_sentence, "Coverage Areas"
+     
+   

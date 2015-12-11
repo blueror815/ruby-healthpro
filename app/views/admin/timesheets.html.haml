@@ -1,0 +1,9 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Timesheets Permissions
+
+= render partial: 'permissions_table', locals: {submission_path: admin_update_timesheets_roles_permissions_path}

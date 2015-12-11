@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Reimbursement:
+  = @reimbursement_timesheet.reimbursement_id
+%p
+  %b Timesheet:
+  = @reimbursement_timesheet.timesheet_id
+%p
+  %b Progress state:
+  = @reimbursement_timesheet.progress_state
+%p
+  %b Action count:
+  = @reimbursement_timesheet.action_count
+%p
+  %b Comment:
+  = @reimbursement_timesheet.comment
+
+= link_to 'Edit', edit_reimbursement_timesheet_path(@reimbursement_timesheet)
+\|
+= link_to 'Back', reimbursement_timesheets_path

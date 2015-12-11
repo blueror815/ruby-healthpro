@@ -1,0 +1,80 @@
+.section-body
+  = render "timesheet_header"
+  #timesheet_body
+    - state = @timesheet.state
+    = render "timesheets/show/#{state}/#{state}"
+
+  .row#comments
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-lg
+            Comments
+        .card-body
+          = render 'comments/comments', commentable: @timesheet
+      .clearfix
+      = render 'comments/form', commentable: @timesheet
+
+- content_for :footer do
+  = render "timesheets/footer"
+
+- content_for :left_offcanvas do
+  - if current_user.job_type.payment_method_ids.include?('1')
+    #visits_comments
+      = render "timesheets/show/shared/offcanvas_comments"
+  - if current_user.job_type.payment_method_ids.include?('2')
+    #hours_comments
+      = render "timesheets/show/shared/offcanvas_hours_comments"
+  - if current_user.job_type.payment_method_ids.include?('5')
+    #oncalls_comments
+      = render "timesheets/show/shared/offcanvas_on_call_comments"
+  - if current_user.job_type.payment_method_ids.include?('6')
+    #reimbs_comments
+      = render "timesheets/show/shared/offcanvas_reimb_comments"
+
+#visit_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "simpleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+        %h4#simpleModalLabel.modal-title Save changes
+      .modal-body
+        %p Do you want to save changes?
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} Cancel
+        %button.btn.btn-primary{:type => "button"} Save changes
+
+:javascript
+  function count_switcher(e){
+    if($(e).is(':checked')){
+      $(e).parent().find('.destroy-field').attr('value', 'false');
+      $(e).parent().find('.action-count-field').attr('value', 1);
+    }
+    else{
+      $(e).parent().find('.destroy-field').attr('value', 'true');
+      $(e).parent().find('.action-count-field').attr('value', 0);
+    }
+  }
+
+  function counter_listener(e){
+    if($(e).val() == '0'){
+      $(e).parent().find('.destroy-field').attr('value', 'true');
+    }
+    else{
+      $(e).parent().find('.destroy-field').attr('value', 'false');
+    }
+  }
+
+  $(".edit_row").click(function(){
+    $.ajax({
+      url: "/visits/"+$(this).attr('data')+"/edit.js",
+      type: "get",
+      success: function(response){},
+      error: function(xhr){}
+    })
+  })
+
+  jQuery(function($){
+     $(".date-mask").inputmask("mm/dd/yyyy");
+     $(".time-mask").inputmask("datetime12"); // am/pm
+  });

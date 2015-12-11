@@ -1,0 +1,12 @@
+- if (can? :view_all, Visit) || (can? :administrate, Visit)
+  %li.gui-folder
+    %a{:class => ('active' unless request.path != main_app.visits_path and main_app.hours_path)}
+      .gui-icon
+        %i.fa.fa-calendar.fa-fw
+      %span.title Activites
+    %ul
+      - if can? :view_all, Visit
+        = render partial:'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.visits_path, folder_item_title: 'Visits'}
+        = render partial:'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.hours_path, folder_item_title: 'Hours'}
+      - if can? :administrate, Visit  
+        = render partial:'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.admin_visits_path, folder_item_title: 'Administration'}

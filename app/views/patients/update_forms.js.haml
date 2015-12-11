@@ -1,0 +1,5 @@
+option = $('select#custom_form_id').find('option').filter(':selected')[0]
+$('select#custom_form_ids').find('option[value="' + $(option).val() + '"]').attr('selected','selected');
+$(option).remove()
+$('select#custom_form_ids, select#custom_form_id').select2()
+$(".card-actionbar").before("#{escape_javascript(render 'shared/forms/form_container', user_forms_form: ActionView::Helpers::FormBuilder.new("patient[form_data_attributes]", @form_datum, self, {index: params[:form_data_count]}))}")

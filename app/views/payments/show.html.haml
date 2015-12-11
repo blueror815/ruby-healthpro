@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Date:
+  = @payment.date
+%p
+  %b Amount:
+  = @payment.amount
+%p
+  %b Notes:
+  = @payment.notes
+%p
+  %b Patient:
+  = @payment.patient_id
+
+= link_to 'Edit', edit_payment_path(@payment)
+\|
+= link_to 'Back', payments_path

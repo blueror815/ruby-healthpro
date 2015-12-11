@@ -1,0 +1,52 @@
+.card.card-underline.style-default-dark
+  .card-head
+    %header.opacity-75
+      Rates
+    .tools
+      %a.btn.btn-icon-toggle.ink-reaction{href: edit_user_path(@user)}
+        %i.fa.fa-edit
+      
+    / end .tools
+  / end .card-head
+  .card-body.no-padding
+    %ul.list
+      - price = 0.0
+
+      - if @user.job_type.payment_method_ids.include?('3')
+        %li.tile
+          .tile-content
+            .tile-text
+              Salary
+        = tile_list_item number_to_currency(@user.fixed_salery), ""
+      
+      - if @user.payment_rates.per_visit.any?
+        %li.divider-inset
+        %li.tile
+          .tile-content
+            .tile-text
+              Visits
+        - @user.payment_rates.per_visit.each do |rate|
+          - price = rate.price.nil? ? rate.visit_type.price  : rate.price
+          = tile_list_item number_to_currency(price), rate.visit_type.title
+          
+      - if @user.payment_rates.hourly.any?    
+        %li.divider-inset
+        %li.tile
+          .tile-content
+            .tile-text
+              Hours
+        - @user.payment_rates.hourly.each do |rate|
+          - price = rate.price.nil? ? rate.hour_type.price  : rate.price 
+          = tile_list_item number_to_currency(price), rate.hour_type.title
+     
+      
+      - if @user.payment_rates.reimbursement_types.any?    
+        %li.divider-inset
+        %li.tile
+          .tile-content
+            .tile-text
+              Reimbursments
+        - @user.payment_rates.reimbursement_types.each do |rate|
+          - if rate.reimbursement.value_type != 3
+            - price = rate.price.nil? ? rate.reimbursement.price  : rate.price 
+            = tile_list_item number_to_currency(price), rate.reimbursement.title

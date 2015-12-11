@@ -1,0 +1,47 @@
+.card.tabs-left.no-margin
+  %ul.card-head.nav.nav-tabs.style-default-light#form-tabs{"data-toggle" => "tabs"}
+    - if @user_hr_forms_data
+      - activated = false
+      - @user_hr_forms_data.each_with_index do |form_form, i|
+        - user_permissions = form_form.custom_form.permissions["#{ current_user.role.short_name }"]
+        - if user_permissions && user_permissions[@action] == '1'
+          %li{class: "form-tab #{ 'active' unless activated }", id: "#{form_form.custom_form.id}"}
+            - activated = true
+            %a{:href => "##{form_form.custom_form.id}nth"} 
+              = form_form.custom_form.title.humanize
+  .card-body.tab-content.style-default-bright#form-panes
+    - activated = false
+    - @user_hr_forms_data.each_with_index do |form_form, i|
+      - user_permissions = form_form.custom_form.permissions["#{ current_user.role.short_name }"]
+      - if user_permissions && user_permissions[@action] == '1'
+        .tab-pane{id: "#{form_form.custom_form.id}nth", class: "#{ 'active' unless activated }"}
+          - activated = true
+          = user_form.fields_for :form_data, form_form do |user_forms_form|
+            = render 'custom_forms/form_data/edit/form', user_forms_form: user_forms_form
+
+:javascript
+  $(function(){
+    update_order_fields();
+
+    $('#form-tabs').bind('tabChange', function(event){
+      update_order_fields();
+    });
+
+    $('#form-tabs').sortable({
+      axis: 'y',
+      items: '.form-tab',
+      cursor: 'move',
+
+      stop: function(e, ui) {
+        update_order_fields();
+      }
+    });
+
+    function update_order_fields(){
+     var position = 0;
+     $('#form-tabs li a').each(function(index){
+       var form_id = $(this).parent().attr('id');
+       $(".form-entity[id=" + form_id +"]").find('.row-order-field').attr('value', position++);
+     });
+    }
+  });

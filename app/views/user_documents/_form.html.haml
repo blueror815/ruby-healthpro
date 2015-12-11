@@ -1,0 +1,52 @@
+%section.content
+  / Your Page Content Here
+  = form_for @user_document , :html => { :multipart => true } do |f|
+    .row
+      .col-md-6
+        / DIRECT CHAT SUCCESS
+        .box.box-success
+          .box-header.with-border
+            %h3.box-title User Documents
+            .box-tools.pull-right
+              %button.btn.btn-box-tool{"data-widget" => "collapse"}
+                %i.fa.fa-minus
+              %button.btn.btn-box-tool{"data-widget" => "remove"}
+                %i.fa.fa-times
+          / /.box-header
+          .box-body
+            .row
+              .col-md-6
+                %table
+                  %tr
+                    %td.table-right-col
+                      - if @user_document.errors.any?
+                        #error_explanation
+                          .alert.alert-callout.alert-info.no-margin
+                            %h2= "#{pluralize(@user_document.errors.count, "error")} prohibited this user_document from being saved:"
+                            %ul
+                              - @user_document.errors.full_messages.each do |msg|
+                                %li= msg
+                  %tr
+                    %td.table-right-col
+                      %b User:
+                    %td 
+                      = f.label @user.full_name
+                      = f.hidden_field :user_id
+                  %tr
+                    %td.table-right-col
+                      %b Document Type
+                    %td 
+                      = f.select :document_type_id, @user.job_type.document_types.collect {|a| [a.document_name, a.id]}, class: 'form-control'
+                  %tr
+                    %td.table-right-col
+                      %b Document
+                    %td 
+                      = f.file_field :attached_document
+                  %tr
+                    %td.table-right-col
+                      %b Expiration Date
+                    %td
+                      = f.text_field :expiration_date, class: 'form-control datepicker', style: "width:150px;height:25px;margin-bottom:4px"
+                  %tr
+                    %td.table-right-col
+                      = f.submit 'Save'

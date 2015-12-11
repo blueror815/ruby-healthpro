@@ -1,0 +1,4 @@
+.form-group
+  = f.label :field_value, { class: "col-sm-1 control-label text-right" }
+  .col-sm-11
+    = f.select :field_value, [[true, '1'], [false, '0']], {}, { class: "form-control" }

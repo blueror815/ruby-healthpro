@@ -1,0 +1,136 @@
+= form_for @field_type do |f|
+  - if @field_type.errors.any?
+    #error_explanation
+      .alert-danger.alert.alert-callout.no-margin
+        %h2= "#{ pluralize(@field_type.errors.count, "error") } prohibited this field type from being saved:"
+        %ul
+          - @field_type.errors.full_messages.each do |msg|
+            %li= msg
+  .form-horizontal
+    .form-group
+      = f.label :name, class: "col-sm-1 control-label"
+      .col-sm-11
+        =  f.text_field :name, class: 'form-control char_count'
+        .form-control-line
+  .form-horizontal
+    .form-group
+      = f.label :field_type, class: "col-sm-1 control-label"
+      .col-sm-11
+        = f.collection_select :field_type, CustomForms::CustomForm::Type, :to_s, :humanize, {}, { class: "form-control" }
+        .form-control-line
+  .form-horizontal.input_mask{class: ('hide' if @field_type.field_type != 'text' && action_name != 'new') }
+    .form-group
+      = f.label :input_mask, class: "col-sm-1 control-label"
+      .col-sm-11
+        =  f.text_field :input_mask, class: 'form-control'
+        .form-control-line
+        .help-block
+          9 : numeric, a : alphabetical, 9|a: alphanumeric
+  .clearfix
+  .options{id: "select", class: ("hide" if @field_type.field_type != 'select')}
+    .form-horizontal
+      .form-group
+        =  f.label :options, class: "col-sm-1 control-label"
+        .col-sm-11
+          = f.fields_for :options, OpenStruct.new(@field_type.options) do |options|
+            = options.text_field :options, { class: "form-control" }
+            .form-group
+              = options.label :comma_separated_options, class: 'pull-left'
+          .form-control-line
+
+  .options{id: "select(associative_value)".parameterize, class: ("hide" if @field_type.field_type != 'select(associative_value)')}
+    .form-horizontal
+      .form-group
+        =  f.label :options, class: "col-sm-1 control-label"
+        .col-sm-11
+          = f.fields_for :options, OpenStruct.new(@field_type.options) do |options|
+            = options.collection_select :model_name, models_names, :to_s, :titleize, { include_blank: true }, { class: "form-control associated_model", onchange: 'get_model_attr(this)' }
+            #attributes_names
+              - if f.object.persisted? && !f.object.options.nil?
+                - model_attr = get_model_attributes_names(f.object.options['model_name'])
+              - else
+                - model_attr = []
+              = options.select :model_attribute, model_attr, {}, { class: "form-control model_attribute" }
+          .form-control-line
+
+  .options{id: "select(associative_value_for_custom_form)".parameterize, class: ("hide" if @field_type.field_type != 'select(associative_value_for_custom_form)')}
+    .form-horizontal
+      .form-group
+        =  f.label :options, class: "col-sm-1 control-label"
+        .col-sm-11
+          = f.fields_for :options, OpenStruct.new(@field_type.options) do |options|
+            = options.collection_select :custom_form_id, CustomForms::CustomForm.all, :id, :title, { :include_blank => true }, { class: "form-control", onchange: 'get_form_attr(this)' }
+            #form_attributes_names
+              - if f.object.persisted? && !f.object.options.nil?
+                - form_attr = get_form_attributes_names(f.object.options['custom_form_id'])
+              - else
+                - form_attr = []
+              = options.select :section_field_id, form_attr, {}, { class: "form-control custom_form_attribute" }
+          .form-control-line
+  .select.options{class: ('hide' unless @field_type.field_type && @field_type.field_type.start_with?('select')) }
+    = f.fields_for :options, OpenStruct.new(@field_type.options) do |options|
+      .form-horizontal
+        .form-group
+          .col-sm-1
+            = options.label :multivalue, class: 'pull-right control-label'
+          .col-sm-11
+            .checkbox.checkbox-styled
+              %label
+                = options.check_box :multivalue
+            .form-control-line
+:javascript
+  $('#field_type_field_type').change(function(){
+    $('div.options').addClass('hide')
+    element_id = $(this).val().replace(/\(/ , '-').replace(/\)/ , '')
+    $('#' + element_id + ' ,.' + element_id.split('-')[0]).removeClass('hide')
+    if($(this).val() != 'text'){
+      $('.input_mask').addClass('hide')
+    } else {
+      $('.input_mask').removeClass('hide')
+    }
+  })
+
+  function get_model_attr(selectElm){
+    $.ajax({
+      url: "#{get_model_attributes_path}",
+      type: "GET",
+      data: {model_name:  selectElm.value, element_class: 'model_attribute'}
+    })
+  }
+
+  function get_form_attr(selectElm){
+    $.ajax({
+      url: "#{get_form_attributes_path}",
+      type: "GET",
+      data: {form_id:  selectElm.value, element_class: 'custom_form_attribute'}
+    })
+  }
+
+  $("input:radio[name=selection_type_#{}]").click(function() {
+    containers = $(this).parents('tr').find('dl')
+    containers.addClass('hide')
+    containers.filter('.'+$(this).val()).removeClass('hide')
+  });
+
+  if(($("select.options").children("option").filter(":selected").text()).match(/Select/g)){
+    element_id = ($("select.options").val() + '#{}').replace(/[()]/g, "_")
+    mutlivalue_checkbox = $("#multivalue_#{}")
+    $("#multivalue_#{'id'}").remove();
+    $('#' + element_id).find('.modal-body').append(mutlivalue_checkbox)
+    $('[data-form=#{'id'}]').removeClass('hide')
+    $('[data-form=#{'id'}]').attr('data-target', '#' + element_id)
+  }
+
+  $("select.#{'id'}").on('change', function() {
+    if(($(this).children("option").filter(":selected").text()).match(/Select/g)){
+      element_id = ($(this).val() + '#{'id'}').replace(/[()]/g, "_")
+      mutlivalue_checkbox = $("#multivalue_#{'id'}")
+      $("#multivalue_#{'id'}").remove();
+      $('#' + element_id).find('.modal-body').append(mutlivalue_checkbox)
+      $('[data-form=#{'id'}]').removeClass('hide')
+      $('[data-form=#{'id'}]').attr('data-target', '#' + element_id)
+    }else{
+      $('[data-form=#{'id'}]').addClass('hide')
+      $('[data-form=#{'id'}]').attr('data-target', '')
+    }
+  })

@@ -1,0 +1,67 @@
+- if controller_name == 'timesheets' and action_name == 'show'
+  .offcanvas
+    #offcanvas-visits.offcanvas-pane.width-16
+      - if @unpaid_visits || @pending_visits || @approved_visits || @admitted_visits
+        = render "timesheets/show/shared/visits"
+    #offcanvas-bill.offcanvas-pane.width-16
+      = render "timesheets/show/shared/billsheet_offcanvas"
+    #offcanvas-hours.offcanvas-pane.width-16
+      - if @unpaid_hours || @pending_hours || @approved_hours || @admitted_hours
+        = render "timesheets/show/shared/offcanvas_hours_container"
+    #offcanvas-on-call.offcanvas-pane.width-16
+      - if @unpaid_on_calls || @pending_on_calls || @approved_on_calls || @admitted_on_calls
+        = render "timesheets/show/shared/offcanvas_on_calls_container"
+    #offcanvas-reimbursements.offcanvas-pane.width-16
+      - if @unpaid_reimb || @pending_reimb || @approved_reimb || @admitted_reimb
+        = render "timesheets/show/shared/offcanvas_reimbursement_container"
+    
+- else
+  .offcanvas
+    #offcanvas-chat.offcanvas-pane.width-12
+      .offcanvas-head.style-primary
+        %header
+          Nurse Visit #101
+        .offcanvas-tools 
+          %a.btn.btn-icon-toggle.pull-right{ "data-dismiss" => "offcanvas"}
+            %i.fa.fa-minus
+      .offcanvas-body
+        .row
+          .col-sm-3
+          .col-sm-6
+            .profile-img 
+              = image_tag asset_path('placeholder.jpg'), class: "border-white border-xl img-responsive auto-width"
+        %h2.text-center.text-primary Patient name
+        %br
+        %table.table.table-condensed.no-margin
+          %tbody
+            %tr
+              %td.text-default-light{"style"=> "width: 70%;"} Visit created date
+              %td{"style"=> "width: 30%;"} 21 / 8 / 2015
+            %tr
+              %td.text-default-light{"style"=> "width: 70%;"} Visit assigned date
+              %td{"style"=> "width: 30%;"} 21 / 8 / 2015
+            %tr
+              %td.text-default-light{"style"=> "width: 70%;"} Visit occurance date
+              %td{"style"=> "width: 30%;"} 21 / 8 / 2015        
+
+        %table.table.table-condensed.no-margin
+          %tbody
+            %tr
+              %td.text-default-light{"style"=> "width: 5%;"}
+                %i.fa.fa-money
+              %td.text-default-light{"style"=> "width: 70%;"} Nurse Visit
+              %td{"style"=> "width: 30%;"} $100
+              
+            %tr
+              %td.text-default-light{"style"=> "width: 5%;"} 
+                %i.fa.fa-credit-card
+              %td.text-default-light{"style"=> "width: 70%;"} Complex Visit
+              %td{"style"=> "width: 30%;"} $50
+              
+            %tr
+              %td.text-default-light{"style"=> "width: 5%;"}
+                %i.fa.fa-credit-card
+              %td.text-default-light{"style"=> "width: 70%;"} Mileage
+              %td{"style"=> "width: 30%;"} $10
+        = render :partial => "layouts/comments"
+

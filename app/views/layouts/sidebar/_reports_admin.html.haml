@@ -1,0 +1,7 @@
+%li.gui-folder
+  %a{:class => ('active' if is_active([{url:main_app.reports_path}]))}
+    .gui-icon
+      %i.fa.fa-user-md.fa-fw
+    %span.title  Reports
+  %ul
+    = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.reports_path, folder_item_title: 'Administration'}

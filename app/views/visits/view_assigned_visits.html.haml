@@ -1,0 +1,58 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Today's
+          
+  - if @today_visits.any?
+    .row
+      - @today_visits.each do |visit|  
+        .col-md-4.col-lg-4.col-sm-4
+          .card
+            .alert.alert-callout.alert-primary.no-margin
+              %strong.text-lg
+                %i.fa.fa-ambulance.text-primary
+              %strong.text-lg
+                - if visit.visit_type
+                  = "#{visit.visit_type.title.humanize} ##{visit.id}"
+                - else
+                  = "Visit #{visit.id}"
+                %span.pull-right 10:10 am
+              %br
+                %strong.text-md.opacity-50  Pacient Name
+
+  - else
+    .row
+      .col-md-12
+        .card
+          .card-body.text-md
+            No assigned activities for today     
+             
+  .card.card-underline
+    .card-head
+      %header.text-xl 
+        Calendar
+    .card-body
+      #calendar
+
+/ call fullcalender function with timeheets event array
+= javascript_include_tag 'timesheets'
+:javascript
+  $('#calendar').fullCalendar({
+    height: 1040,
+    defaultView: 'agendaWeek',
+    header: {
+        left:   'title',
+        center: '',
+        right:  'today prev,next'
+    },
+    editable: false,
+    droppable: true,
+    events: #{@events_array.to_json},
+
+    eventClick: function(calEvent) {
+      window.location = "/visits/" + calEvent['title'].split('#')[1];
+    }
+  })

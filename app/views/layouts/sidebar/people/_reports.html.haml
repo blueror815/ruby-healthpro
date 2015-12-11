@@ -1,0 +1,2 @@
+- @people_reports.each do |report|
+  = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.generate_instance_report_path(report), folder_item_title: report.name.titleize}

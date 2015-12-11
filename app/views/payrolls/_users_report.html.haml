@@ -1,0 +1,27 @@
+.section-body
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-xl 
+            Employees
+        .card-body
+          .table-responsive
+            %table.table.table-hover#employees-datatable
+              %thead
+                %tr
+                  %th Employee Name
+                  %th Timesheets Number
+                  %th Total paid
+              - users.each do |user|
+                %tr
+                  %td= user.display_name
+                  %td= user.timesheets.size
+                  - timesheets_total_paid = 0 
+                  - timesheets_total_paid = user.timesheets.map(&:total_paid).inject{|total_paid, timesheets_total_paid| total_paid.to_i + timesheets_total_paid.to_i}
+                  %td= timesheets_total_paid
+
+:javascript
+  $(function(){
+    $("#employees-datatable").DataTable({});
+  });

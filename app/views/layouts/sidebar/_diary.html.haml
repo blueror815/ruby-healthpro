@@ -1,0 +1,5 @@
+%li
+  %a{:class => ('active' unless request.path != main_app.view_assigned_visits_path) , :href => main_app.view_assigned_visits_path}
+    .gui-icon
+      %i.fa.fa-home.fa-fw
+    %span.title Home

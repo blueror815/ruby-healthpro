@@ -1,0 +1,4 @@
+$("#field_aliases").empty()
+- @field_aliases.each do |field_alias|
+  $("#field_aliases").append("<option value='#{field_alias.field_alias}'>#{field_alias.field_alias}</option>")
+$("#field_aliases").select2("val", "");

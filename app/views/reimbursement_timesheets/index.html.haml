@@ -1,0 +1,29 @@
+%h1 Listing reimbursement_timesheets
+
+%table
+  %thead
+    %tr
+      %th Reimbursement
+      %th Timesheet
+      %th Progress state
+      %th Action count
+      %th Comment
+      %th
+      %th
+      %th
+
+  %tbody
+    - @reimbursement_timesheets.each do |reimbursement_timesheet|
+      %tr
+        %td= reimbursement_timesheet.reimbursement_id
+        %td= reimbursement_timesheet.timesheet_id
+        %td= reimbursement_timesheet.progress_state
+        %td= reimbursement_timesheet.action_count
+        %td= reimbursement_timesheet.comment
+        %td= link_to 'Show', reimbursement_timesheet
+        %td= link_to 'Edit', edit_reimbursement_timesheet_path(reimbursement_timesheet)
+        %td= link_to 'Destroy', reimbursement_timesheet, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Reimbursement timesheet', new_reimbursement_timesheet_path

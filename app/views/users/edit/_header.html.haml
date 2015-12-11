@@ -1,0 +1,8 @@
+%section.full-bleed
+  .section-body.style-default-dark.force-padding.text-shadow
+    .img-backdrop{style: "background-image: url(#{asset_url('hands.jpg')})"}
+    %div{class: "overlay overlay-shade-bottom stick-bottom-left height-5"}
+    .row
+      .col-md-3.col-xs-5
+        %img.img-circle.border-white.border-xl.img-responsive.auto-width{:alt => "", :src => asset_url(@user.image), :style=> "width:200px; height: 200px;"}
+          = f.file_field :image, id: 'imgInp', :style=> "margin: 15px 0 0 12px !important;"

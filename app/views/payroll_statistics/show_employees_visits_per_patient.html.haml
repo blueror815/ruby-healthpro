@@ -1,0 +1,24 @@
+.section-body
+  .card.card-underline
+    = render 'payroll_report_header', origin_page: 'visits_per_patient'
+    .card-head
+      %header.text-xl  
+        Employees visits per patient 
+    .card-body
+      .table-responsive
+        %table.table.table-condensed.text-xs#avg_visits_per_patient
+          %thead
+            %tr
+              %th Employee Name 
+              %th Patient Name
+              %th AVG visits per patient
+          - @grouped_visits.each do |emp_avg|
+            %tr
+              %td
+                = emp_avg[:employee_name]
+              %td.text-sm
+                = emp_avg[:patient_name]
+              %td.text-sm
+                = emp_avg[:avg]
+:javascript
+  var table = $('#avg_visits_per_patient').dataTable({ "bLengthChange": false, "bPaginate": false}).rowGrouping({bExpandableGrouping: true});

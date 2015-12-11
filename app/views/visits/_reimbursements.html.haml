@@ -1,0 +1,29 @@
+= form_for visit , :class => "edit-visit" do |f|
+  %table.table-no-border
+    %tr
+      %td.table-right-col
+        - if visit.errors.any?
+          #error_explanation
+            .alert.alert-callout.alert-info.no-margin
+              %h2= "#{pluralize(visit.errors.count, "error")} prohibited this form from being saved:"
+              %ul
+                - visit.errors.full_messages.each do |msg|
+                  %li= msg
+  %table.table.text-xs
+    %thead
+      %tr
+        %th.col-md-4 Title
+        %th.col-md-2 Request
+        %th.col-nd-6 Comment
+    = f.fields_for :reimbursements_visits, visit.reimbursements_visits do |builder|
+      %tr
+        %td
+          = builder.object.reimbursement.title
+
+        %td.action-count-field
+          - if builder.object.reimbursement.value_type == 1
+            = builder.check_box :action_count,  { "class": "single_instance input-xs", "data-rid": builder.object.id, "disabled": true }
+          - else
+            = builder.number_field :action_count, {"data-rid": builder.object.id, "data-count": builder.object.action_count, "class": "form-control multiple-instance input-sm text-left", min: 0, step: 1, "disabled": true}
+        %td
+          = builder.text_field :comment, {class: "form-control", "disabled": true}

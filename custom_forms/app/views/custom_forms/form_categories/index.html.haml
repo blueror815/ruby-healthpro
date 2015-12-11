@@ -1,0 +1,27 @@
+.section-body  
+  .row
+    - @form_categories.each do |form_category|
+      .col-md-6.col-lg-4.col-sm-6
+        .card
+          .alert.alert-callout.alert-primary.no-margin
+            %span.text-lg
+              %i.fa.fa-clock-o.text-primary
+              = form_category.name.humanize
+            %br
+              %span.opacity-50
+                - if can? :update, FormCategory
+                  = link_to 'Edit', edit_form_category_path(form_category), class: "pull-right btn ink-reaction btn-raised btn-sm"
+                  - disabled = ''
+                - if can? :destroy, FormCategory
+                  - unless form_category.custom_forms.empty? 
+                    - disabled = " pointer-events: none; cursor: default;"
+                  = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete", style: disabled
+                  = link_to '', form_category, :method => :delete, class: "hide"
+  
+  - content_for :footer do
+    - if can? :create, FormCategory
+      = section_floating_action "plus", new_form_category_path, "New form category"
+
+
+  - content_for :header_title do 
+    Form categories                

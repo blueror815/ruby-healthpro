@@ -1,0 +1,11 @@
+- reimbs = @pending_reimb + @approved_reimb + @rejected_reimb
+.offcanvas
+  - reimbs.each do |reimb|
+    .offcanvas-pane.width-12{id: "offcanvas-reimb-#{reimb.payable.id}-comments"}
+      .offcanvas-head.style-primary
+        %header= "Reimbursement ##{reimb.payable.id}"
+        .offcanvas-tools 
+          %a.btn.btn-icon-toggle.pull-right{ "data-dismiss" => "offcanvas"}
+            %i.fa.fa-minus
+      .offcanvas-body
+        = render "comments/comments_with_form", commentable: reimb.payable

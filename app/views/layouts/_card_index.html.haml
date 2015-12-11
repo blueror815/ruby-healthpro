@@ -1,0 +1,23 @@
+.section-body
+  - if @instances.empty?
+    .card
+      .card-body
+        .text-center
+          %h2 No #{@model.pluralize.humanize} available
+  - else
+    .card
+      .card-body
+        %table.table#job-types-datatable
+          %thead
+            %tr
+              %th Name
+          %tbody
+            - @instances.each do |instance|
+              = render partial: "layouts/card_item", locals:{instance: instance}
+
+- content_for :footer do
+  = section_floating_action "plus","/#{@model.pluralize}/new","New patient"        
+:javascript
+  $(function(){
+    $("#job-types-datatable").DataTable({});
+  });

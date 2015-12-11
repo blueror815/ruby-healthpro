@@ -1,0 +1,14 @@
+.section-body
+  .row
+    .col-md-12          
+      .card
+        .card-body
+          = render 'form'
+      
+  - content_for :footer do
+    = section_submit_action "Submit"
+    = section_action "reply", form_categories_path, "Form categories"
+
+- content_for :header_title do 
+  Edit form category
+    

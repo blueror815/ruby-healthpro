@@ -1,0 +1,14 @@
+.form-group
+  = builder.label period_type, nil, class: 'col-sm-2 control-label'
+  .col-sm-5
+    .input-group
+      = builder.fields_for period_type, OpenStruct.new(configuration_line) do |builder|
+        = builder.number_field :days, class: 'form-control numbers_only', min: 0, :step => 1
+      %span.input-group-addon days
+    .form-control-line
+  .col-sm-5
+    .input-group
+      = builder.fields_for period_type, OpenStruct.new(configuration_line) do |builder|
+        = builder.number_field :hours, class: 'form-control numbers_only', min: 0, :step => 1
+      %span.input-group-addon hours
+    .form-control-line

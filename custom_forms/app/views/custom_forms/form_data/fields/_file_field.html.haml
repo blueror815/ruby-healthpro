@@ -1,0 +1,25 @@
+- id = nil
+- @form_datum ||= form_datum.object
+= form_datum.fields_for :attachments, @form_datum.attachments.find_by(section_field_id: field.id) || @form_datum.attachments.new do |file|
+  - file.object_name = "user[form_data_attributes][#{ form_datum.index }][attachments_attributes][#{ file.index }]"
+  - id = file.object_name.parameterize
+  - if file.object.file.present?
+    = link_to '', file.object.file.url, download: file.object.file_file_name , class: 'fa fa-download'
+
+  = file.hidden_field :id, value: file.object.try(:id)
+  = file.hidden_field :section_field_id, value: field.id
+  = file.file_field :file, value: file.object.file_file_name, id: id
+= f.hidden_field field.id, value: 'file'
+
+:javascript
+  function read(input) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+     $('object.object-thumbnail').attr('data', e.target.result);
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+
+  $("##{id}").change(function(){
+    read(this);
+  });

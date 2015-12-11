@@ -1,0 +1,216 @@
+.section-body
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-lg.text-primary
+            Bills
+          .tools
+            = link_to "", receivables_bills_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state]), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+
+  = render "bills/date_filter_partial_or_fully", report_url: receivables_bills_path
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-lg.text-primary
+            Receivables
+          .tools
+            = link_to "", receivables_bills_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], export_summary: false), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+        .card-body
+          .table-responsive
+            %table.table.table-hover#aging_datatable
+              %thead
+                %tr
+                  %th ID
+                  %th Start Date
+                  %th End Date
+                  %th Claim Type
+                  %th Payor
+                  %th Patient Name
+                  %th Billed Amt.
+                  %th Bill Date
+                  %th Paid Amt.
+                  %th Paid Date
+
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-lg.text-primary Summary
+          .tools
+            = link_to "", receivables_bills_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], export_summary: true, filter_type: params[:filter_type]), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+        .card-body
+          %table.table.table-condensed#summary.text-xs.bills-summary-datatable
+            %thead
+              %tr
+                - if @summary_filter_keys.first != :claim_type
+                  %th Claim Type
+                  %th Insurance Company
+                -else
+                  %th Insurance Company
+                  %th Claim Type
+                %th Amount
+                %th Count
+                %th 0-10 days
+                %th 11-20 days
+                %th 21-30 days
+                %th 31-60 days
+                %th 60+ days
+            %tbody
+              - total = {}
+              - total[:interval_10_0] = 0
+              - total[:interval_20_11] = 0
+              - total[:interval_30_21]  = 0 
+              - total[:interval_60_30] = 0
+              - total[:interval_61] = 0
+              - total_count = 0
+              - @bills.each do |grouping_key, bills|
+                - if @summary_filter_keys.first == :claim_type
+                  - grouped_bills = bills.group_by{ |bill| bill.insurance_company.try(:name) }
+                - else
+                  - grouped_bills = bills.group_by{ |bill| bill.claim_type.try(:name) }
+                - total[:interval_10_0] += interval_amount_sum_int(bills, 10, 0).to_f
+                - total[:interval_20_11] += interval_amount_sum_int(bills, 20, 11).to_f
+                - total[:interval_30_21] += interval_amount_sum_int(bills, 30, 21).to_f
+                - total[:interval_60_30] += interval_amount_sum_int(bills, 60, 31).to_f
+                - total[:interval_61] += ((bills.select{ |b| b.date < (params[:to] - 60.days) }.map(&:receivable_amount).reduce(:+)).to_f)
+                - grouped_bills.each do |key, records|
+                  %tr
+                    %td
+                      = grouping_key
+                      %span
+                        = number_to_currency bills.map(&:receivable_amount).reduce(:+)
+                      %span
+                        = bills.count
+                      %span
+                        = interval_amount_sum(bills, 10, 0)
+                      %span
+                        = interval_amount_sum(bills, 20, 11)
+                      %span
+                        = interval_amount_sum(bills, 30, 21)
+                      %span
+                        = interval_amount_sum(bills, 60, 31)
+                      %span
+                        = number_to_currency bills.select{ |b| b.date < (params[:to] - 60.days) }.map(&:receivable_amount).reduce(:+)
+                    %td.text-right
+                      = key
+                    %td
+                      = number_to_currency records.map(&:receivable_amount).reduce(:+).to_f
+                    %td.individual-count.hover-red
+                      - total_count += records.count
+                      = records.count
+                    %td
+                      = interval_amount_sum(records, 10, 0)
+                    %td
+                      = interval_amount_sum(records, 20, 11)
+                    %td
+                      = interval_amount_sum(records, 30, 21)
+                    %td
+                      = interval_amount_sum(records, 60, 31)
+                    %td
+                      = number_to_currency records.select{ |b| b.date < (params[:to] - 60.days) }.map(&:receivable_amount).reduce(:+)
+              %tr
+                %td
+                  Total
+                  %span
+                  %span
+                  %span
+                  %span
+                  %span
+                  %span
+                %td
+                  %b Total
+                %td= number_to_currency @bills.values.flatten.map(&:receivable_amount).reduce(:+).to_f
+                %td#summary_total= total_count
+                %td= number_to_currency(total[:interval_10_0])
+                %td= number_to_currency(total[:interval_20_11])
+                %td= number_to_currency(total[:interval_30_21])
+                %td= number_to_currency(total[:interval_60_30])
+                %td= number_to_currency(total[:interval_61])
+
+- content_for :header_title do 
+  Recievables Summary
+
+:javascript
+  $(function () {
+    function getUrlVar(key) {
+      var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
+      return result && unescape(result[1]) || "";
+    }
+
+    $('.date-picker input').datetimepicker({
+      format: 'MM-DD-YYYY'
+    });
+    columns = [
+          {data :'id'},
+          {data :'claim_start_date'},
+          {data :'claim_end_date'},
+          {data :'claim_type_name'},
+          {data :'insurance_company_name'},
+          {data :'patient_name'},
+          {data :'amount'},
+          {data :'date'},
+          {data :'paid_amount'},
+          {data :'paid_date'}
+        ]
+    var report_datatable_handler = new DataTableHandler('/bills/receivables?to=#{params[:to]}&from=#{params[:from]}&from=#{params[:from]}&payment_state=#{params[:payment_state]}', 'bill', '#aging_datatable', [], [], columns, {showButtons: false} );
+
+    var table = $('#summary').dataTable({ "bLengthChange": false, "bPaginate": false}).rowGrouping({bExpandableGrouping: true});
+
+    var receivables = $('#aging_datatable').dataTable();
+
+    var filter_type = getUrlVar('filter_type');
+    var search_prefix = "filterkey:";
+
+    var group_column_id = filter_type === 'Claim' ? 3 : 4;
+    var individual_column_id = filter_type === 'Claim' ? 4 : 3;
+
+    function clear_selection() {
+      receivables.fnFilter("", individual_column_id);
+      receivables.fnFilter("", group_column_id);
+    };
+
+    $('#summary_total').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $('#summary_wrapper tr').not('[role=row]').children('td').not('[id=summary_total]').not('[data-group-level=0]').not('[class]').not('[rowspan]').closest("tr").siblings().removeClass("highlight-filter");
+      $('.individual-count').closest("tr").siblings().removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      receivables.fnFilter("");
+    });
+
+    $('#summary_wrapper tr').not('[role=row]').children('td').not('[data-group-level=0]').not('[class]').not('[rowspan]').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $("#summary_total").parents("tr").removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      if ($('.highlight-filter').length > 0) {
+        receivables.fnFilter(search_prefix + $('.highlight-filter').html().split('</td>')[0].split('>')[1].trim(), group_column_id, true);
+      } else {
+        receivables.fnFilter("");
+      }
+    });
+
+    $('.individual-count').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $("#summary_total").parents("tr").removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      if ($('.highlight-filter').length > 0) {
+        var highlighted = $('.highlight-filter').prevAll('tr').not('[role=row]')[0];
+        receivables.fnFilter(search_prefix + $(highlighted).html().split('</td>')[0].split('>')[1].trim(), group_column_id, true);
+        receivables.fnFilter(search_prefix + $('.highlight-filter').html().split('</td>')[0].split('>')[1].trim(), individual_column_id, true);
+      } else {
+        receivables.fnFilter("");
+      }
+    });      
+  });
+
+

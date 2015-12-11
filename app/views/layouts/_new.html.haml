@@ -1,0 +1,23 @@
+- model_name = @model == 'job_type' ? 'discipline' : @model
+.section-body
+  = form_for @instance do |f|
+    .card.card-underline
+      .card-head
+        %header.text-lg
+          New #{model_name.humanize.capitalize}
+      .card-body
+        .row
+          .col-md-12
+            - if @instance.errors.any?
+              #error_explanation
+                .alert.alert-callout.alert-error.no-margin
+                  %h2= "#{pluralize(@instance.errors.count, "error")} prohibited this #{model_name.humanize} from being saved:"
+                  %ul
+                    - @instance.errors.full_messages.each do |msg|
+                      %li= msg
+        = yield
+ 
+    - content_for :footer do
+      = section_submit_action "Submit", f.options[:html][:id]
+      = section_action "reply", "/" + @model.pluralize , "Visit types"
+

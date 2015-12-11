@@ -1,0 +1,6 @@
+%dl.dl-horizontal
+  %dt Salary
+  %dd
+    = f.fields_for :payment_rates, @user.payment_rates.find_by(payment_method_id: 3) || @user.payment_rates.new(payment_method_id: 3) do |payment_rate|
+      = payment_rate.hidden_field :payment_method_id, value: 3
+      = payment_rate.text_field :price, class: 'form-control numbers_only input-xs', placeholder: "#{number_to_currency(@user.fixed_salery)}"  

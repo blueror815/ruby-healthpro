@@ -1,0 +1,21 @@
+= form_for [@custom_form, @form_datum] do |f|
+  - if @form_datum.errors.any?
+    .card.no-padding
+      #error_explanation
+        .alert.alert-callout.alert-error.no-margin
+          %h2= "#{pluralize(@form_datum.errors.count, "error")} prohibited this form from being saved:"
+          %ul
+            - @form_datum.errors.full_messages.each do |msg|
+              %li= msg
+  - @permitted_sections = false
+  = hidden_field_tag :redirect_path, @redirect_path
+  - @custom_form.form_sections.each do |form_section|
+    = render 'custom_forms/form_data/edit/section', form_section: form_section, user_forms_form: f, user_forms_section_form: form_section
+  .card-actionbar
+    .card-actionbar
+      
+  
+  - content_for :footer do
+    = section_submit_action "Submit", f.options[:html][:id]
+    - path = @redirect_path.present? ? params[:redirect_path] : forms_path
+    = section_action "reply", path, "Patient form"    

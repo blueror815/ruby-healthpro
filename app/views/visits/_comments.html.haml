@@ -1,0 +1,9 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title Reimbursements
+    .modal-body
+      = render partial: 'comments/comments', locals: {commentable: @visit}
+      .clearfix
+      = render partial: 'comments/form', locals: {commentable: @visit}

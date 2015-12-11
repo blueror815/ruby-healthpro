@@ -1,0 +1,16 @@
+#menubar.menubar.animate
+  .menubar-fixed-panel
+    %div#toggle-wrapper
+      %a.btn.btn-icon-toggle.btn-default.menubar-toggle{"data-toggle" => "menubar", :href => "javascript:void(0);"}
+
+
+  .menubar-scroll-panel
+    %ul#main-menu.gui-controls
+      = render partial: "layouts/sidebar/payroll"
+      = render partial: "layouts/sidebar/people"
+      = render partial: "layouts/sidebar/bills"
+      = render partial: "layouts/sidebar/patients"
+      //= render partial: "layouts/sidebar/activities"
+      //= render partial: "layouts/sidebar/templates"
+      = render partial: "layouts/sidebar/payroll_admin"
+      = render partial: "layouts/sidebar/data"

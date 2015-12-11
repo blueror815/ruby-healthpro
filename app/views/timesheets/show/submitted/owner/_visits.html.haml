@@ -1,0 +1,27 @@
+.card
+  .card-head
+    %header.text-lg
+      Visits
+    - if @timesheet.user == current_user and @timesheet.state == "created"
+      .tools
+        %a.pull-right.btn.btn-floating-action.ink-reaction.btn-info.btn-xs{href: "#offcanvas-visits" , "data-toggle": "offcanvas", "data-backdrop": "false"}
+          %i.fa.fa-plus
+  .card-body#visits_table
+    - unless visits and visits.empty?
+      %table#unbilled-visits-datatable.table.table-condensed.text-xs{"cellspacing":"0"}
+        %thead 
+          %tr
+            %th State
+            %th.col-md-2 Patient
+            %th.col-md-2 Visit
+            %th.col-md-2 Date [Timein - Timeout]
+            %th.col-md-5 Reimbursements
+            %th.col-md-1.text-right Actions
+
+
+        %tbody
+          - visits.each do |v|
+            %tr
+              = render partial: "timesheets/show/submitted/owner/visit_row", locals: { v: v }
+    - else
+      %span Click (+) to add visits to this timesheet

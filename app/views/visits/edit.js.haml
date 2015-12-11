@@ -1,0 +1,19 @@
+$("#visit_modal").html("#{escape_javascript(render('modal_form')).html_safe}");
+$("#visit_modal").modal('show');
+
+
+
+
+
+var time1 = $($("#visit_modal  .mini_datetime_select")[0]);
+var time2 = $($("#visit_modal  .mini_datetime_select")[1]);
+
+$(time1.find("select")[0]).hide();
+$(time1.find("select")[1]).hide();
+$(time1.find("select")[2]).hide();
+
+
+$(time2.find("select")[0]).hide();
+$(time2.find("select")[1]).hide();
+$(time2.find("select")[2]).hide();
+$("input[type='hidden']+span").remove();

@@ -1,0 +1,40 @@
+//TODO_PROHEALTH need to refactor this condition
+$(".modal").modal('hide');
+- state = @timesheet.state
+- path = "timesheets/show/#{state}/#{state}"
+
+$("#timesheet_body").html("#{escape_javascript(render path).html_safe}");
+
+
+// Visits offcanvas
+$("#visits_offcanvas").html("#{escape_javascript(render('timesheets/show/shared/visits_offcanvas')).html_safe}");
+
+// Hours offcanvas
+$("#hours_offcanvas").html("#{escape_javascript(render('timesheets/show/shared/hours_offcanvas')).html_safe}");
+
+// On Call offcanvas
+$("#on_calls_offcanvas").html("#{escape_javascript(render('timesheets/show/shared/on_call_offcanvas')).html_safe}");
+
+// Bills ofcanvas
+$("#bill_offcanvas").html("#{escape_javascript(render('timesheets/show/shared/bill')).html_safe}");
+
+// reimbursements offcanvas
+$("#reimbursements_offcanvas").html("#{escape_javascript(render('timesheets/show/shared/reimbursements_offcanvas')).html_safe}");
+// Init Datatables for offcanvas
+/ offfcanvasDatatableInit('.offCanvasTable');
+
+- if current_user.job_type.payment_method_ids.include?('1')
+  $("#visits_comments").html("#{escape_javascript(render('timesheets/show/shared/offcanvas_comments'))}")
+
+- if current_user.job_type.payment_method_ids.include?('2')
+  $("#hours_comments").html("#{escape_javascript(render('timesheets/show/shared/offcanvas_hours_comments'))}")
+
+- if current_user.job_type.payment_method_ids.include?('6')
+  $("#reimbs_comments").html("#{escape_javascript(render('timesheets/show/shared/offcanvas_reimb_comments'))}")
+
+- if current_user.job_type.payment_method_ids.include?('5')
+  $("#oncalls_comments").html("#{escape_javascript(render('timesheets/show/shared/offcanvas_on_call_comments'))}")
+
+setup_offcanvas_events();
+setup_visit_events();
+setup_card_collapse();

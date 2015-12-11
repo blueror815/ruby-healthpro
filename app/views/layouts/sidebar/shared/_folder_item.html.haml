@@ -1,0 +1,4 @@
+%li
+  %a{:class => ('active' unless request.path != folder_item_path) , :href => folder_item_path}
+    %span.title
+      = folder_item_title

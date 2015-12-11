@@ -1,0 +1,27 @@
+.section-body
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-xl 
+            Visits
+        .card-body
+          .table-responsive
+            %table.table.table-hover#visits-datatable
+              %thead
+                %tr
+                  %th Visit type 
+                  %th Number of visits 
+                  %th Total paid
+              - @visit_types.each do |visit_type|
+                %tr
+                  %td= visit_type.title
+                  %td= visit_type.visits.where(timesheet_id: @timesheet_ids).count
+                  - total_price = 0
+                  - total_price = visit_type.visits.where(timesheet_id: @timesheet_ids).map(&:total_price).inject{|total_price, price| total_price.to_i + price.to_i}
+                  %td= total_price
+
+:javascript
+  $(function(){
+    $("#visits-datatable").DataTable({});
+  });

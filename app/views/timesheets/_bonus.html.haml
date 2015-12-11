@@ -1,0 +1,18 @@
+.card.card-underline
+  .card-head
+    %header.text-lg
+      Bonus
+    - if admittable?(@timesheet, current_user) && (can? :admit, Timesheet) && @user_bonus.nil?
+      .tools
+        = link_to new_bonuse_path(user_id: @user, timesheet_id: @timesheet.id) , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+          %i.fa.fa-plus
+
+  .card-body#reimbursement_timesheet_table.text-xs
+    - if @user_bonus
+      #reimbursement_timesheet_table
+        %h3= "Bonus Amount: #{@user_bonus.payable.price}"
+    - else
+      Click (+) to add Bonus to this timesheet
+
+   
+  

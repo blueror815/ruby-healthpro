@@ -1,0 +1,5 @@
+- @field_types ||= []
+%label{class: "col-sm-1 control-label"}
+  Field Types
+.col-sm-11
+  = f.select :field_type_ids, options_from_collection_for_select(@field_types, :id, :humanized_name, f.object.field_type_ids), {}, { multiple: true, id: 'field_type_ids' }

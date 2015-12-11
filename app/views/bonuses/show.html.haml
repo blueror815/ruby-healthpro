@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @bonuse.user_id
+%p
+  %b Price:
+  = @bonuse.price
+%p
+  %b Timesheet:
+  = @bonuse.timesheet_id
+
+= link_to 'Edit', edit_bonuse_path(@bonuse)
+\|
+= link_to 'Back', bonuses_path

@@ -1,0 +1,11 @@
+= form_for [commentable, ::Comment.new], html: {id: "#{commentable.class.to_s.demodulize.downcase + '-comments-form'}"}, remote: true do |f|
+  .card.card-underline
+    .card-head
+      %header.text-lg
+        Add comment
+    .card-body
+      .col-md-12
+        = f.text_area :content, class: 'form-control autosize', :placeholder => "Leave a comment", rows: "4", required: true
+    .card-actionbar
+      .card-actionbar-row
+        = f.button 'Post comment', class: 'btn btn-primary'

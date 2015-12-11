@@ -1,0 +1,17 @@
+.section-body
+  .card.card-underline
+    - if @timesheets && @timesheets.any?
+      .card-body
+        #table_tab
+          = render partial: "timesheets/index_timesheet_table/timesheets_table_#{@timesheet_type}", locals: {timesheets: @timesheets}
+    - else
+      .card-body
+        No Timesheets Available
+.section-action.style-primary
+  = render partial: "timesheets/footer"        
+
+- content_for :header_title do
+  - if @user
+    #{@user.display_name} Timesheets
+  - else
+    = "#{@timesheet_type.humanize} Timesheets"

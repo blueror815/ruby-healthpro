@@ -1,0 +1,10 @@
+%table.table.table-condensed
+  %thead
+    %th 
+    %th
+    %th
+  %tbody
+    - payments.each do |payment|
+      %td= payment[0]
+      %td= payment[1]
+      %td= payment[2]

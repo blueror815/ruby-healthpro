@@ -1,0 +1,100 @@
+= form_tag(update_task_state_path, method: :get, remote:true, id: "update_task") do 
+  = hidden_field_tag :id, @timesheet.id
+  = hidden_field_tag :state, 'logged'
+  = hidden_field_tag :task_type, 'hour'
+  - (@pending_hours).each do |hour|
+    = check_box_tag 'task_id[]',  hour.id, false, class: "hidden" if submittable?(@timesheet)
+
+.card
+  .card-head.style-primary
+    %header.text-lg
+      submitted Hours
+    .tools
+      / %a.btn.btn-icon-toggle{href: "#offcanvas-visits" , "data-toggle":"offcanvas", "data-backdrop": "false"}
+      = link_to  new_hour_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'btn btn-icon-toggle', "data-remote":"true" do 
+        %i.fa.fa-plus
+  .card-body
+    %table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+      %thead 
+        %tr
+          %th
+          %th.col-md-3 hour
+          %th.col-md-1 Time
+          %th.col-md-2
+      %tbody
+        - (@pending_hours).each do |hour|
+          %tr
+            
+            %td= check_box_tag 'task_id[]',  hour.id, false, class: "task_checkbox" if submittable?(@timesheet)
+            - hour_name = "hour ##{hour.id}"
+            - if hour.hour_type and hour.hour_type.title
+              - hour_name = "#{hour.hour_type.title} ##{hour.id}"
+            %td
+              %form
+                .row
+                  .col-md-12
+                    %dl.dl-horizontal
+                      %dt Hour
+                      %dd= hour_name
+                      %dt Date
+                      %dd= hour.date.strftime("%e, %b, %y")
+            - if hour.assignee == current_user && submittable?(@timesheet)
+              %td
+                .row.visit-time-form
+                  .col-sm-12
+                    %dl.dl-horizontal
+                      %dt.text-default-light
+                        Time In
+                      %dd
+                        = hour.from.strftime("%H:%M")
+
+                      %dt.text-default-light
+                        Time Out
+                      %dd
+                        /= best_in_place v, :time_out, :as => :time , display_with: lambda {|t| t.try(:strftime, '%H:%M').try(:html_safe)}
+                        = hour.to.strftime("%H:%M")
+ 
+
+            %td.text-center
+             
+              - if hour.assignee == current_user  && submittable?(@timesheet)
+                - if hour.progress_state == "logged" && submittable?(@timesheet)
+                  = link_to  update_task_state_path(id: @timesheet.id, task_id: [hour.id], state: 'pending', task_type: 'hour'), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+                    %i.fa.fa-arrow-right
+                - else
+                  = link_to  update_task_state_path(id: @timesheet.id, task_id: [hour.id], state: 'logged', task_type: 'hour'), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+                    %i.fa.fa-remove
+              - if admittable?(@timesheet, @user) && (can? :admit, Timesheet)
+                - user = @user ? @user : current_user
+                %td.text-right
+                  = link_to "", update_task_state_path(id: @timesheet.id, task_id: [hour.id], state: 'approved', user_id: user.id), class: "btn-icon-toggle fa fa-arrow-right", title: 'Approve' , remote: true
+
+  - if submittable?(@timesheet) && @pending_hours.count > 0
+    .card-actionbar
+      .card-actionbar-row          
+        = submit_tag 'remove', class: "btn btn-primary", onclick:"$('#update_task').submit()"
+
+
+
+
+
+
+:javascript
+  $(document).ready(function() {
+    $(".task_checkbox").change(function(){
+      if ($(this).is(":checked") == true) {
+        $("#update_task input[value=" + $(this).val() +"]").prop('checked', true) 
+      }else{
+        $("#update_task input[value=" + $(this).val() +"]").prop('checked', false) 
+      }
+    })
+    
+    $('.visit-reimbursements-form .single_instance,  .visit-reimbursements-form .multiple-instances, .visit-reimbursements-form .comment').change(function(){ 
+      $(this).parents('form.edit_visit').submit();
+    })
+
+    $('.visit-time-form input').change(function(){ 
+      $(this).parents('form.edit_visit').submit();
+    })
+    $('#unbilled-visits-datatable').DataTable();
+  });

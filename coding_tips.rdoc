@@ -1,0 +1,11 @@
+# small methods
+# write comments 
+# useing presenters
+# methods names 
+# classes names
+# attributes names
+# methods locations  
+# view partials 
+# helpers methods 
+# clean routes 
+# test cases  

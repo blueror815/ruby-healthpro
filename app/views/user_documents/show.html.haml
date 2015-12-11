@@ -1,0 +1,45 @@
+%section.content
+  / Your Page Content Here
+  .row
+    .col-md-6
+      / DIRECT CHAT SUCCESS
+      .box.box-success
+        .box-header.with-border
+          %h3.box-title User Documents
+          .box-tools.pull-right
+            %button.btn.btn-box-tool{"data-widget" => "collapse"}
+              %i.fa.fa-minus
+            %button.btn.btn-box-tool{"data-widget" => "remove"}
+              %i.fa.fa-times
+        / /.box-header
+        .box-body
+          .row
+            .col-md-6
+              %table
+                %tr
+                  %td.table-right-col
+                    %b User
+                  %td 
+                    = @user_document.user_id
+                %tr
+                  %td.table-right-col
+                    %b Document type:
+                  %td 
+                    = @user_document.document_type_id
+                %tr
+                  %td.table-right-col
+                    %b Document is
+                  %td
+                    = link_to  @user_document.attached_document.name, @user_document.attached_document.path
+                %tr
+                  %td.table-right-col
+                    %b Document type:
+                  %td
+                    = @user_document.expiration_date
+                %tr
+                  %td.table-right-col
+                    = link_to 'Edit', edit_user_document_path(@user_document)
+                  %td 
+                    = link_to 'Back', user_documents_path
+      / /.info-box
+    / /.col

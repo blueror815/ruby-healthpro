@@ -1,0 +1,31 @@
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+  %body
+    %h1= "Timesheet Id is , #{@timesheet.id}" 
+    %p
+      - if @timesheet.user.job_type.payment_method_ids.include?('1')
+        %h1 Visits
+        %p  
+          - @timesheet.visits.where(progress_state: 'pending').each do |visit|
+            %label Visit Id
+            %label= visit.id
+      - if @timesheet.user.job_type.payment_method_ids.include?('2')
+        %h1 Hours
+        %p  
+          - @timesheet.hours.where(progress_state: 'pending').each do |hour|
+            %label Hour Id
+            %label= hour.id
+      - if @timesheet.user.job_type.payment_method_ids.include?('5')
+        %h1 On Calls
+        %p  
+          - @timesheet.line_items.on_calls.where(progress_state: 'pending').each do |on_call|
+            %label On Call Id
+            %label= on_call.id
+      - if @timesheet.user.job_type.payment_method_ids.include?('6')
+        %h1 Reimbursements
+        %p  
+          - @timesheet.line_items.reimb.where(progress_state: 'pending').each do |reimb|
+            %label Reimbursement Id
+            %label= reimb.id
+

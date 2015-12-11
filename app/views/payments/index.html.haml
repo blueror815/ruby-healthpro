@@ -1,0 +1,36 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl 
+            Payments
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover#payment_datatable
+          %thead
+            %tr
+              %th Amount
+              %th Date
+              %th Insurance company
+              %th Patient
+              %th Claim Type
+              %th Payment Type
+
+:javascript
+  edit_fields = [
+        { label: 'Bill', name: 'bill_id', type: 'select', options: #{ model_options(Bill, "instance.date.strftime('%B %d, %Y') + ' - ' + (instance.patient.try(:display_name) || '') + ' -  ' + (instance.claim_type.try(:name) || '')") } },
+        { label: 'amount', name: 'amount' }, 
+        { label: 'date', name: 'date', type: 'date', def:function () { return new Date();},dateFormat: $.datepicker.ISO_8601 },
+        { label: 'insurance company', name: 'insurance_company_id', type: 'select', options: #{ model_options(InsuranceCompany) }}
+    ];
+  editable_params = ['bill_id', 'amount', 'date', 'insurance_company_id'];
+  columns = [
+        {5 :'amount'},
+        {6 :'date'},
+        {3 :'insurance_company_name'},
+        {4 :'patient_name'},
+        {7 :'claim_type_name'},
+      ]
+  var datatable_handler = new DataTableHandler('/payments', 'payment', '#payment_datatable', edit_fields, editable_params, columns, {});

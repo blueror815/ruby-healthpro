@@ -1,0 +1,49 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header  
+            Agencies
+          - if current_user.admin?
+            .tools  
+              = link_to 'Scrape Agencies', scrape_agencies_path
+            .tools  
+              = link_to '', new_agency_path, class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-plus'
+
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.datatable.people-table
+          %thead
+            %tr
+              %th name
+              %th Phone
+              %th Fax
+              %th Zipcode
+              %th State
+              %th City
+              %th Short name
+              %th Address
+              %th Suite/Apt #
+              %th Email
+              %th Medicare provider number
+              %th Fax service username
+              %th Timezone
+          %tbody
+            - @agencies.each do |agency|
+              %tr
+                %td= link_to agency.name, agency_path(agency)
+                %td= agency.phone
+                %td= agency.fax
+                %td= agency.zipcode
+                %td= agency.state
+                %td= agency.city
+                %td= agency.short_name
+                %td= agency.address
+                %td= agency.address2
+                %td= agency.email
+                %td= agency.medicare_provider_number
+                %td= agency.fax_service_username
+                %td= agency.timezone
+                

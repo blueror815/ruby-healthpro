@@ -1,0 +1,57 @@
+%table#unbilled-hours-datatable.table-condensed.text-sm{"cellspacing":"0"}
+  %thead
+    %tr
+      %th.col-md-2 Payment Date
+      %th.col-md-1 Payment Amount
+      %th.col-md-2 Action
+
+:javascript
+  edit_fields = [
+                  { label: 'Payment Amount', name: 'amount' },
+                  { label: 'Date', name: 'date', type: 'date', dateFormat: 'MM dd, yy'},
+                ];
+
+  editable_params = ['date', 'amount'];
+
+  columns = [
+              {data :'date'},
+              {data :'amount'},
+              {data :'action'}
+            ]
+
+  var datatable_handler = new DataTableHandler('#{bill_payments_path(@bill, bill_view: 'true')}', 'payment', '#unbilled-hours-datatable', edit_fields, editable_params, columns, { showButtons: 'onlyNew' });
+
+  $('#unbilled-hours-datatable').on( 'click', 'tbody td:not()', function (e) {
+      editor.inline( this, {
+            onBlur: 'submit'
+        } );
+  } );
+
+    $('#unbilled-hours-datatable').on('click', 'a.editor_remove', function (e) {
+        e.preventDefault();
+ 
+        editor.remove( $(this).closest('tr'), {
+            title: 'Delete record',
+            message: 'Are you sure you wish to remove this record?',
+            buttons: 'Delete'
+        } );
+    } );
+
+    $('a.editor_create').on('click', function (e) {
+        e.preventDefault();
+ 
+        editor.create( {
+            title: 'Create new record',
+            buttons: 'Add'
+        } );
+    } );
+
+
+    bill_id = #{@bill.id}
+    datatable_handler.editor.on("onSubmitSuccess", function(a, b, c){
+      $.ajax({ 
+            url: '/fetch_bill_paid_amount',
+            dataType: 'json',
+            data: {'bill_id': bill_id}
+          });
+    });

@@ -1,0 +1,6 @@
+%li
+  %a{:class => ('active' unless request.path != item_path), :href => item_path}
+    .gui-icon
+      %i.fa.fa-fw{class: item_icon}
+    %span.title 
+      = item_title

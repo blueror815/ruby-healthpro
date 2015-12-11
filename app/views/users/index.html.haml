@@ -1,0 +1,14 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.people-table#users-datatable.text-sm{"data-source" => users_path(format: :json)}
+          %thead
+            %tr
+              %th.text-md Users
+
+- content_for :footer do
+  = render partial: "users/index/footer"
+
+- content_for :header_title do 
+  People

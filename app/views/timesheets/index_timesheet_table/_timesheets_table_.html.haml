@@ -1,0 +1,14 @@
+.table-responsive
+  %table.table.table-hover.datatable.people-table
+    %thead
+      %tr
+        %th User name
+        %th Payroll Date
+        %th Controls
+    - timesheets.each do |timesheet|
+      - present timesheet do |timesheet_presenter|
+        %tr
+          %td= timesheet_presenter.assignee_link
+          %td= timesheet_presenter.payroll_date
+          %td.text-center
+            = link_to '<i class="fa fa-eye"></i>'.html_safe, user_timesheet_path(timesheet.user_id, timesheet), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"

@@ -1,0 +1,21 @@
+.section-body
+  .card.card-underline
+    = render 'payroll_report_header', origin_page: 'hours'
+    .card-head
+      %header.text-xl  
+        Employees with Over time
+    .card-body
+      .table-responsive
+        %table.table.table-condensed.text-xs#hours
+          %thead
+            %tr
+              %th Employee Name 
+              %th Hours
+          - @groupd_hours.each do |emp_hour|
+            %tr
+              %td
+                = emp_hour[:employee_name]
+              %td.text-sm
+                = emp_hour[:hours]
+:javascript
+  var table = $('#hours').dataTable({ "bLengthChange": false, "bPaginate": false}).rowGrouping({bExpandableGrouping: true});

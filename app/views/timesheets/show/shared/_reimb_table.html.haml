@@ -1,0 +1,14 @@
+.card
+  .card-body
+    %table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+      %thead 
+        %tr
+          %th.col-md-2 Date
+          %th.col-md-7 Notes
+          %th.col-md-1 Action
+          
+      %tbody
+        - reimbursement_timesheets_line_items.map(&:payable).each do |reimb|
+          %tr
+            = render "timesheets/show/shared/reimb_row", reimb: reimb
+

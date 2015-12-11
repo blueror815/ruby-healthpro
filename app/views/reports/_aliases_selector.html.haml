@@ -1,0 +1,5 @@
+- @field_aliases ||= []
+%label{class: "col-sm-1 control-label"}
+  Fields Aliases
+.col-sm-11
+  = f.select :field_aliases, options_from_collection_for_select(@field_aliases, :field_alias, :field_alias, f.object.field_aliases), {}, { multiple: true, id: 'field_aliases' }

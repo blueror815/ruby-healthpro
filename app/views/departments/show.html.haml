@@ -1,0 +1,28 @@
+%section.content
+  / Your Page Content Here
+  .row
+    .col-md-12
+      / DIRECT CHAT SUCCESS
+      .box.box-success
+        .box-header.with-border
+          %h3.box-title Department
+          / .box-tools.pull-right
+          /   %button.btn.btn-box-tool{"data-widget" => "collapse"}
+          /     %i.fa.fa-minus
+          /   %button.btn.btn-box-tool{"data-widget" => "remove"}
+          /     %i.fa.fa-times
+        / /.box-header
+        .box-body
+          .row
+            .col-md-6
+              %table{style: 'width:100%'}
+                %tr
+                  %td.table-right-col
+                    %b name
+                  %td 
+                    = @department.name
+                %tr
+                  %td.table-right-col
+                    = link_to 'Edit', edit_department_path(@department)
+                  %td 
+                    = link_to 'Back', departments_path

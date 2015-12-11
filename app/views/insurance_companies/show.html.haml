@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @insurance_company.name
+%p
+  %b Description:
+  = @insurance_company.description
+
+= link_to 'Edit', edit_insurance_company_path(@insurance_company)
+\|
+= link_to 'Back', insurance_companies_path

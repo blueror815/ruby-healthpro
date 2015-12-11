@@ -1,0 +1,23 @@
+%h1 Listing on_calls
+
+%table
+  %thead
+    %tr
+      %th Date
+      %th Note
+      %th
+      %th
+      %th
+
+  %tbody
+    - @on_calls.each do |on_call|
+      %tr
+        %td= on_call.date
+        %td= on_call.note
+        %td= link_to 'Show', on_call
+        %td= link_to 'Edit', edit_on_call_path(on_call)
+        %td= link_to 'Destroy', on_call, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New On call', new_on_call_path

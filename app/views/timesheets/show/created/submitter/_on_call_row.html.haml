@@ -1,0 +1,11 @@
+%td.col-md-1
+  = state_badge on_call.progress_state
+%td= StringFormatter.format_date(on_call.date)
+%td= on_call.note
+%td.text-right
+  .input-group
+    .btn-xs-group
+      %a.btn.btn-xs.ink-reaction.text-primary{class: ("pulse1" unless on_call.comments.empty?), href: "#offcanvas-oncall-#{on_call.id}-comments" , "data-toggle": "offcanvas", "data-backdrop": "false"}
+        %i.fa.fa-comment
+      = link_to  update_task_state_path(id: @timesheet.id, task_id: [on_call.id], state: 'logged', task_type: 'on_call'), class: "btn ink-reaction btn-icon-toggle btn-sm  text-danger" , :remote => true do 
+        %i.fa.fa-minus-circle

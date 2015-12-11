@@ -1,0 +1,24 @@
+.form-horizontal
+  .form-group
+    = label @model, :title, class: "col-sm-1 control-label"
+    .col-sm-11
+      = text_field @model, :title, class: 'form-control'
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model,  :price_factor, class: "col-sm-1 control-label"
+    .col-sm-11
+      = text_field @model, :price_factor, class: 'form-control numbers_only'
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model, :department, class: "col-sm-1 control-label"
+    .col-sm-11
+      = select @model, :department_ids, options_from_collection_for_select(Department.all, :id, :name, @hour_type.department_ids), {:include_blank => true}, {multiple: true, class: "form-control"}
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model, :job_type, class: "col-sm-1 control-label"
+    .col-sm-11
+      = select @model, :job_type_ids, options_from_collection_for_select(JobType.all, :id, :title, @hour_type.job_type_ids), {:include_blank => true}, {multiple: true, class: "form-control"}
+      .form-control-line

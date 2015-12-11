@@ -1,0 +1,7 @@
+.card-head
+  %header.text-sm.payroll_statistics_links
+    = link_to "Employee visits avg per patient", show_employees_visits_per_patient_payroll_path(@payroll.id), class: "#{origin_page == 'visits_per_patient' ? 'hidden' : ''}"     
+    = link_to "Employee exceeded", get_exceeded_employees_payroll_path(@payroll.id)   , class: "#{origin_page == 'exceeded_page' ? 'hidden' : ''}"     
+    = link_to "Top Ten Employee", show_top_ten_employees_payroll_path(@payroll.id)   , class: "#{origin_page == 'top_ten' ? 'hidden' : ''}"     
+    = link_to "Employees with reimbursements", show_employees_with_reimb_payroll_path(@payroll.id)   , class: "#{origin_page == 'employees_with_reimb' ? 'hidden' : ''}"     
+    = link_to "Employees with OverTime", show_employees_with_over_time_payroll_path(@payroll.id)   , class: "#{origin_page == 'hours' ? 'hidden' : ''}"     

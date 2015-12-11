@@ -1,0 +1,52 @@
+= form_for @payroll do |f|
+  - if @payroll.errors.any?
+    #error_explanation
+      .alert.alert-callout.alert-error.no-margin
+        %h2= "#{pluralize(@payroll.errors.count, "error")} prohibited this form from being saved:"
+        %ul
+          - @payroll.errors.full_messages.each do |msg|
+            %li= msg
+
+  .card
+    .card-body  
+      .form-group
+        %label.col-sm-2.control-label Start Date
+        .col-sm-10
+          #start-date.input-group.date
+            = f.text_field :start_date, class: 'form-control'
+          .form-control-line
+        %br
+        .row
+          .col-md-6
+            - if @payroll_configurations
+              %dl
+                %dt
+                  Payroll period 
+                %dd
+                  = pluralize(@payroll_configurations['period']['days'].to_i, 'day') + ' and ' + pluralize(@payroll_configurations['period']['hours'].to_i, 'hour')
+                %dt
+                  Submission allowance
+                %dd
+                  = pluralize(@payroll_configurations['submission_allowance']['days'].to_i, 'day') + ' and ' + pluralize(@payroll_configurations['submission_allowance']['hours'].to_i, 'hour')
+                %dt
+                  Admission allowance
+                %dd
+                  = pluralize(@payroll_configurations['admission_allowance']['days'].to_i, 'day') + ' and ' + pluralize(@payroll_configurations['admission_allowance']['hours'].to_i, 'hour')
+            %p
+              = 'To change these configuration, head to'
+              = link_to 'Cofniguration section', admin_configurations_path
+
+  
+
+  - content_for :footer do
+    = section_submit_action "Submit", f.options[:html][:id]
+    = section_action "reply",payrolls_path, "Payrolls"        
+
+  
+
+:javascript
+  $(document).ready(function(){
+    $('#start-date input').datetimepicker({
+      format: 'DD-MM-YYYY HH:mm:ss Z'
+    });
+  });

@@ -1,0 +1,154 @@
+#bill_creation_overlay
+= form_for @bill, remote: true do |f|
+  = hidden_field_tag :from, @from
+  = hidden_field_tag :to, @to 
+  .row
+    .col-md-4
+      %b{for: "patient_id"}
+        Patient
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:patient_id)}"}
+        = f.text_field :patient_id, {class: "patient patient_selector form-control select_comp", id: "patient"}
+        %span.help-block= f.object.errors[:patient_id].join(", ")
+    .col-md-4
+      %b{for: "claim_type_id"}
+        Claim
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:claim_type_id)}"}
+        = f.select :claim_type_id, options_from_collection_for_select_with_data(ClaimType.all, :id, :name, @bill.claim_type_id, {:'monthly_paid' => :monthly_paid}), {:include_blank => true}, {id: "claim-type", class: "form-control select_comp"}
+        %span.help-block= f.object.errors[:claim_type_id].join(", ")
+  .row
+    .col-md-4
+      %b{for: "claim_start_date"}
+        Start Date
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:claim_start_date)}"}
+        = f.text_field :claim_start_date, class: 'date date_input form-control',  id: 'claim-start-date'
+        %span.help-block= f.object.errors[:claim_start_date].join(", ")
+    .col-md-4
+      %b{for: "claim_end_date"}
+        End Date
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:claim_end_date)}"}
+        #date_overlay
+        = f.text_field :claim_end_date, class: 'date date_input form-control',  id: 'claim-end-date'
+        %span.help-block= f.object.errors[:claim_end_date].join(", ")
+  .row
+    .col-md-4
+      %b{for: "insurance_company_id"}
+        Payor
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:insurance_company)}"}
+        - options = @bill.patient.nil? ? [] : options_from_collection_for_select(@bill.patient.try(:insurance_companies), :id, :name, @bill.insurance_company_id)
+        = f.select :insurance_company_id, options, {:include_blank => true}, {class: "form-control insurance-company select_elem select_comp"}
+        %span.help-block= f.object.errors[:insurance_company].join(", ")
+
+
+  .row  
+    .col-md-4
+      %b{for: "date"}
+        Bill Date
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:date)}"}
+        = f.text_field :date, class: 'form-control date date_input'
+        %span.help-block= f.object.errors[:date].join(", ")
+    .col-md-4
+      %b{for: "amount"}
+        Bill Amount
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:amount)}"}
+        = f.text_field :amount, class: 'form-control amount'
+        %span.help-block= f.object.errors[:amount].join(", ")
+
+  .row
+    .col-md-4
+      %b{for: "payment_date"}
+        Payment Date
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:payment_date)}"}
+        = f.text_field :payment_date, class: 'form-control payment-date date_input'
+        %span.help-block= f.object.errors[:payment_date].join(", ")
+    .col-md-4
+      %b{for: "paied_amount"}
+        Paid Amount
+      .form-group{class:"#{'has-error' if f.object.errors.include?(:paied_amount)}"}
+        = f.text_field :paied_amount, class: 'form-control paied-amount'
+        %span.help-block= f.object.errors[:paied_amount].join(", ")
+
+
+  .row  
+    .col-md-12
+      .form-group
+        %b
+          Note
+        = f.text_area :note, class: 'form-control notes'
+        
+
+
+  .row
+    .col-md-12
+      .pull-right
+        = f.submit 'create', {class: 'btn btn-primary pull-right', onclick: "submit_new_bill_row_form(this)"}
+
+:javascript
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [month, day, year].join('/');
+  }
+
+  $(window).on('load', function() {
+    $('.date_input').datepicker();
+
+    $(".patient_selector").select2({
+      ajax: {
+        url: "/find_patients_matches",
+        dataType: 'json',
+        delay: 250,
+        data: function (params) {
+           return {q: params}
+        },
+        results: function (data) {
+            return {
+                results: $.map(data.items, function (item) {
+                    return {
+                        text: item.display_name,
+                        id: item.id
+                    }
+                })
+            };
+        },
+      cache: true
+      },
+      minimumInputLength: 3,
+    });
+
+    $(".patient_selector").on('change',function(){
+      var monthly_paid = $('#claim-type').select2().find(":selected").data("monthly_paid");
+      var claim_type = {'monthly_paid': monthly_paid};
+      $.ajax({
+        url: "/patients/" + $(this).val() + "/get_patient_data",
+        data: claim_type
+      })
+    });
+
+    $("#claim-type").on('change',function(){
+      if ($("#patient").val()){
+        var monthly_paid = $('#claim-type').select2().find(":selected").data("monthly_paid");
+        var claim_type = {'monthly_paid': monthly_paid};
+
+        $.ajax({
+          url: "/patients/" + $("#patient").val() + "/get_patient_data",
+          data: claim_type
+        })
+      }
+    });
+
+    // if monthly paid, set end date automatically
+    $('#claim-start-date').on('change',function(){
+      var monthly_paid = $('#claim-type').select2().find(":selected").data("monthly_paid");
+      if(monthly_paid){
+        var claim_end_date = new Date($('#claim-start-date').val());
+        claim_end_date = claim_end_date.setMonth(claim_end_date.getMonth()+1);
+        $('#claim-end-date-hidden-field, #claim-end-date').val(formatDate(claim_end_date));
+      }
+    });
+  });

@@ -1,0 +1,34 @@
+- visit = "Visit ##{v.id}"
+- if v.visit_type and v.visit_type.title
+  - visit = "#{v.visit_type.title} ##{v.id}"    
+%td.text-center
+  = state_badge v.progress_state
+
+%td.trunc-hover-show
+  = v.patient.try(:display_name)
+%td.trunc-hover-show
+  = visit
+  /= render_visit_state(@timesheet, v)
+%td= visit_time v
+%td
+  = render "timesheets/show/submitted/admittor/reimbursement", v: v
+%td.text-right
+  %form.inline-form.table-inline-form
+    .input-group
+      .btn-xs-group
+        %a.btn.btn-xs.ink-reaction.text-primary{class: ("pulse1" unless v.comments.empty?), href: "#offcanvas-visit-#{v.id}-comments" , "data-toggle": "offcanvas", "data-backdrop": "false"}
+          %i.fa.fa-comment
+        %a.btn.btn-xs.text-primary{href: "#{visit_path(v)}", target: "_blank" }
+          %i.fa.fa-eye
+        - if v.progress_state == "pending"
+          %a.btn.btn-xs.text-success{href: update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'approved', user_id: @timesheet.user.id,), "data-remote": true}
+            %i.fa.fa-check
+          %a.btn.btn-xs.text-danger{href: update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'rejected', user_id: @timesheet.user.id, task_type: 'visit'), "data-remote": true}
+            %i.fa.fa-times
+        - else
+          %a.btn.btn-xs.text-danger{href: update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'pending', user_id: @timesheet.user.id), "data-remote": true}
+            %i.fa.fa-minus-circle
+          
+      
+      
+        

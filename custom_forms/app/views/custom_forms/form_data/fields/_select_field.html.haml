@@ -1,0 +1,11 @@
+- multiselect = field.field_type.options['multivalue'] == '1' ? true : false
+- if field.field_type.field_type == 'select(associative_value)'
+  - collection = field.field_type.options['model_name'].constantize
+  = f.select field.id, collection.all.map { |a| [a.send(field.field_type.options['model_attribute']), a.id] }, { include_blank: true }, { multiple: multiselect, class: "form-control" }
+
+- elsif field.field_type.field_type == 'select(associative_value_for_custom_form)'
+  - collection = CustomForms::CustomForm.find(field.field_type.options['custom_form_id'].to_i).form_data
+  = f.select field.id, options_for_select(collection.map { |a| [a.sections_data[field.field_type.options['section_field_id']], a.id] }), { include_blank: true }, { multiple: multiselect, class: "form-control" }
+
+- else
+  = f.collection_select field.id, field.field_type.options['options'].split(','), :strip, :titleize, { :include_blank => true }, { multiple: multiselect, class: "form-control" }

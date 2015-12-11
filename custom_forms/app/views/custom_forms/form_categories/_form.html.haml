@@ -1,0 +1,17 @@
+= form_for @form_category do |f|
+  - if @form_category.errors.any?
+    #error_explanation
+      .alert-danger.alert.alert-callout.no-margin
+        %h2= "#{pluralize(@form_category.errors.count, "error")} prohibited this form_category from being saved:"
+        %ul
+          - @form_category.errors.full_messages.each do |msg|
+            %li= msg
+
+  
+  .form-horizontal
+    .form-group
+      = f.label :name, class: "col-sm-1 control-label"
+      .col-sm-11
+        = f.text_field :name , class: 'form-control'
+        .form-control-line
+  

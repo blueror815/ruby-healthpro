@@ -1,0 +1,44 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.people-table#patients-datatable.text-md{"data-source" => patients_path(format: :json)}
+          %thead
+            %tr
+              %th.text-md Patients
+  - if can? :edit, Patient
+    - content_for :footer do
+      = section_floating_action "plus", new_patient_path, "New patient"
+      = section_action "refresh", scrape_patients_path, "Patients"
+      = section_action "trash", delete_all_patients_path, "Patients"
+
+- content_for :header_title do 
+  Patients
+
+:javascript
+  $(function () {
+    $('#patients-datatable').DataTable(
+    {
+      "processing": true,
+      "serverSide": true,
+      "ajax": $('#patients-datatable').data('source'),
+      "dom": 'lCfrtip',
+      "order": [[ 0, "asc" ]],
+      "colVis": {
+        "buttonText": "Columns",
+        "overlayFade": 0,
+        "align": "right"
+      },
+      "columnDefs": [
+        { className: "people-info", "targets": [ 0 ] }
+      ],
+      "language": {
+        "lengthMenu": '_MENU_ entries per page',
+        "search": '<i class="fa fa-search"></i>',
+        "paginate": {
+          "previous": '<i class="fa fa-angle-left"></i>',
+          "next": '<i class="fa fa-angle-right"></i>'
+        }
+      }
+    });
+  });

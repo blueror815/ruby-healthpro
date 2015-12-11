@@ -1,0 +1,14 @@
+.section-body
+  = javascript_include_tag 'form_data'
+  .card.card-underline
+    .card-head
+      %header.text-xl
+        = "#{@form_datum.custom_form.title} ##{@form_datum.id}"
+      .tools
+        = link_to '', custom_forms.edit_custom_form_form_datum_path(@custom_form, @form_datum), class: "btn btn-floating-action ink-reaction btn-info btn-xs fa fa-edit"
+    .card-body
+      - @custom_form.form_sections.each do |section|
+        = render partial: 'custom_forms/form_data/view/section', locals: {section: section, form: @form_datum}
+        
+      - if @custom_form.allow_comments?
+        = render partial: 'comments/comments_with_form', locals: {commentable: @form_datum}

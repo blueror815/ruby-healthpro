@@ -1,0 +1,39 @@
+%section.content
+  / Your Page Content Here
+  = form_for @document_type do |f|
+    .row
+      .col-md-12
+        / DIRECT CHAT SUCCESS
+        .box.box-success
+          .box-header.with-border
+            %h3.box-title User Documents
+            .box-tools.pull-right
+              %button.btn.btn-box-tool{"data-widget" => "collapse"}
+                %i.fa.fa-minus
+              %button.btn.btn-box-tool{"data-widget" => "remove"}
+                %i.fa.fa-times
+          / /.box-header
+          .box-body
+            .row
+              .col-md-6
+                %table
+                  %tr
+                    %td.table-right-col
+                      - if @document_type.errors.any?
+                        #error_explanation
+                          .alert.alert-callout.alert-info.no-margin
+                            %h2= "#{pluralize(@job_type.errors.count, "error")} prohibited this job_type from being saved:"
+                            %ul
+                              - @job_type.errors.full_messages.each do |msg|
+                                %li= msg
+                  %tr
+                    %td.table-right-col
+                      %b Document name
+                    %td 
+                      = f.hidden_field :job_type_id
+                      = f.text_field :document_name, class: 'form-control'
+                  %tr
+                    %td.table-right-col
+                      = f.submit 'Save'
+        / /.info-box
+      / /.col

@@ -1,0 +1,5 @@
+- if can? :edit, User
+  = section_action "refresh", scrape_users_path, "Submit"
+  = section_floating_action "user-plus", new_user_path, "Add New User"
+- else
+  = section_floating_action "users", users_path, "Home"

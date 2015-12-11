@@ -1,0 +1,3 @@
+- if can? :administrate, Timesheet 
+  = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.admin_configurations_path, folder_item_title: 'Configurations'}
+  = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.admin_timesheets_path, folder_item_title: 'Administration'}

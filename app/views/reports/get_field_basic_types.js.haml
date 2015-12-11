@@ -1,0 +1,4 @@
+$('select.field_type_select').empty()
+- @basic_field_types.each do |basic_field_type|
+  $("select.field_type_select").append("<option value='#{basic_field_type}'>#{basic_field_type.titleize}</option>")
+$('select.field_type_select').select2("val", "");

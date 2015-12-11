@@ -1,0 +1,98 @@
+.section-body
+  .row
+    .col-md-12
+      = render 'bills_summary_header'
+
+  = render "date_filter" , report_url: reports_bills_path
+  .row
+    .col-md-8
+      = render 'bills_data_table'
+
+    .col-md-4
+      = render 'summary_table'
+
+
+#payment_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "simpleModalLabel", :role => "dialog", :tabindex => "-1"}
+
+- content_for :header_title do 
+  Bills Summary
+
+:javascript
+  $(function(){
+    function getUrlVar(key){
+      var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search); 
+      return result && unescape(result[1]) || ""; 
+    }
+
+    $('.date-picker input').datetimepicker({
+      format: 'MM-DD-YYYY'
+    });
+
+    columns = [
+            {data :'claim_start_date'},
+            {data :'claim_end_date'},
+            {data :'claim_type_name'},
+            {data :'insurance_company_name'},
+            {data :'patient_name'},
+            {data :'amount'},
+            {data :'date'}
+        ]
+
+    var datatable_handler = new DataTableHandler('/bills/index_report_bills?to=#{params[:to]}&from=#{params[:from]}', 'bill', '#reports_datatable', [], [], columns, {"order": [[ '6', "desc" ]] ,showButtons: false} );
+
+    var reports = $('#reports_datatable').dataTable();
+
+    var table = $('#summary').dataTable({ "bLengthChange": false, "bPaginate": false}).rowGrouping({bExpandableGrouping: true});
+
+    var filter_type = getUrlVar('filter_type');
+    var search_prefix = "filterkey:";
+
+    var group_column_id = filter_type === 'Claim' ? 2 : 3;
+    var individual_column_id = filter_type === 'Claim' ? 3 : 2;
+
+    function clear_selection() {
+      reports.fnFilter("", individual_column_id);
+      reports.fnFilter("", group_column_id);
+    };
+
+    $('#summary_total').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $('#summary_wrapper tr').not('[role=row]').children('td').not('[id=summary_total]').not('[data-group-level=0]').not('[class]').not('[rowspan]').closest("tr").siblings().removeClass("highlight-filter");
+      $('.individual-count').closest("tr").siblings().removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      reports.fnFilter("");
+    });
+
+    $('#summary_wrapper tr').not('[role=row]').children('td').not('[data-group-level=0]').not('[class]').not('[rowspan]').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $("#summary_total").parents("tr").removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      if ($('.highlight-filter').length > 0) {
+        reports.fnFilter(search_prefix + $('.highlight-filter').html().split('</td>')[0].split('>')[1].replace(/&amp;/g, '&').trim(), group_column_id, true);
+      } else {
+        reports.fnFilter("");
+      }
+    });
+
+    $('.individual-count').click(function(event) {
+      clear_selection();
+      // highlight the row
+      $("#summary_total").parents("tr").removeClass("highlight-filter");
+      $(this).closest("tr").siblings().removeClass("highlight-filter");
+      $(this).parents("tr").toggleClass("highlight-filter", this.clicked);
+      // do the filteration
+      if ($('.highlight-filter').length > 0) {
+        var highlighted = $('.highlight-filter').prevAll('tr').not('[role=row]')[0];
+        reports.fnFilter(search_prefix + $(highlighted).html().split('</td>')[0].split('>')[1].replace(/&amp;/g, '&').trim(), group_column_id, true);
+        reports.fnFilter(search_prefix + $('.highlight-filter').html().split('</td>')[0].split('>')[1].replace(/&amp;/g, '&').trim(), individual_column_id, true);
+      } else {
+        reports.fnFilter("");
+      }
+    });
+  })

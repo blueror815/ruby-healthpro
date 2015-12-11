@@ -1,0 +1,16 @@
+- sub_items = [{path: main_app.bills_path, title: "Bills"}, {path: main_app.reports_bills_path, title: "Bills Summary"} ,{path: main_app.payments_summary_path, title: "Payments Summary"} , { path: main_app.receivables_bills_path, title: "Receivables Summary" }, {path: main_app.admin_bills_path, title: "Administration"}]
+
+- if can? :view, Bill or can? :administrate, Bill or can? :edit, Bill or current_user.role.name=="finance_admin" or current_user.role.name=="executive" 
+  %li.gui-folder
+    %a{:class => ('active' if request.path.match ".*(#{sub_items.join '|'})" )}
+      .gui-icon
+        %i.fa.fa-dollar.fa-fw
+      %span.title Billing
+    %ul
+      - if can? :view, Bill or can? :edit, Bill
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.bills_path, folder_item_title: "Bills"}
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.reports_bills_path, folder_item_title: "Bills Summary"}
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.payments_summary_path, folder_item_title: "Payments Summary"}
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.receivables_bills_path, folder_item_title: "Receivables Summary"}
+      - if can? :administrate, Bill
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.admin_bills_path, folder_item_title: "Administration"}

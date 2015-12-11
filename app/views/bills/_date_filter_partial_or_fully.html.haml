@@ -1,0 +1,35 @@
+= form_tag report_url, :method => 'get' do
+  .card.card-underline
+    .card-head
+      %header.text-lg.text-primary Filter
+    .card-body
+      .form-group
+        = label_tag :from, nil, class: "col-sm-2 control-label"
+        .col-sm-10
+          #start-date.input-group.date-picker
+            = text_field_tag :from, params[:from].strftime("%m-%d-%Y"), class: 'form-control'
+      .form-group
+        = label_tag :to, nil, class: "col-sm-2 control-label"
+        .col-sm-10
+          #end-date.input-group.date-picker
+            = text_field_tag :to, params[:to].strftime("%m-%d-%Y"), class: 'form-control'
+      .form-group
+        = label_tag :payment, nil, class: "col-sm-2 control-label"
+        .col-sm-10
+          .radio.radio-styled
+            %label
+              = radio_button_tag :payment_state, :partially_paid, !params[:payment_state] || params[:payment_state].eql?('partially_paid'), class: "col-sm-2 control-label"
+              %span Partially paid
+            %label
+              = radio_button_tag :payment_state, :no_payment, params[:payment_state].eql?('no_payment'), class: "col-sm-2 control-label"
+              %span No payment
+      .form-group
+        = label_tag :filter_type, "Group By", class: "col-sm-2 control-label"
+        .col-sm-10
+          .input-group{style: 'width: 150px;'}
+            = select_tag :filter_type, options_for_select([['Claim', 'Claim'], ['Insurance', 'Insurance']], :selected => params[:filter_type]), class: "form-control"
+    .card-actionbar
+      .card-actionbar-row
+        .pull-right
+          .form-group
+            = submit_tag "Submit", name: nil, class: 'btn btn-primary'

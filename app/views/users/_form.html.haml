@@ -1,0 +1,22 @@
+= form_for @user do |user_form|
+  = render "users/edit/header", f: user_form
+  %section
+    - if @user.errors.any?
+      #error_explanation
+        .alert.alert-callout.alert-error.no-margin
+          %ul
+            - @user.errors.full_messages.each do |msg|
+              %li= msg
+    .section-body.no-margin
+      .row
+        .col-md-7
+          = render "users/edit/forms", user_form: user_form
+        .col-md-5
+          = render "users/edit/info", user_form: user_form
+          - if can? :manage_payments, User or @user.id == current_user.id
+            = render "users/edit/rates", job_type: @user.job_type, f: user_form
+    
+  %section.has-actions{style: "padding: 0px; width: 100%;   position: fixed; bottom: 0px; right: 0px; left: 0px;" }
+    .section-action.style-primary
+      = render partial: "users/edit/footer"
+  

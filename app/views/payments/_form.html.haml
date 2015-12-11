@@ -1,0 +1,39 @@
+= form_for @payment, remote:true  do |f|
+  = f.hidden_field :bill_id
+  = f.hidden_field :patient_id
+  = f.hidden_field :claim_type_id
+  = hidden_field_tag :view_location, @view_location
+
+  .card.card-underline
+    .card-body
+      .row
+        .col-md-12
+          #error_explanation#payment_modal_errors
+    .card-body
+      .form-horizontal
+        .form-group
+          = f.label :date, class: "col-sm-1 control-label"
+          .col-sm-11#date.input-group.date
+            = f.text_field :date, class: 'datepicker form-control'
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = f.label  :amount, class: "col-sm-1 control-label"
+          .col-sm-11
+            = f.text_field :amount, class: 'form-control numbers_only'
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = f.label  :notes, class: "col-sm-1 control-label"
+          .col-sm-11
+            = f.text_field :notes, class: 'form-control '
+            .form-control-line
+      .form-horizontal
+        .form-group
+          = f.label  :payment_type, class: "col-sm-1 control-label"
+          .col-sm-11
+            = f.select :payment_type_id, options_from_collection_for_select(PaymentType.all, :id, :name, @payment.payment_type_id), {:include_blank => true}, {class: "form-control", onchange: 'get_dependant_data(this)'}
+            .form-control-line
+
+    .card-body
+      = f.submit 'Save', class: "btn  btn-raised btn-info ink-reaction pull-right"

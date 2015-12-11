@@ -1,0 +1,13 @@
+- permission_texts = {'read' => 'View', 'create' => 'Create', 'update' => 'Edit', 'destroy' => 'Delete', 'manage' => 'Administrate [full permissions]', 'show_self_only' => 'View own page only [if any]' }
+.form-horizontal
+  .form-group
+    = label @model, :name, class: "col-sm-2 control-label"
+    .col-sm-10
+      = text_field @model, :name, class: 'form-control'
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model, :short_name, class: "col-sm-2 control-label"
+    .col-sm-10
+      = text_field @model, :short_name, class: 'form-control'
+      .form-control-line

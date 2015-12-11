@@ -1,0 +1,11 @@
+- oncalls = @pending_on_calls + @approved_on_calls + @rejected_on_calls
+.offcanvas
+  - oncalls.each do |oncall|
+    .offcanvas-pane.width-12{id: "offcanvas-oncall-#{oncall.payable.id}-comments"}
+      .offcanvas-head.style-primary
+        %header= "oncall ##{oncall.payable.id}"
+        .offcanvas-tools 
+          %a.btn.btn-icon-toggle.pull-right{ "data-dismiss" => "offcanvas"}
+            %i.fa.fa-minus
+      .offcanvas-body
+        = render "comments/comments_with_form", commentable: oncall.payable

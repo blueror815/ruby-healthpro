@@ -1,0 +1,28 @@
+= form_for @report do |f|
+  - if @report.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@report.errors.count, "error")} prohibited this report from being saved:"
+      %ul
+        - @report.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-horizontal
+    .form-group
+      = f.label :Name, class: "col-sm-1 control-label text-right"
+      .col-sm-11
+        = f.text_field  :name, class: 'form-control'
+        .form-control-line
+
+    .form-group
+      = f.label "Custom Form", class: "col-sm-1 control-label text-right"
+      .col-sm-11
+        = f.select :custom_form_id, options_from_collection_for_select(CustomForms::CustomForm.all, :id, :title, @report.custom_form_id), {:include_blank => true}, {class: "form-control custom_form_select"}
+
+    
+  = f.fields_for :report_fields, @report.report_fields do |builder|
+    = render 'report_field_form_row', f: builder, field_type_id: "1"
+      
+  - content_for :footer do
+    - action = f.object.persisted? ? 'Save' : 'Submit'
+    = section_submit_action action, f.options[:html][:id]
+    = section_action "reply", reports_path, "Report"

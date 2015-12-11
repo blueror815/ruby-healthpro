@@ -1,0 +1,35 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-xl
+            = @report.name
+          .tools
+            = link_to '', export_report_path(@report,format: "xls", remote: true), class: 'pull-right btn btn-floating-action ink-reaction btn-info  btn-xs fa fa-file-excel-o'
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-condensed.text-xs#reports_table
+          %thead
+            %tr
+              %th Name
+              %th Document Title
+              %th Document/Expiry Date
+              %th Summary
+          %tbody
+
+:javascript
+  $(function(){
+    columns = [
+            {data :'model'},
+            {data :'field', class: 'text-right'},
+            {data :'value'},
+            {data :'count'}
+        ]
+
+    var datatable_handler = new DataTableHandler('/reports/#{params[:id]}/generate_instance', 'bill', '#reports_table', [], [], columns, {showButtons: false, "ordering": false});
+
+    $('#reports_table').rowGrouping({bExpandableGrouping: true, asExpandedGroups: ['dd']});
+  });
+  

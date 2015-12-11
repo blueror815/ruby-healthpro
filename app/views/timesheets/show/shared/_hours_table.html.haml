@@ -1,0 +1,10 @@
+
+%table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+  %thead 
+    %tr
+      %th.col-md-12 Hour
+  %tbody
+    - hours.each do |hour|
+      %tr
+        %td
+          = render "timesheets/show/shared/hour_row", hour: hour

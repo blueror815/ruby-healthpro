@@ -1,0 +1,50 @@
+- present @bill do |bill_presenter|
+  .section-body
+    .card
+      .card-head.style-primary
+        %header.text-xl
+          Bill ##{@bill.id}
+    .card
+      .card-Head
+        %header.text-xl
+          Details
+      .card-body
+        %dl.dl-horizontal
+          %dt Payor
+          %dd= @bill.insurance_company.try(:name)
+          %dt Date
+          %dd= @bill.date.strftime("%d-%m-%Y")
+          %dt Claim
+          %dd= @bill.claim_type.try(:name)
+          %dt Bill Amount
+          %dd= number_to_currency(@bill.amount)
+          %dt Payed Amount
+          %dd#paid_amount= number_to_currency(@bill.paied_amount)
+
+    .card
+      .card-Head
+        %header.text-xl
+          Patient Details
+      .card-body
+        %dl.dl-horizontal
+          %dt Patient
+          %dd= @bill.patient.try(:display_name)
+          %dt Start of Care
+          %dd=  bill_presenter.start_of_care_date
+          %dt Discharge Date
+          %dd= bill_presenter.end_of_care_date
+
+  - present @bill
+
+  .card.card-underline
+    .card-head
+      %header.text-lg
+        Payments
+      .tools
+        = link_to '#', class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs editor_create' do 
+          %i.fa.fa-plus
+    .card-body
+      #hours_table
+        = render 'payments_table'
+
+  #payment_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "simpleModalLabel", :role => "dialog", :tabindex => "-1"}

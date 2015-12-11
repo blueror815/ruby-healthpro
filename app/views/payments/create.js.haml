@@ -1,0 +1,8 @@
+- if @payment.errors.any?
+  $('#payment_modal_errors').html("#{escape_javascript(render('payments/errors', errors: @payment.errors)).html_safe}")
+- elsif @view_location == 'bill_view'
+  $("#payment_modal").modal('hide');
+  $('#hours_table').html("#{escape_javascript(render('bills/payments_table', payments: @bill.payments)).html_safe}")
+- else
+  $("#payment_modal").modal('hide');
+  window.location.reload()

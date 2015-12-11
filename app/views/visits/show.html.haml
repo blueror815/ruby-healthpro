@@ -1,0 +1,100 @@
+%p#notice= notice
+.section-body
+  .card
+    .card-head.style-primary
+      %header.text-xl
+        - if @visit.visit_type 
+          = @visit.visit_type.title   + " #" + @visit.id.to_s
+        - else 
+          Visit ##{@visit.id}
+      .tools  
+        - if can? :edit, Visit
+          = link_to '', edit_visit_path(@visit) , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-edit'
+  .card  
+    .card-body
+      .row
+        .col-sm-3.profile-pic-col
+          .profile-img
+            = image_tag(@visit.assignee.image, class: "border-white border-xl img-responsive auto-width")
+          %h3.text-center= @visit.assignee.display_name
+        .col-sm-9.profile-info
+          .form-horizontal
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Progress state
+              .col-sm-10
+                %label{:for => ""}
+                  = @visit.progress_state
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Billing state
+              .col-sm-10
+                %label{:for => ""}
+                  = @visit.billing_state
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Billing code
+              .col-sm-10
+                %label{:for => ""}
+                  = @visit.billing_code
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Date
+              .col-sm-10
+                %label{:for => ""}
+                  = @visit.date
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Time in
+              .col-sm-10
+                %label{:for => ""}
+                  = format_time @visit.time_in
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Time out
+              .col-sm-10
+                %label{:for => ""}
+                  = format_time @visit.time_out
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Agency
+              .col-sm-10
+                %label{:for => ""}
+                  - if @visit.agency_id
+                    = Agency.find(@visit.agency_id).name.humanize
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Assigner
+              .col-sm-10
+                %label{:for => ""}
+                  = @visit.assigner_id
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Assignee
+              .col-sm-10
+                %label{:for => ""}
+                  - if @visit.assignee
+                    = @visit.assignee.display_name
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Patient
+              .col-sm-10
+                %label{:for => ""}
+                  - if @visit.patient
+                    = @visit.patient.display_name
+                  
+            .form-group
+              %label.col-sm-2.form-label{:for => ""} Visit type
+              .col-sm-10
+                %label{:for => ""}
+                  - if @visit.visit_type 
+                    = @visit.visit_type.title    
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header.text-lg
+            Reimbursements
+      .card
+        .card-body
+          - if (@visit.reimbursements_visits && @visit.reimbursements_visits.any?) || (@new_reimbursements_visits && @new_reimbursements_visits.any?)
+            = render 'reimbursements', visit: @visit
+          - else
+            Adding reimbursements is not applicable for you.
+  .row
+    .col-md-12
+      .card.style-primary
+        .card-head
+          %header.text-lg
+            Comments  
+      = render partial: 'comments/comments_with_form', locals: {commentable: @visit}

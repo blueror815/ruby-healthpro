@@ -1,0 +1,27 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header 
+            Departments
+          .tools
+            - if can? :create, Department
+              = link_to '', new_department_path, class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-plus'
+  - @departments.each do |department|
+    .col-md-6.col-lg-4.col-sm-6
+      .card
+        .alert.alert-callout.alert-info.no-margin
+          %strong.text-xl
+            %i.fa.fa-clock-o.text-primary
+            = department.name
+          %br
+            %span.opacity-50
+              - if can? :update, Department
+                = link_to 'Edit', edit_department_path(department), class: "pull-right btn ink-reaction btn-raised btn-sm"
+              - disabled = ''
+              - unless department.users.empty? 
+                - disabled = " pointer-events: none; cursor: default;"
+              - if can? :destroy, Department
+                = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete", style: disabled 
+                = link_to '', department, :method => :delete, class: "hide"

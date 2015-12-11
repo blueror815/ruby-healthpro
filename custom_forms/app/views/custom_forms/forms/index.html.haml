@@ -1,0 +1,17 @@
+.section-body
+  .row          
+    - @forms.each do |form|
+      .col-md-6.col-lg-4.col-sm-6
+        .card
+          .alert.alert-callout.alert-primary.no-margin
+            .text-lg
+              %i.fa.fa-clock-o.text-primary
+              = form.title.humanize
+            %br
+              %span.opacity-50
+              - if @forms_to_create.include?form
+                = link_to 'New', custom_forms.new_custom_form_form_datum_path(form), class: "pull-right btn ink-reaction btn-raised btn-sm"
+                = link_to 'Browse', form_path(form), class: "pull-right btn ink-reaction btn-raised btn-sm"
+
+- content_for :header_title do 
+  Forms

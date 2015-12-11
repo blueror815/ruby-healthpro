@@ -1,0 +1,12 @@
+- visits = @pending_visits + @approved_visits + @rejected_visits
+.offcanvas
+  - visits.each do |visit|
+    .offcanvas-pane.width-12{id: "offcanvas-visit-#{visit.id}-comments"}
+      .offcanvas-head.style-primary
+        %header= "Visit ##{visit.id}"
+        .offcanvas-tools 
+          %a.btn.btn-icon-toggle.pull-right{ "data-dismiss" => "offcanvas"}
+            %i.fa.fa-minus
+      .offcanvas-body
+        / = render "visits/reimbursements", visit: visit
+        = render "comments/comments_with_form", commentable: visit

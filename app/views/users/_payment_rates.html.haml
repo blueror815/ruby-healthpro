@@ -1,0 +1,59 @@
+- job_type ||= JobType.first
+#payment_rates.card.card-underline
+  .card-head
+    %header.text-lg
+      Payment rates
+  .card-body
+    .row
+      .form-horizontal
+        .col-md-12
+          - job_type.payment_method_ids.each do |payment_method|
+            - if payment_method == '1'
+              - if job_type.visit_types.any?
+                %label Visits
+              - job_type.visit_types.each do |visit_type|
+                = f.fields_for :payment_rates, @user.payment_rates.find_by(visit_type_id: visit_type.id) || @user.payment_rates.new(visit_type_id: visit_type.id) do |payment_rate|
+                  .form-group
+                    = payment_rate.hidden_field :visit_type_id, value: visit_type.id
+                    = payment_rate.hidden_field :payment_method_id, value: payment_method
+                    = payment_rate.label visit_type.title.to_sym, class: 'col-sm-2 control-label'
+                    .col-sm-10
+                      = payment_rate.text_field :price, class: 'form-control numbers_only', placeholder: "#{visit_type.price}"
+
+              %label Reimbursements
+              - job_type.visit_types.map(&:reimbursements).flatten.uniq.each do |reimbursement|
+                = f.fields_for :payment_rates, @user.payment_rates.find_by(reimbursement_id: reimbursement.id) || @user.payment_rates.new(reimbursement_id: reimbursement.id) do |payment_rate|
+                  .form-group
+                    = payment_rate.hidden_field :reimbursement_id, value: reimbursement.id
+                    = payment_rate.hidden_field :payment_method_id, value: 4
+                    = payment_rate.label reimbursement.title.to_sym, class: 'col-sm-2 control-label'
+                    .col-sm-10
+                      = payment_rate.text_field :price, class: 'form-control numbers_only', placeholder: "#{reimbursement.price}"
+                      
+            - elsif payment_method == '2'
+              - if job_type.hour_types.any?
+                %label Hours
+              - job_type.hour_types.each do |hour_type|
+                = f.fields_for :payment_rates, @user.payment_rates.find_by(hour_type_id: hour_type.id) || @user.payment_rates.new(hour_type_id: hour_type.id) do |payment_rate|
+                  .form-group
+                    = payment_rate.hidden_field :hour_type_id, value: hour_type.id
+                    = payment_rate.hidden_field :payment_method_id, value: payment_method
+                    = payment_rate.label hour_type.title.to_sym, class: 'col-sm-2 control-label'
+                    .col-sm-10
+                      = payment_rate.text_field :price, class: 'form-control numbers_only', placeholder: "#{hour_type.price_factor}"
+            - elsif payment_method == '3'
+              - if job_type.payment_method_ids.include?('3')
+                %label Fixed Salery
+              = f.fields_for :payment_rates, @user.payment_rates.find_by(payment_method_id: 3) || @user.payment_rates.new(payment_method_id: 3) do |payment_rate|
+                .form-group
+                  = payment_rate.hidden_field :payment_method_id, value: payment_method
+                  .col-sm-10
+                    = payment_rate.text_field :price, class: 'form-control numbers_only', placeholder: "#{@user.fixed_salery}"
+            - else
+              %label Else
+              = f.fields_for :payment_rates, @user.payment_rates.find_by(payment_method_id: payment_method) || @user.payment_rates.new(payment_method_id: payment_method) do |payment_rate|
+                .form-group
+                  = payment_rate.hidden_field :payment_method_id, value: payment_method
+                  = payment_rate.label (JobType::PAYMENT_METHODS[payment_method.to_s] + ' rate').to_sym, class: 'col-sm-2 control-label'
+                  .col-sm-10
+                    = payment_rate.text_field :price, class: 'form-control numbers_only', placeholder: "0"

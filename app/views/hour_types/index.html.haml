@@ -1,0 +1,24 @@
+= link_to 'New Hour type', new_hour_type_path
+.row
+  .col-md-12
+    .card
+      .card-head.style-primary
+        %header.text-xl 
+          Hour Type
+        - if current_user.admin?
+          .tools  
+            = link_to '', new_hour_type_path, class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-plus'
+.row              
+  - @hour_types.each do |hour_type|
+    .col-md-6.col-lg-4.col-sm-6
+      .card
+        .alert.alert-callout.alert-info.no-margin
+          %strong.text-lg
+            %i.fa.fa-clock-o.text-primary
+            = hour_type.title.humanize
+          %br
+            %span.opacity-50
+              = link_to 'Edit', edit_hour_type_path(hour_type), class: "pull-right btn ink-reaction btn-raised btn-sm"
+              = link_to 'Destroy', 'javascript:void(0)',class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete"
+              = link_to '', hour_type, :method => :delete, class: "hide"
+

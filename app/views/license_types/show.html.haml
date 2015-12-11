@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @license_type.name
+%p
+  %b Code:
+  = @license_type.code
+%p
+  %b Job type:
+  = @license_type.job_type_id
+
+= link_to 'Edit', edit_license_type_path(@license_type)
+\|
+= link_to 'Back', license_types_path

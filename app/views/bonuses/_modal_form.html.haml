@@ -1,0 +1,24 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title Bonus
+    .modal-body
+      = form_for @bonuse, remote:true do |f|
+        = f.hidden_field :user_id
+        = f.hidden_field :timesheet_id
+        = hidden_field_tag :timesheet_id , @timesheet_id if @timesheet_id
+
+        = render "bonuses/errors", errors: @bonuse.errors
+
+        .form-horizontal
+          .form-group
+            = f.label :price, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.number_field :price, class: 'form-control numbers_only'
+              .form-control-line
+
+        .card-actionbar
+          .deactivate-btn.card-title
+          = f.submit "Save", class: 'save-form btn btn-info pull-right'
+

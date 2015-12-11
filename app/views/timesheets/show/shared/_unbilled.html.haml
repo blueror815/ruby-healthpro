@@ -1,0 +1,141 @@
+= form_tag(update_task_state_path, method: :get, remote:true, id: "update_task") do 
+  = hidden_field_tag :id, @timesheet.id
+  = hidden_field_tag :state, 'pending'
+  = hidden_field_tag :task_type, 'visit'
+  - (@unpaid_visits + @pending_visits).each do |v|
+    = check_box_tag 'task_id[]',  v.id, false, class: "hidden" if submittable?(@timesheet)
+.card
+  .card-head.style-primary
+    %header.text-xl
+      Unbilled Visits
+  .card-body
+    %table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+      %thead 
+        %tr
+          %th
+          %th Patient
+          %th Visit
+          %th Date
+          %th Time in
+          %th Time out
+          %th Reimbursements
+          %th Status
+          %th
+      %tbody
+        - (@unpaid_visits + @pending_visits).each do |v|
+          %tr
+            - if v.progress_state == "visited"
+              %td= check_box_tag 'task_id[]',  v.id, false, class: "task_checkbox" if submittable?(@timesheet)
+            - else 
+              %td
+            - visit = "Visit ##{v.id}"
+            - if v.visit_type and v.visit_type.title
+              - visit = "#{v.visit_type.title} ##{v.id}"
+            %td= v.patient.display_name
+            %td= visit
+            %td= v.date.strftime("%e, %b, %y")
+            - if v.user == current_user && submittable?(@timesheet)
+              %td
+              / = best_in_place v, :time_in, :as => :time , display_with: lambda {|t| t.try(:strftime, '%H:%M').try(:html_safe)}
+              %td
+              / = best_in_place v, :time_out, :as => :time , display_with: lambda {|t| t.try(:strftime, '%H:%M').try(:html_safe)}
+              %td
+                = form_for v , class: "visit_form", remote: true do |f|
+                  - not_included_reimbursements = v.visit_type.reimbursements - v.reimbursements
+                  - @new_reimbursements_visits = []
+                  - not_included_reimbursements.each do |reimbursement|
+                    - @new_reimbursements_visits << reimbursement.reimbursements_visits.new
+                    - @new_reimbursements_visits.last.visit = v
+                  = f.fields_for :reimbursements_visits, (v.reimbursements_visits + @new_reimbursements_visits) do |builder|
+                    = builder.hidden_field :reimbursement_id
+                    = builder.object.reimbursement.title
+                    = builder.object.reimbursement.riembursement_price(v.assignee)
+                    .action-count-field
+                      - if builder.object.reimbursement.value_type == 1
+                        .checkbox.checkbox-styled
+                          %label
+                            = check_box_tag :remove_field, nil, v.reimbursement_ids.include?(builder.object.reimbursement.id) ? true : false
+                            = builder.hidden_field :action_count, {class: 'action-count-field'}
+                            = builder.hidden_field :_destroy, {class: 'destroy-field', value: false}
+                      - else
+                        = builder.number_field :action_count, class: "form-control multiple-instances", min: 0, :step => 1
+                        = builder.hidden_field :_destroy, {class: 'destroy-field', value: false}
+            - else
+              %td
+                = v.time_in.strftime("%H:%M")
+              %td
+                = v.time_out.strftime("%H:%M")
+              %td
+                - text = []
+                - v.reimbursements_visits.each do |v|
+                  - text <<  "#{v.reimbursement.title}:#{v.action_count}"
+                = text.join(' & ')
+            %td
+              - if v.progress_state == "visited"
+                Visted
+              - else
+                In Timesheet
+            %td.text-center
+              = link_to  show_comments_path(id: v.id), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+                %i.fa.fa-comments-o
+              - if v.user == current_user  && submittable?(@timesheet)
+                - if v.progress_state == "visited" && submittable?(@timesheet)
+                  = link_to  update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'pending', task_type: 'visit'), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+                    %i.fa.fa-arrow-right
+                - else
+                  = link_to  update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'visited', task_type: 'visit'), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" , :remote => true do 
+                    %i.fa.fa-remove
+              - if admittable?(@timesheet, @user) && (can? :admit, Timesheet)
+                - user = @user ? @user : current_user
+                %td.text-right
+                  = link_to "", update_task_state_path(id: @timesheet.id, task_id: [v.id], state: 'approved', user_id: user.id), class: "btn-icon-toggle fa fa-arrow-right", title: 'Approve' , remote: true
+              %a{ href: visit_path(v.id), class: "btn ink-reaction btn-icon-toggle btn-sm btn-primary" }
+                %i.fa.fa-eye
+  - if submittable?(@timesheet) && @unpaid_visits.count > 0
+    .card-actionbar
+      .card-actionbar-row          
+        = submit_tag 'add', class: "btn btn-primary", onclick:"$('#update_task').submit()"
+
+
+
+
+
+:javascript
+  $(document).ready(function() {
+      $('#unbilled-visits-datatable').DataTable();
+  } );
+  $(function(){
+    $(".task_checkbox").change(function(){
+      if ($(this).is(":checked") == true) {
+        $("#update_task input[value=" + $(this).val() +"]").prop('checked', true) 
+      }else{
+        $("#update_task input[value=" + $(this).val() +"]").prop('checked', false) 
+      }
+    })
+
+    $('.action-count-field .checkbox').change(function(){
+      if($(this).find('input').is(':checked')){
+        $(this).parent().find('.destroy-field').attr('value', 'false');
+        $(this).parent().find('.action-count-field').attr('value', 1);
+      }
+      else{
+        $(this).parent().find('.destroy-field').attr('value', 'true');
+        $(this).parent().find('.action-count-field').attr('value', 0);
+      }
+    });
+    $('.action-count-field .checkbox').change(function(){
+      $(this).parents('form.edit_visit').submit();
+      })
+
+    $('.action-count-field .multiple-instances').change(function(){
+      if($(this).val() == '0'){
+        $(this).parent().find('.destroy-field').attr('value', 'true');
+      }
+      else{
+        $(this).parent().find('.destroy-field').attr('value', 'false');
+      }
+    });
+    $('.action-count-field .multiple-instances').focusout(function(){
+      $(this).parents('form.edit_visit').submit();
+      })
+  });

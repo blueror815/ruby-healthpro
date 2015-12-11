@@ -1,0 +1,48 @@
+$('#bill_table').html("#{escape_javascript(render('bills/bill_table')).html_safe}");
+$('#new_bill_row').html("#{escape_javascript(render('bills/bill_form_row')).html_safe}");
+$('#claim-type').select2();
+$('#error_explanation').html("")
+var widthsArray = [];
+$('#bills_datatable thead th').each(function(i){
+billFieldsWidth = ( $(this).width() + 16 );
+widthsArray.push(billFieldsWidth);
+});
+
+$('#new_bill .date').css('width', widthsArray[0]);;
+$('#new_bill .patient').css('width', widthsArray[1]);;
+$('#new_bill .claim-type').css('width', widthsArray[2]);;
+$('#new_bill .amount').css('width', widthsArray[3]);;
+$('#new_bill .notes').css('width', widthsArray[4]);;
+$('#new_bill .payment-date').css('width', widthsArray[5]);;
+$('#new_bill .paied-amount').css('width', widthsArray[6]);;
+$('#new_bill .insurance-company').css('width', widthsArray[7]);;
+$('#new_bill .add-payment').css('width', widthsArray[8]);;
+
+$('.date_input').datepicker();
+$('.select_elem').select2();
+$(".patient_selector").select2({
+ajax: {
+url: "/find_patients_matches",
+dataType: 'json',
+delay: 250,
+data: function (params) {
+return {q: params}
+},
+results: function (data) {
+return {
+results: $.map(data.items, function (item) {
+return {
+text: item.display_name,
+id: item.id
+}
+})
+};
+},
+cache: true
+}
+});
+$(".patient_selector").on('change',function(){
+$.ajax({
+url: "/patients/" + $(this).val() + "/get_patient_data"
+})
+});

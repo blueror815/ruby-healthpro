@@ -1,0 +1,3 @@
+- if @timesheet.user == current_user
+  = render "timesheets/show/created/submitter/activities", visits: @pending_visits, hours: @pending_hours, on_calls_line_items: @pending_on_calls, reimbursement_timesheets_line_items: @pending_reimb
+

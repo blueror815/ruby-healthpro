@@ -1,0 +1,53 @@
+- visit = "Visit ##{v.id}"
+- if v.visit_type and v.visit_type.title
+  - visit = "#{v.visit_type.title} ##{v.id}"    
+%td
+  = check_box_tag 'task_id[]',  v.id, false, class: "task_checkbox" if submittable?(@timesheet)
+%td  
+  = v.patient.display_name
+%td
+  = visit
+  /= render_visit_state(@timesheet, v)
+%td
+  15/10/2015
+%td
+  10:25
+%td
+  11:25
+%td
+  = form_for v , class: "visit_form", remote: true do |f|
+    = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+      = builder.hidden_field :reimbursement_id
+  
+      - if builder.object.reimbursement.value_type == 1
+        = builder.check_box :action_count, class: "single_instance input-sm"
+      
+%td
+  = form_for v , class: "visit_form", remote: true do |f|
+    = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+      = builder.hidden_field :reimbursement_id
+      %dd
+        = builder.text_field :comment, class: "form-control comment input-sm"
+%td
+  = form_for v , class: "visit_form", remote: true do |f|
+    = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+      = builder.hidden_field :reimbursement_id
+
+      - if builder.object.reimbursement.value_type == 1
+        = builder.check_box :action_count, class: "single_instance input-sm"
+%td
+  = form_for v , class: "visit_form", remote: true do |f|
+    = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+      = builder.hidden_field :reimbursement_id
+      %dd
+        = builder.text_field :comment, class: "form-control comment input-sm"
+%td
+  
+%td
+  = form_for v , class: "visit_form", remote: true do |f|
+    = f.fields_for :reimbursements_visits, (v.reimbursements_visits) do |builder|
+      = builder.hidden_field :reimbursement_id
+      %dd
+        = builder.text_field :comment, class: "form-control comment input-sm"
+
+/= render partial: "comments/comments_collapsed_card", locals: {commentable: v}

@@ -1,0 +1,11 @@
+- if (can? :view, Patient) || (can? :administrate, Patient)
+  %li.gui-folder
+    %a{:class => ('active' unless request.path != main_app.patients_path and main_app.admin_patients_path)}
+      .gui-icon
+        %i.fa.fa-users.fa-fw
+      %span.title Patients
+    %ul
+      - if can? :view, Patient
+        = render partial:'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.patients_path, folder_item_title: 'Directory'}
+      - if can? :administrate, Patient
+        = render partial:'layouts/sidebar_folder_item', locals: {folder_item_path: main_app.admin_patients_path, folder_item_title: 'Administration'}

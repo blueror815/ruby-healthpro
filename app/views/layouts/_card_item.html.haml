@@ -1,0 +1,15 @@
+%tr
+  %td
+    - if instance.has_attribute?(:name)
+      = instance.name.humanize
+    - elsif instance.has_attribute?(:title)
+      = instance.title.humanize
+    - else
+      = instance.id
+    .pull-right
+      - if can? :update, @model.camelize.constantize
+        = link_to '', "/#{@model.pluralize}/#{instance.id}/edit", class: "btn btn-floating-action ink-reaction  btn-xs fa fa-edit text-primary"
+        - disabled = ''
+      - if can? :destroy, @model.camelize.constantize
+        = link_to '', 'javascript:void(0)',class: "btn btn-floating-action ink-reaction  btn-xs fa fa-trash text-primary swal swal-delete", style: disabled
+        = link_to '', instance, method: :delete, class: "hide"

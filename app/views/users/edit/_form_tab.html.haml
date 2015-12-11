@@ -1,0 +1,5 @@
+- if @form_datum.custom_form.permissions["#{ current_user.role.short_name }"][@action] == '1'
+  %li{class: "form-tab", id: "#{@form_datum.custom_form.id}"}
+    - activated = true
+    %a{:href => "##{@form_datum.custom_form.id}nth"} 
+      = @form_datum.custom_form.title.humanize

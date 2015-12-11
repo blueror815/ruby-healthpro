@@ -1,0 +1,25 @@
+.section-body       
+  .row
+    - @custom_forms.each do |custom_form|
+      .col-md-6.col-lg-4.col-sm-6
+        .card
+          .alert.alert-callout.alert-primary.no-margin
+            %strong.text-lg{style: 'display: block; word-break: break-all;'}
+              %i.fa.fa-clock-o.text-primary
+              = custom_form.title.humanize
+            %br
+              %span.opacity-50
+                - if custom_form.form_category
+                  = custom_form.form_category.name
+                - if can? :update, CustomForms::CustomForm
+                  = link_to 'Edit', edit_custom_form_path(custom_form), class: "pull-right btn ink-reaction btn-raised btn-sm"
+                - if custom_form.deletable == true
+                  - if can? :destroy, CustomForms::CustomForm
+                    = link_to 'Destroy', 'javascript:void(0)', class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete"
+                    = link_to '', custom_form, :method => :delete, class: "hide"
+
+  - content_for :footer do
+    = section_floating_action "plus", new_custom_form_path, "New Schema"
+
+  - content_for :header_title do 
+    Form Types

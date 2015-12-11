@@ -1,0 +1,38 @@
+%li.dropdown.hidden-xs#notification-panel
+  %a.btn.btn-icon-toggle.btn-default{"aria-expanded" => "false", "data-toggle" => "dropdown", :href => "javascript:void(0);", id: 'notification-pane'}
+    %i.fa.fa-bell
+    - n_count = notification_count
+    %sup.badge.style-danger= n_count == 0 ? '' : n_count
+  %ul.dropdown-menu.animation-expand#notification-panel-list
+    %li.dropdown-header Notifications
+    - if Notification.unread_by(current_user).any?
+      - Notification.unread_by(current_user).where.not(action: 'submit').where.not(action: 'admit_notify_payers').each do |notification|
+        %li.notification-item
+          .alert.alert-callout.alert-info
+            %small
+              - if notification.notifiable.is_a?(Timesheet) && notification.action == 'admit'
+                - if notification.notifiable.user == current_user
+                  = render  "notifications/#{notification.notifiable_type.underscore}/admit_notify_owner", notification: notification
+                - else
+                  = render  "notifications/#{notification.notifiable_type.underscore}/admit_notify_payers", notification: notification
+              - else
+                = render "notifications/#{notification.notifiable_type.underscore}/#{notification.action}", notification: notification
+    - if Notification.unread_by(current_user).any?
+      - if current_user.admitter? && Notification.unread_by(current_user).where(action: 'submit').any?
+        %li.dropdown-header Submissions
+        %li.notification-item
+          .alert.alert-callout.alert-info
+            %small
+              = render "notifications/timesheet/submit", notifications: Notification.unread_by(current_user).where(action: 'submit')
+    - if Notification.unread_by(current_user).any?
+      - if current_user.payer? && Notification.unread_by(current_user).where(action: 'admit_notify_payers').any?
+        %li.dropdown-header Admissions
+        %li.notification-item
+          .alert.alert-callout.alert-info
+            %small
+              = render "notifications/timesheet/admit_notify_payers", notifications: Notification.unread_by(current_user).where(action: 'admit_notify_payers')
+    %li.dropdown-header Options
+    %li
+      = link_to 'View all Notifications', main_app.notifications_path
+    %li
+      = link_to 'Mark all as read', main_app.mark_all_as_read_notifications_path, method: :post, remote: true

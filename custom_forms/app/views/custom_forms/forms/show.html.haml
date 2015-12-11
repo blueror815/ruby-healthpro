@@ -1,0 +1,47 @@
+.section-body  
+  .card
+    .card-body
+      %table.table.table-bordered.table-striped#checklist-instances-datatable
+        %thead
+          %tr
+            %th ID
+            %th User
+            %th Created At
+            %th Updated At
+            - @custom_form.form_sections.each do |form_section|
+              - form_section.section_fields.each do |field|
+                - if field.index_display?
+                  %th= field.field_type.name.humanize
+            %th Controls
+        %tbody    
+          - @forms_data.each do |form|
+            %tr
+              %td= form.id
+              %td= form.user_id
+              %td= form.created_at
+              %td= form.updated_at
+              - @custom_form.form_sections.each do |form_section|
+                - form_section.section_fields.each do |field|
+                  - if field.index_display?
+                    %td= form.sections_data[field.field_type_id]
+              %td.text-center
+                = link_to '<i class="fa fa-eye"></i>'.html_safe, custom_forms.custom_form_form_datum_path(@custom_form, form), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+                - if can_edit_instance(@custom_form.id)
+                  = link_to '<i class="fa fa-edit"></i>'.html_safe, custom_forms.edit_custom_form_form_datum_path(@custom_form, form), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+
+- content_for :header_title do 
+  #{@custom_form.title} Instances
+
+- content_for :footer do
+  .section-floating-action-row
+    - if can_create_instance(@custom_form.id)
+      = link_to '', custom_forms.new_custom_form_form_datum_path(@custom_form), class: "btn btn-floating-action ink-reaction btn-accent btn-lg fa fa-plus"
+
+                  
+:javascript
+  $(function(){
+    $("#checklist-instances-datatable").DataTable({});
+  });
+
+
+

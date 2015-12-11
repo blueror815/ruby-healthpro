@@ -1,0 +1,12 @@
+.section-body
+  = form_for @instance do |f|
+    .card.card-underline
+      .card-head
+        %header.text-lg Editing #{@model.titleize}
+      .card-body 
+        = yield
+
+
+    - content_for :footer do
+      = section_submit_action "Submit", f.options[:html][:id]
+      = section_action "reply", "/#{@model.pluralize}" , "Visit types"          

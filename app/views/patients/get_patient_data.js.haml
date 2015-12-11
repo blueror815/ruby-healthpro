@@ -1,0 +1,38 @@
+$("#claim-end-date").removeAttr('disabled');
+- if !params[:monthly_paid].nil? && params[:monthly_paid] == 'true'
+  $("#bill_insurance_company_id").html("<select id='bill_insurance_company_id' class='insurance-company select_elem' name='bill[insurance_company_id]'>#{escape_javascript options_from_collection_for_select(InsuranceCompany.all, :id, :name, InsuranceCompany.first)}</select>");
+  $("#bill_insurance_company_id").val("");
+
+  - start_date = Date.today.at_beginning_of_month
+  - end_date = Date.today.at_end_of_month
+  $("#patient_soc").html(#{start_date.strftime("%Y, %m, %d")});
+  $("#patient_discharge_date").html(#{end_date.strftime("%Y, %m, %d")});
+
+  $("#claim-start-date").datepicker("setDate",new Date(#{start_date.strftime("%Y, %m, %d")}));
+  $("#claim-end-date").datepicker("setDate",new Date(#{end_date.strftime("%Y, %m, %d")})).attr('readonly','readonly');
+  $("#date_overlay").addClass('overlay_div_component');
+  $("#claim-end-date").datepicker('hide');
+
+- elsif !@patient.insurance_companies.empty?
+  $("#bill_insurance_company_id").html("<select id='bill_insurance_company_id' class='insurance-company select_elem' name='bill[insurance_company_id]'>#{escape_javascript options_from_collection_for_select(@patient.insurance_companies, :id, :name, @patient.insurance_companies.first.id)}</select>");
+  $("#bill_insurance_company_id").val("#{@patient.insurance_companies.first.id}");
+
+  - start_date = @patient.soc_date || (Date.today - 1.day) 
+  - end_date = @patient.discharged_date  || Date.today 
+  $("#patient_soc").html("#{(@patient.soc_date || (Date.today - 1.day)).strftime("%Y, %m, %d")}");
+  $("#patient_discharge_date").html("#{(@patient.discharged_date || (Date.today )).strftime("%Y, %m, %d")}");
+
+  $("#claim-start-date").datepicker("setDate",new Date("#{start_date.strftime('%Y, %m, %d')}"));
+  $("#claim-end-date").datepicker("setDate",new Date("#{end_date.strftime('%Y, %m, %d')}"));
+
+  $("#claim-end-date").removeAttr('readonly').datepicker("option", "disabled", false);
+  $("#date_overlay").removeClass('overlay_div_component');
+- else
+  $("#bill_insurance_company_id").html("<select id='bill_insurance_company_id' class='insurance-company select_elem' name='bill[insurance_company_id]'></select>");
+  - start_date = @patient.soc_date || (Date.today - 1.day) 
+  - end_date = @patient.discharged_date  || Date.today 
+  $("#patient_soc").html("#{(@patient.soc_date || (Date.today - 1.day)).strftime("%Y, %m, %d")}");
+  $("#patient_discharge_date").html("#{(@patient.discharged_date || (Date.today )).strftime("%Y, %m, %d")}");
+
+  $("#claim-end-date").removeAttr('readonly').datepicker("option", "disabled", false);
+$("#bill_insurance_company_id").select2();

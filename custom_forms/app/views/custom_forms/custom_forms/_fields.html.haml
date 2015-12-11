@@ -1,0 +1,29 @@
+%tr.field{id: f.object.id}
+  %td
+    = f.hidden_field :_destroy, { class: 'destroy-field', value: false }
+    = f.hidden_field :form_section_id
+    = f.hidden_field :row_order, class: 'order-field'
+    = f.select :field_type_id, CustomForms::FieldType.all.map{|cf| [cf.name.humanize, cf.id]}, {}, { class: "form-control select2 fieldSelect" , disabled: @custom_form.form_data.any? && f.object.persisted? }
+  %td#alias_field
+    - if f.object.field_alias
+      = f.text_field :field_alias, class: 'form-control'
+    - else
+      = f.text_field :field_alias, value: f.object.field_type.try(:name).try(:humanize) || CustomForms::FieldType.first.name.humanize, class: 'form-control'
+  %td
+    .checkbox.checkbox-styled
+      %label
+        = f.check_box :required
+  %td
+    .checkbox.checkbox-styled
+      %label
+        = f.check_box :index_display
+  %td.text-right
+    = link_to_remove_section_field '<i class="fa fa-trash-o"></i>'.html_safe, 'tr'
+
+:javascript
+  $(function(){
+    $(".fieldSelect").change(function(){
+      alias_name = $(this).children('option:selected').text();
+      $(this).parent().siblings('td#alias_field').children().val(alias_name);
+    })
+  });

@@ -1,0 +1,20 @@
+.card.tabs-left.no-margin
+  %ul.card-head.nav.nav-tabs.style-default-light{"data-toggle" => "tabs"}
+    - if @user_hr_forms_data
+      - activated = false
+      / TODO_PROHEALTH need to add order page in schema to avoid such bad practice
+      - @user_hr_forms_data.each_with_index do |form, i|
+        - user_permissions = form.custom_form.permissions["#{ current_user.role.short_name }"]
+        - if user_permissions && user_permissions[action_name] == '1'
+          %li{class: "#{ 'active' unless activated }" }
+            - activated = true
+            %a{:href => "##{i}nth"} 
+              = form.custom_form.title.humanize
+  .card-body.tab-content.style-default-bright.form-panes
+    - activated = false
+    - @user_hr_forms_data.each_with_index do |form, i|
+      - user_permissions = form.custom_form.permissions["#{ current_user.role.short_name }"]
+      - if user_permissions && user_permissions[action_name] == '1'
+        .tab-pane{id: "#{i}nth", class: "#{ 'active' unless activated }"}
+          - activated = true
+          = render partial: 'custom_forms/form_data/view/form', locals: {form: form}

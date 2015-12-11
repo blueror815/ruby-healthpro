@@ -1,0 +1,13 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover#payment-types{"data-source" => payment_types_path(format: :json)}
+          %thead
+            %tr
+              %th Name
+              %th Payment Description
+
+- content_for :header_title do
+  Payment types
+

@@ -1,0 +1,10 @@
+:plain
+  $('#payment_rates').replaceWith("#{escape_javascript(render 'users/payment_rates', job_type: @job_type, f: ActionView::Helpers::FormBuilder.new(:user, @user, self, {}))}")
+  /* append category's extra forms to basically selected forms */
+  var basicSelectedItems = $('#custom_form_ids option[selected="selected"]').map(function () {
+    return parseInt($(this).val());
+  });
+  basicSelectedItems = basicSelectedItems.get();
+  var neededItems =  JSON.parse("[" + #{@job_type.custom_form_ids} + "]");
+  var diff = $(neededItems).not(basicSelectedItems).get();
+  $('#custom_form_ids').select2("val", diff.concat(basicSelectedItems)).change();

@@ -1,0 +1,6 @@
+%div
+  - if user_forms_section_form.permissions["#{ current_user.role.short_name }"][@action] == '1'
+    .text-lg= user_forms_section_form.title.humanize
+  %dl.dl-horizontal
+    - user_forms_section_form.section_fields.each do |section_field|
+      = form_field_edit(user_forms_form, user_forms_section_form, section_field)

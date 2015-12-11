@@ -1,0 +1,6 @@
+$('##{@form_datum.id}').remove()
+option = $('select#custom_form_ids').find('option[value="' + #{@form_datum.custom_form_id} + '"]')
+$('select#custom_form_id').append(new Option($(option).html(), $(option).val()))
+$(option).removeAttr('selected');
+$('select#custom_form_ids, select#custom_form_id').select2()
+$('input[value="#{@form_datum.id}"]').remove();

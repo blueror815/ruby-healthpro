@@ -1,0 +1,53 @@
+.section-body
+  .card.card-underline
+    .card-head
+      %header.text-xl  
+        Pay periods
+    .card-body
+      .table-responsive
+        %table.table.table-hover#pay-periods-datatable
+          %thead
+            %tr
+              %th Id
+              %th Start Date
+              %th End Date
+              %th Submission Date
+              %th Admission Date
+              %th Controls
+          - @payrolls.each do |payroll|
+            %tr
+              %td.text-sm
+                = link_to payroll.id, payroll_path(payroll)
+              %td.text-sm
+                = date payroll.start_date
+              %td.text-sm
+                = date payroll.end_date
+              %td.text-sm
+                = date payroll.submission_date
+              %td.text-sm
+                = date payroll.admission_date
+              %td.text-center.text-sm
+                = link_to '<i class="fa fa-eye"></i>'.html_safe, payroll_path(payroll), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+                = link_to '<i class="fa fa-list"></i>'.html_safe, get_exceeded_employees_payroll_path(payroll), class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+
+- if @visit_types
+  = render 'visits_report', visit_types: @visit_types, timesheet_ids: @timesheet_ids
+- if @hour_types
+  = render 'hours_report', hour_types: @hour_types, timesheet_ids: @timesheet_ids
+- if @hour_types
+  = render 'reimbursements_report', visits: @visits
+- if @users
+  = render 'users_report', users: @users
+
+
+- content_for :header_title do 
+  Reports
+
+- content_for :footer do
+  - if !Payroll.any? 
+    .section-floating-action-row
+      = link_to '', new_payroll_path , class: 'pull-right btn btn-floating-action ink-reaction btn-accent btn-lg fa fa-plus'
+      :css
+        .fa-plus:before {
+          font-size: 1.3em;
+        }

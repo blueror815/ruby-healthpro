@@ -1,0 +1,43 @@
+.row
+  .col-md-12
+    .card
+      .card-head.style-primary
+        %header
+          .text-xl
+            Reports
+.row
+  .col-md-12.col-lg-12.col-sm-12
+    .card
+      .card-body          
+        %table.table
+          %thead
+            %tr
+              %td
+              %td
+          %tbody
+            %tr
+              %td
+                Total Number of form categories is 
+              %td= @categories_count
+            %tr
+              %td
+                Total Number of custom forms is 
+              %td= @custom_forms_count
+            - @categories_custom_forms_count.each do |name, count|
+              %tr
+                %td 
+                  - if name.nil?
+                    uncategorized
+                  - else
+                    = name
+                %td
+                  = count
+            %tr
+              %td
+                Total Number of users is 
+              %td= @users_count
+            %tr
+              %td
+                Total Number of disciplines is 
+              %td= @disciplines_count
+      

@@ -1,0 +1,27 @@
+.section-body
+  .row
+    .col-md-12
+      .card
+        .card-head.style-primary
+          %header
+            .text-size-xl
+              User Roles
+          .tools  
+            = link_to '', new_role_path, class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs fa fa-plus'
+  .row
+    - @roles.each do |role|
+      .col-md-6.col-lg-4.col-sm-6
+        .card
+          .alert.alert-callout.alert-primary.no-margin
+            %strong.text-size-l
+              %i.fa.fa-cogs.text-primary
+              = role.name.humanize
+            %br
+              %span.opacity-50
+                = link_to 'Edit', edit_role_path(role), class: "pull-right btn ink-reaction btn-raised btn-sm"
+                - disabled = ''
+                - unless role.users.empty? 
+                  - disabled = " pointer-events: none; cursor: default;"
+                = link_to 'Destroy', 'javascript:void(0)',class: "pull-right btn ink-reaction btn-raised btn-sm swal swal-delete", style: disabled
+                = link_to '', role, :method => :delete, class: "hide"
+

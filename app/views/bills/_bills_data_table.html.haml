@@ -1,0 +1,18 @@
+.card.card-underline
+  .card-head
+    %header.text-lg.text-primary
+      Bills
+    .tools
+      = link_to "", reports_bills_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], export_summary: false), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+  .card-body
+    .table-responsive
+      %table.table.table-condensed#reports_datatable
+        %thead
+          %tr
+            %th Start Date
+            %th Discharged Date
+            %th Bill Type
+            %th Payor
+            %th Patient
+            %th Billed Amt.
+            %th Billed Date

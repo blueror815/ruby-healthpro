@@ -1,0 +1,68 @@
+%html
+  %head
+    %meta{:charset => "UTF-8"}
+    %title
+      -if content_for?(:header_title)
+        = yield :header_title
+      - else
+        ProHealth - Home Care Services
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", :name => "viewport"}
+    = favicon_link_tag 'favicon.ico', type: 'image/gif'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag 'custom_forms/application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+
+    = stylesheet_link_tag '/Editor-1.5.1/css/editor.dataTables.css'
+    = javascript_include_tag    'https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/select/1.0.1/js/dataTables.select.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/plug-ins/1.10.10/api/fnMultiFilter.js', media: 'all'
+
+
+
+
+    = javascript_include_tag    'https://cdn.datatables.net/buttons/1.1.0/js/buttons.html5.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/buttons/1.1.0/js/buttons.flash.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/buttons/1.1.0/js/buttons.colVis.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/buttons/1.1.0/js/buttons.print.min.js', media: 'all'
+    = javascript_include_tag    'https://cdn.datatables.net/autofill/2.1.0/js/dataTables.autoFill.min.js', media: 'all'
+    = javascript_include_tag    '/Editor-1.5.1/js/dataTables.editor.js', media: 'all'
+
+  - if current_user
+    - if controller_name == 'users' and action_name != 'index'
+      %body.menubar-hoverable.header-fixed.header-first.menubar-pin
+        #base
+          = render :partial => "layouts/navbar"
+          .offcanvas
+            = yield :left_offcanvas
+          #content
+            = yield
+          = render :partial => "layouts/sidebar"
+    - else
+      %body.menubar-hoverable.header-fixed.menubar-first.menubar-pin.full-content
+        #base
+          = render :partial => "layouts/navbar"
+          .offcanvas
+            = yield :left_offcanvas
+          #content
+            %section.has-actions
+              = render :partial => "layouts/flashes"
+              - if @partial
+                = render :partial => @partial
+              - else
+                = yield
+          = render :partial => "layouts/sidebar"
+          = render :partial => "layouts/offcanvas"
+        #footer-area.section-action.style-primary
+          = yield :footer
+
+    
+  - elsif controller_name ==  'passwords' && action_name == 'edit'
+    = yield
+  - else
+    = render :partial => "layouts/sign_in"
+
+// TODO_PROHEALTH this must be removed it crashs with coffescript files 
+- if Rails.application.assets.find_asset params[:controller]
+  = javascript_include_tag params[:controller]

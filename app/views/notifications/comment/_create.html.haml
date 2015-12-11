@@ -1,0 +1,13 @@
+- if notification.notifiable.class.name == 'Timesheet'
+  - modified_redirect_path = main_app.polymorphic_path([notification.notifiable.commentable.user, notification.notifiable.commentable], anchor: 'comments')
+- else
+  - modified_redirect_path = main_app.polymorphic_path([notification.notifiable.commentable.user, notification.notifiable.commentable.timesheet], anchor: 'comments')
+
+= link_to main_app.mark_as_read_notifications_path(notification_ids: [notification.id], redirect_path: modified_redirect_path) do
+  .notification-element{id: "#{notification.id}"}
+    = image_tag notification.user_notifications.first.sender.image, class: 'img-circle img-responsive pull-left width-1'
+    %span.text-primary= summurize(notification.senders.map(&:display_name))
+    commented on
+    %span.text-medium= ((notification.notifiable.commentable.user == current_user) ? ' your ' : '') + notification.notifiable.commentable.class.name.demodulize.downcase + ' #' + notification.notifiable.commentable.id.to_s
+    %br
+    %span.opacity-50= notification.updated_at

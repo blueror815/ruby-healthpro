@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @reimbursement.title
+%p
+  %b Value type:
+  = @reimbursement.value_type
+%p
+  %b Price:
+  = @reimbursement.price
+
+= link_to 'Edit', edit_reimbursement_path(@reimbursement)
+\|
+= link_to 'Back', reimbursements_path

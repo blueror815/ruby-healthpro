@@ -1,0 +1,14 @@
+%dl.dl-horizontal
+  - v.reimbursements_visits.each do |r_v|
+    - if r_v.action_count > 0
+      %dt= r_v.reimbursement.title
+      %dd
+        - if r_v.reimbursement.value_type == 2
+          %span= r_v.action_count.to_s + ", "
+        - else
+          %span= ""
+        
+        - if r_v.comment and r_v.comment !=""
+          %span= r_v.comment
+        - else
+          %span.text-danger= "no comment available"

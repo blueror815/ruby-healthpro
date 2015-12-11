@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# one:
+#   medical_record_number: MyString
+#   status_chart_id: 1
+#   user_id: 1
+#   patient_id: 1
+#   insurance: MyString
+#   agency: MyString
+#   form_date: 2015-05-25
+#   billing_code: MyString
+#   time_in: 2015-05-25 14:10:33
+#   time_out: 2015-05-25 14:10:33
+
+# two:
+#   medical_record_number: MyString
+#   status_chart_id: 1
+#   user_id: 1
+#   patient_id: 1
+#   insurance: MyString
+#   agency: MyString
+#   form_date: 2015-05-25
+#   billing_code: MyString
+#   time_in: 2015-05-25 14:10:33
+#   time_out: 2015-05-25 14:10:33

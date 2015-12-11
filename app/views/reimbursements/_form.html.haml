@@ -1,0 +1,28 @@
+.form-horizontal
+  .form-group
+    = label @model, :title, class: "col-sm-1 control-label"
+    .col-sm-11
+      = text_field @model,  :title, class: 'form-control'
+      .form-control-line
+  .form-group
+    = label @model, :price, class: "col-sm-1 control-label"
+    .col-sm-11
+      = number_field @model, :price, class: 'form-control numbers_only', placeholder: 'Insert numbers only', min: 0, :step => 'any'
+      .form-control-line
+.form-horizontal
+  .form-group
+    = label @model, :value_type, class: "col-sm-1 control-label"
+    .col-sm-11
+      = collection_radio_buttons @model, :value_type, Reimbursement::TYPES, :first, :last, checked: (@instance.value_type if @instance) || 1 do |b|
+        .radio-inline.radio-styled
+          = b.label do
+            = b.radio_button
+          = b.label
+        .form-control-line
+  .form-group
+    = label @model, :include_in_timesheet, class: "col-sm-1 control-label"
+    .col-sm-11
+      .checkbox.checkbox-styled
+        %label
+          = check_box @model, :include_in_timesheet
+          %span

@@ -1,0 +1,31 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover#reimbursements-table
+          %thead
+            %tr
+              %th Title
+              %th Price
+              %th Value Type
+              %th Include in timesheet
+
+
+- content_for :header_title do 
+  Reimbursements
+
+:javascript
+  edit_fields = [
+                  { label: 'Title', name: 'title' },
+                  { label: 'Price', name: 'price' },
+                  { label: 'Value Type', name: 'value_type', type: 'select', options: #{ Reimbursement::TYPES.invert.to_json } },
+                  { label: 'Include in timesheet', name: 'include_in_timesheet', type: 'checkbox', separator: "|", options: [{ label: '', value: '1'}] }
+                ];
+  editable_params = ['title', 'price', 'value_type', 'include_in_timesheet_0'];
+  columns = [
+              {data :'title'},
+              {data :'price'},
+              {data :'value_type_text'},
+              {data :'include_in_timesheet'}
+            ];
+  var datatable_handler = new DataTableHandler('/reimbursements', 'reimbursement', '#reimbursements-table', edit_fields, editable_params, columns, {});

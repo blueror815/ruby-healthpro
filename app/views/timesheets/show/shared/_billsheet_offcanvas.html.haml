@@ -1,0 +1,7 @@
+.offcanvas-head
+  .text-sm.text-primary Billsheet
+  .offcanvas-tools
+    %a.btn.btn-icon-toggle.pull-right.hide_offcanvas{ "data-dismiss" => "offcanvas" }
+      %i.fa.fa-minus
+.offcanvas-body#bill_offcanvas
+  = render partial: "timesheets/show/shared/bill"

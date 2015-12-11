@@ -1,0 +1,99 @@
+<section class="content-header">
+  <h1>
+    Roles Administration
+    <small>HR Supervisor</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Forms</a></li>
+    <li class="active">HR</li>
+  </ol>
+</section>
+<section class="content">
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Default box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Details</h3>
+        </div>
+          <div class="box-body">
+
+          <table class="table borderless" >
+
+            <tr>
+              <td><span>ID</span></td>
+              <td><input type="text" class="form-control " disabled value="1234"></td>
+            </tr>
+
+            <tr>
+              <td><span>Name</span></td>
+              <td><input type="text" class="form-control" value="HR Supervisor"></td>
+            </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Default box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Permissions</h3>
+        </div>
+        <div class="box-body">
+          <table  class="datatable table table-bordered">
+            <thead>
+            <tr>
+              <th>Roles</th>
+              <th class="text-center">Create</th>
+              <th class="text-center">Edit</th>
+              <th class="text-center">View</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HR Form</td>
+              <td class="text-center"><input type="checkbox" class="flat-red" checked/></td>
+              <td class="text-center"><input type="checkbox" class="flat-red" checked/></td>
+              <td class="text-center"><input type="checkbox" class="flat-red" checked/></td>
+            </tr>
+            <tr>
+              <td>Timesheet</td>
+              <td class="text-center"><input type="checkbox" class="flat-red" /></td>
+              <td class="text-center"><input type="checkbox" class="flat-red" /></td>
+              <td class="text-center"><input type="checkbox" class="flat-red" /></td>
+            </tr>
+
+            <tr>
+              <td>Nurse Visit</td>
+              <td class="text-center"><input type="checkbox" class="flat-red" /></td>
+              <td class="text-center"><input type="checkbox" class="flat-red" /></td>
+              <td class="text-center"><input type="checkbox" class="flat-red" checked/></td>
+            </tr>
+
+
+          </tbody>
+          </table>
+
+        </div><!-- /.box-body -->
+
+      </div><!-- /.box -->
+
+
+    </div>
+  </div>
+
+
+</section>
+
+
+<script>
+
+
+$(".datatable").dataTable();
+
+</script>

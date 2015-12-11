@@ -1,0 +1,5 @@
+= f.fields_for :value_options, OpenStruct.new(f.object.value_options) do |value_option|
+  .form-group
+    = value_option.label :days, { class: "col-sm-1 control-label text-right" }
+    .col-sm-11
+      = value_option.text_field :days, class: "form-control numbers_only"

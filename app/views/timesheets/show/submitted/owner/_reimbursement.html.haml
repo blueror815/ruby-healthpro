@@ -1,0 +1,37 @@
+- if v.progress_state =="approved"
+  .input-group
+    - rs = v.reimbursements_visits.sort_by { |v| v.reimbursement.id }
+    - rs.each do |r|
+      .row
+        - if r.action_count > 0
+          
+          %span.input-group-addon
+            - if r.reimbursement.value_type == 1
+              = r.reimbursement.title
+            - else
+              = "#{r.reimbursement.title} x#{r.action_count}"
+          .input-group-content
+            = r.comment             
+
+
+- else
+  = form_for v , :html => {:class => 'form-inline edit-visit table-inline-form', :remote=> true} do |f|
+    
+    = f.fields_for :reimbursements_visits, (v.reimbursements_visits.sort_by { |v| v.reimbursement.id }) do |builder|
+      = builder.hidden_field :reimbursement_id
+      = builder.hidden_field :comment,  {"class": "comment-field", "data-rid": builder.object.id}
+      .input-group
+        
+        - has_comment = builder.object.comment != nil && builder.object.comment != ""
+        %span.input-group-addon
+          %a.comment-icon{"data-rid": builder.object.id, "href": "#"}
+            %i{"class": "fa fa-comments text-#{ has_comment ?  'primary' : 'default' }"}
+          
+        .input-group-content.control-label= builder.object.reimbursement.title
+        - if builder.object.reimbursement.value_type == 1
+          %span.input-group-addon= builder.check_box :action_count,  { "class": "single_instance input-xs", "data-rid": builder.object.id}
+        - else
+          %span.input-group-addon= builder.number_field :action_count, {"data-rid": builder.object.id, "data-count": builder.object.action_count, "class": "form-control multiple-instance input-sm text-right", min: 0, step: 1}
+        
+          
+          

@@ -1,0 +1,14 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover#claim-types{"data-source" => claim_types_path(format: :json)}
+          %thead
+            %tr
+              %th Name
+              %th Description
+              %th Monthly Paid
+
+- content_for :header_title do
+  Claim types
+

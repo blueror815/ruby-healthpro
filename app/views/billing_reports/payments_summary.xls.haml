@@ -1,0 +1,80 @@
+!!! XML
+%Workbook{:xmlns => "urn:schemas-microsoft-com:office:spreadsheet", "xmlns:html" => "http://www.w3.org/TR/REC-html40", "xmlns:o" => "urn:schemas-microsoft-com:office:office", "xmlns:ss" => "urn:schemas-microsoft-com:office:spreadsheet", "xmlns:x" => "urn:schemas-microsoft-com:office:excel"}
+  %Worksheet{"ss:Name" => "Bills"}
+    - if !params[:export_summary] || params[:export_summary] == "false"
+      %table
+        %tr
+          %td
+            %data{"ss:Type" => "String"} ID
+          %td
+            %data{"ss:Type" => "String"} Start data
+          %td
+            %data{"ss:Type" => "String"} Discharged data
+          %td
+            %data{"ss:Type" => "String"} Payor
+          %td
+            %data{"ss:Type" => "String"} Patient
+          %td
+            %data{"ss:Type" => "String"} Billed Amt.
+          %td
+            %data{"ss:Type" => "String"} Bill date
+          %td
+            %data{"ss:Type" => "String"} Claim
+
+        - @payments_in_interval.each do |payment|
+          %tr
+            %td
+              %data{"ss:Type" => "String"}= payment.id
+            %td
+              %data{"ss:Type" => "String"}= payment.bill.claim_start_date
+            %td
+              %data{"ss:Type" => "String"}= payment.bill.claim_end_date
+            %td
+              %data{"ss:Type" => "String"}= payment.bill.insurance_company.name
+            %td
+              %data{"ss:Type" => "String"}= payment.patient.display_name
+            %td
+              %data{"ss:Type" => "String"}= payment.bill.amount
+            %td
+              %data{"ss:Type" => "String"}= payment.bill.date
+            %td
+              %data{"ss:Type" => "String"}= payment.bill.claim_type.name
+      %br
+      %br
+      %br
+    - if !params[:export_summary] || params[:export_summary] == "true"
+      %table
+        %tr
+          %td
+            %data{"ss:Type" => "String"} Claim Type
+          %td
+            %data{"ss:Type" => "String"} Payor
+          %td
+            %data{"ss:Type" => "String"} Amount
+          %td
+            %data{"ss:Type" => "String"} Files No.
+        - @payments_in_interval_grouped.group_by{ |b| b[:claim_type] }.each do |claim, payments|
+          %tr
+            %td
+              %data{"ss:Type" => "String"}= claim
+            %td
+            %td
+              %data{"ss:Type" => "String"}= number_to_currency @claim_types[claim][:amount]
+            %td
+              %data{"ss:Type" => "String"}= @claim_types[claim][:count]
+          - payments.each do |payment|
+            %tr
+              %td
+              %td
+                %data{"ss:Type" => "String"}= payment[:insurance]
+              %td
+                %data{"ss:Type" => "String"}= number_to_currency payment[:amount]
+              %td
+                %data{"ss:Type" => "String"}= payment[:count]
+        %tr
+          %td
+            Total
+          %td
+          %td= number_to_currency @payments_in_interval_grouped.map{|s| s[:amount]}.reduce(:+)
+          %td= @payments_in_interval_grouped.sum{|s| s[:count]}
+

@@ -1,0 +1,18 @@
+.section-action-row
+  - if @timesheet && @timesheet.state == "submitted"
+    = section_action_offcanvas "list", "#offcanvas-bill", "Billsheet"
+.section-floating-action-row
+  - if @timesheet
+    - if submittable?(@timesheet) && @timesheet.user == current_user
+      - title, action_path, icon = "Submit", @user ? submit_user_timesheet_path(@user, @timesheet) : submit_timesheet_path(@timesheet), "save"
+    - elsif admittable?(@timesheet, @user) && (can? :admit, Timesheet)
+      - title, action_path, icon = "Admit", @user ? admit_user_timesheet_path(@user, @timesheet) : admit_timesheet_path(@timesheet), "check-square-o"
+    - elsif payable?(@timesheet) && (can? :pay, Timesheet)
+      - title, action_path, icon = "Pay", @user ? pay_user_timesheet_path(@user, @timesheet) : pay_timesheet_path(@timesheet), "money"
+    - else
+      - payed = true
+  - if @timesheet && !payed  
+    %a{"class": "btn btn-floating-action btn-lg btn-accent ink-reaction", "data-original-title": "#{title}", "data-placement": "top", "data-toggle": "tooltip", href: "#{action_path}", rel:"nofollow", "data-method": "put"}
+      %i.fa{class: "fa-#{icon}"}
+#footer-copyright
+  %span Copyright &copy; #{Time.now.year} - ProHealth

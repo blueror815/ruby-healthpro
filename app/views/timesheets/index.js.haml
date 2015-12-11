@@ -1,0 +1,1 @@
+$("#table_tab").html("#{escape_javascript(render("timesheets/index_timesheet_table/timesheets_table_#{@timesheet_type}", timesheets: @timesheets)).html_safe}");

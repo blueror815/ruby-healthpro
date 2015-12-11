@@ -1,0 +1,124 @@
+.section-body
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-lg
+            About
+        .card-body
+          .row
+            .col-sm-3.profile-pic-col
+              .profile-img
+                = image_tag(@patient.image, class: "border-white border-xl img-responsive auto-width")
+              %h3.text-center
+                = @patient.display_name
+            .col-sm-8.profile-info
+              .form-horizontal
+                .form-group
+                  - if @patient.email.present?
+                    %label.col-sm-2.control-label{:for => ""} Email
+                    .col-sm-10
+                      %label{:for => ""}
+                        = @patient.email
+                .form-group
+                  %label.col-sm-2.control-label{:for => ""} Home Phone
+                  .col-sm-10
+                    %label{:for => ""}
+                      = @patient.phone
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Agency
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.agency.name if @patient.agency
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Start of care
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.soc_date
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Discharged date
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.discharged_date
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Zipcode
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.zipcode
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} City
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.city
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} State
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.state
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Street
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.street
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Suit/apt#
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.apartment_number
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Emergency Contact
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.emergency_contact
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Emergency Contact phone
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        = @patient.emergency_contact_phone
+                .form-group
+                  %label.col-sm-2.form-label{:for => ""} Insurances
+                  .col-sm-10
+                    %label{:for => ""}
+                      %ul
+                        - insurance_companies = @patient.insurance_companies
+                        - if insurance_companies.any?
+                          - @patient.insurance_companies.each do |ic|
+                            %li= ic.name
+                        - else
+                          Patient doesn't have insurance companies 
+            .col-sm-1
+              .tools
+                .btn-group.pull-right
+                  - if can? :edit, Patient
+                    = link_to '', edit_patient_path(@patient) , class: 'pull-right btn btn-floating-action ink-reaction btn-primary btn-xs fa fa-edit'
+  - if @patient_forms_data && @patient_forms_data.any?
+    .row
+      .col-md-12
+        .card.card-underline.table-no-border
+          .card-head
+            %ul.nav.nav-tabs{"data-toggle" => "tabs"}
+              - @patient_forms_data.each_with_index do |form, i|
+                - if form.custom_form.permissions["#{current_user.role.short_name}"][action_name] == '1'
+                  %li{class: ('active' if i == 0)}
+                    %a{:href => "##{i}nth"} 
+                      = form.custom_form.title
+          .card-body.tab-content
+            - activated = false
+            - @patient_forms_data.each_with_index do |form, i|
+              - if form.custom_form.permissions["#{ current_user.role.short_name }"][action_name] == '1'
+                .tab-pane{id: "#{i}nth", class: "#{ 'active' unless activated }"}
+                  - activated = true
+                  = render partial: 'custom_forms/form_data/view/form', locals: {form: form}
+  - else
+    .card-body.tab-content
+      %h1.profile-empty No information available

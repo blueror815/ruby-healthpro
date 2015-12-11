@@ -1,0 +1,49 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title Reimbursement
+    .modal-body
+      = form_for @reimbursement_timesheet, remote: true do |f|
+        = f.hidden_field :user_id
+        = f.hidden_field :timesheet_id
+        = f.hidden_field :progress_state
+        = hidden_field_tag :timesheet_id , @timesheet_id if @timesheet_id
+
+        #reimbursement_timesheet-errors
+          = render "reimbursement_timesheets/errors", errors: @reimbursement_timesheet.errors
+
+        .form-horizontal
+          .form-group
+            = f.label "Type", class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.select :reimbursement_id, options_from_collection_for_select(Reimbursement.timesheet_allowables, :id, :title, @reimbursement_timesheet.reimbursement_id), {:include_blank => true}, {class: "form-control", onchange: 'get_dependant_data(this)'}
+              .form-control-line
+          .form-group
+            = f.label :amount, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.number_field :action_count, class: 'form-control'
+              .form-control-line
+          .form-group.hide
+            = f.label :amount, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.number_field :amount, class: 'form-control numbers_only'
+              .form-control-line
+          .form-group
+            = f.label :note, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.text_field :note, class: 'form-control'
+              .form-control-line
+
+        .card-actionbar
+          .deactivate-btn.card-title
+          = f.submit "Save", class: 'save-form btn btn-info pull-right'
+
+:javascript
+  $(".numbers_only").numeric()
+  $("#reimbursement_timesheet_reimbursement_id").change(function(){
+    $.ajax({
+      url: "/reimbursements/" + $(this).val(),
+      method: 'GET'
+    })
+  })

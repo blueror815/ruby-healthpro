@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @field_type.name
+
+= link_to 'Edit', edit_field_type_path(@field_type)
+\|
+= link_to 'Back', field_types_path

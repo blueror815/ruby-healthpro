@@ -1,0 +1,47 @@
+.card.card-underline
+  .card-head
+    %header.text-lg.text-primary
+      Summary
+    .tools
+      = link_to "", reports_bills_path(format: :xls, from: params[:from], to: params[:to], payment_state: params[:payment_state], export_summary: true, filter_type: params[:filter_type]), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'
+  .card-body
+    %table.table.table-condensed.text-xs#summary.bills-summary-datatable
+      %thead
+        %tr
+          %th{"colspan": "2"}= ""
+          %th.text-center{"colspan": "2", style: "border-top: solid rgb(230, 231, 231) 1px; "}= "#{params[:from]} - #{params[:to]}"
+        %tr
+          - if @summary_filter_keys.first != :claim_type
+            %th Claim Type
+            %th Payor
+          - else
+            %th Payor
+            %th Claim Type
+          %th.col-md-2 Amount
+          %th.col-md-2 Files No.
+      %tbody
+        - total_bill_count = 0
+        - @bills.each do |bill|
+          %tr
+            %td 
+              = bill[@summary_filter_keys.first]
+              %span
+                = number_to_currency @bills_summary[bill[@summary_filter_keys.first]][:amount]
+              %span
+                = @bills_summary[bill[@summary_filter_keys.first]][:count]
+            %td.text-right
+              = bill[@summary_filter_keys.last]
+            %td
+              = number_to_currency bill[:amount]
+            %td.individual-count.hover-red
+              - total_bill_count += bill[:count]
+              = bill[:count]
+        %tr
+          %td
+            Total
+            %span
+            %span
+          %td.text-right
+            Total
+          %td= number_to_currency(@bills.map{|s| s[:amount]}.reduce(:+).to_f.round(2).to_s)
+          %td#summary_total= total_bill_count

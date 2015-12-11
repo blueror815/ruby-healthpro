@@ -1,0 +1,16 @@
+= render partial: "users/show/header"
+%section{style: 'padding-left: 0; padding-right: 0;'}
+  .section-body.no-margin
+    .row
+      .col-md-7
+        - if @user_hr_forms_data && @user_hr_forms_data.any? || @hr_form_data.present?
+          = render partial: "users/show/forms"
+
+      .col-md-5
+        = render partial: "users/show/info"
+        - if can? :manage_payments, User or @user.id== current_user.id
+          = render partial: "users/show/rates"
+
+
+  - content_for :header_title do
+    = @user.display_name

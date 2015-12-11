@@ -1,0 +1,25 @@
+.card.card-underline
+  .card-head
+    %header.text-lg
+      User Information
+  .card-body
+    %dl.dl-horizontal.dl-edit
+      = dl_item user_form.text_field(:email, class: 'form-control text-xs'), "Email"
+      = dl_item user_form.text_field(:username, class: 'form-control text-xs'), "Username"
+      = dl_item user_form.select(:availability_ids, options_from_collection_for_select(Availability.all, :id, :name, @user.availability_ids), {}, { class: 'form-control text-xs', multiple: true }), "Availabilities"
+      = dl_item user_form.text_field(:display_name, class: 'form-control text-xs'), "Display name"
+      = dl_item user_form.text_field(:password, type: 'password', class: 'form-control text-xs'), "Password"
+      = dl_item user_form.text_field(:password_confirmation, type: 'password', class: 'form-control text-xs'), "Password Confirmaiton"
+
+      = dl_item user_form.select(:job_type_id, options_from_collection_for_select(JobType.order(:id), :id, :title, @user.job_type_id), { class: 'form-control text-xs' }), "Job"
+      = dl_item user_form.select(:role_id, options_from_collection_for_select(Role.all, :id, :name, @user.role_id),  { class: 'form-control text-xs' }), "Roles"
+      = dl_item user_form.select(:agency_ids, options_from_collection_for_select(Agency.all, :id, :name, @user.agency_ids), {}, { class: 'form-control text-xs', multiple: true }), "Agencies"
+      = dl_item user_form.select(:department_ids, options_from_collection_for_select(Department.all, :id, :name, @user.department_ids), {}, { class: 'form-control text-xs', multiple: true }), "Departments"
+      = dl_item user_form.select(:coverage_area_ids, options_from_collection_for_select(CoverageArea.all, :id, :name, @user.coverage_area_ids), {}, { class: 'form-control text-xs', multiple: true }), "Coverage areas"
+
+      - if @user.persisted?
+        - if @user.deactivated?
+          = dl_item link_to('Activate', activate_user_user_path(@user.id), method: :post, class: 'btn btn-primary'), "Status"
+        - else
+          = dl_item link_to('Deactivate', deactivate_user_user_path(@user.id), method: :post, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'), "Status"
+        = dl_item link_to('<i class="fa fa-key"></i>'.html_safe, user_reset_password_via_email_path(@user), method: :post , class: "btn btn-icon-toggle btn-lg"), 'Reset password'

@@ -1,0 +1,14 @@
+%ul.list-chats{id: "#{commentable.class.to_s.demodulize.downcase + '-comments'}"}
+  - if commentable.comments.any?
+    - commentable.comments.each do |comment|
+      %li{class: comment.user == current_user ? 'chat-left' : 'chat-right' }
+        .chat
+          .chat-avatar
+            = image_tag comment.user.image, alt: comment.user.display_name, title: comment.user.display_name
+          .chat-body
+            - if comment.user != current_user
+              %small
+                = comment.user.display_name.humanize + " Says:"
+            = comment.content
+            %small
+              = comment.created_at

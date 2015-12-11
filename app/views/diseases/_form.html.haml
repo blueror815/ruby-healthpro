@@ -1,0 +1,45 @@
+= form_for @disease do |f|
+  - if @disease.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@disease.errors.count, "error")} prohibited this disease from being saved:"
+      %ul
+        - @disease.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .actions
+    = f.submit 'Save'
+%section.section-body
+  / Your Page Content Here
+  = form_for @disease do |f|
+    .card.card-underline
+      .card-head
+        %header Disease
+      .card-body
+        .row
+          .col-md-12
+           
+            - if @disease.errors.any?
+              #error_explanation
+                .alert.alert-callout.alert-info.no-margin
+                  %h2= "#{pluralize(@disease.errors.count, "error")} prohibited this disease from being saved:"
+                  %ul
+                    - @disease.errors.full_messages.each do |msg|
+                      %li= msg
+            .row
+              .col-md-12
+                .form-horizontal
+                  .form-group
+                    = f.label :name, class: "col-sm-1 control-label"
+                    .col-sm-11
+                      = f.text_field :name, class: "form-control "
+                      .form-control-line
+      .card-actionbar
+        .card-actionbar-row
+          %a.btn.btn-default{href: diseases_path, class: "btn-default-bright"}
+            Back
+          = f.submit 'Save', class: "btn btn-primary"  
+
+= javascript_include_tag 'job_types'

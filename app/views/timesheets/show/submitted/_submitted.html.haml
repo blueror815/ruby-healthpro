@@ -1,0 +1,4 @@
+- if can? :admit, Timesheet
+  = render  "timesheets/show/submitted/admittor/activities", visits: @pending_visits.to_a + @approved_visits.to_a + @rejected_visits.to_a, hours: @pending_hours.to_a + @approved_hours.to_a + @rejected_hours.to_a, on_calls_line_items: @pending_on_calls.to_a + @approved_on_calls.to_a + @rejected_on_calls.to_a, reimbursement_timesheets_line_items: @pending_reimb.to_a + @approved_reimb.to_a + @rejected_reimb.to_a
+- else
+  = render "timesheets/show/submitted/owner/activities", visits: @pending_visits + @approved_visits + @rejected_visits, hours: @pending_hours + @approved_hours + @rejected_hours, on_calls_line_items: @pending_on_calls + @approved_on_calls + @rejected_on_calls.to_a, reimbursement_timesheets_line_items: @pending_reimb + @approved_reimb + @rejected_reimb.to_a

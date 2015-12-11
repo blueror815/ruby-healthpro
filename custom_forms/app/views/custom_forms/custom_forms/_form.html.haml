@@ -1,0 +1,73 @@
+= form_for @custom_form do |f|
+  - if @custom_form.errors.any?
+    #error_explanation
+      .alert.alert-callout.alert-error.no-margin
+        %h2= "#{pluralize(@custom_form.errors.count, "error")} prohibited this form from being saved:"
+        %ul
+          - @custom_form.errors.full_messages.each do |msg|
+            %li= msg
+  = hidden_field_tag :redirect_path, @redirect_path
+  .card.card-underline
+    .card-head
+      %header.text-lg
+        Details
+    .card-body
+      .form-horizontal
+        .form-group
+          %label.col-sm-2.control-label{:for => ""}
+            Name
+          .col-sm-10
+            = f.text_field :title, class: 'form-control char_count'
+            .form-control-line
+        .form-group
+          %label.col-sm-2.control-label{:for => ""}
+            Form Category
+          .col-sm-10
+            = f.select :form_category_id, options_from_collection_for_select(FormCategory.all, :id, :name, @custom_form.form_category_id), {include_blank: true}, class: "form-control"
+            .form-control-line
+        .form-group
+          %label.col-sm-2.control-label{:for => ""}
+            Allow Comments
+          .col-sm-10
+            .checkbox.checkbox-styled
+              %label
+                = f.check_box :allow_comments
+            .form-control-line
+
+        .form-group
+          %label.col-sm-2.control-label{:for => ""}
+            Permissions
+          .col-sm-10
+            %table.datatable.table.table-bordered.table.table-hover.dataTable.no-footer
+              %thead
+                %tr
+                  %th Roles
+                  %th.text-center Create
+                  %th.text-center Edit
+                  %th.text-center View
+              %tbody
+                - @user_roles.each_with_index do |user_role, index|
+                  %tr.text-sm
+                    %td= user_role
+                    = f.fields_for "permissions[#{user_role}]", OpenStruct.new(@custom_form.permissions[user_role]) do |permission|
+                      - @user_abilities.each do |ability|
+                        %td.text-center
+                          .checkbox.checkbox-styled
+                            %label
+                              = permission.check_box ability
+            .form-control-line
+  = f.fields_for :form_sections, @custom_form.form_sections do |sections_form|
+    = render 'section_fields' , f: sections_form
+
+
+  .row
+    .col-md-12
+      = link_to_add_fields "Add Section", f, :form_sections, "section_fields", 'form_sections', 'add-section-btn'
+
+
+
+
+  - content_for :footer do
+    = section_submit_action "Submit", f.options[:html][:id]
+    = section_action "reply", custom_forms_path, "Schemas"
+

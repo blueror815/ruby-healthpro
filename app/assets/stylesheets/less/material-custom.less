@@ -1,0 +1,742 @@
+.hover-red:hover {
+  color: #FD6464;
+}
+
+.overlay_div_component{
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(255, 255,255, 0.2);
+  z-index: 99999999999;
+  cursor: not-allowed;
+}
+
+.overlay_button{
+  width:100%;
+  height:100%;
+  background: rgba(255, 255,255, 0.2);
+  z-index: 99999999999;
+  cursor: not-allowed; 
+}
+
+#new_bill_row{
+  position:relative;  
+}
+
+body {
+  font-size: 14px !important;
+}
+.mini_datetime_select div.select2-container{
+    display:inline-block !important;
+    width: 15% !important;
+}
+
+@font-face {
+  font-family: "Exo";
+  src: font-url('Exo-Regular.otf') format('opentype');
+}
+
+header#header {
+  position: fixed;
+  width: 100%;
+  left: 64px;
+  right: auto;
+  background: #0B80C1;
+}
+
+li.header-title-container {
+  margin-top: 3px;
+  margin-left: 10px;
+  color: #FFF;
+}
+
+.text-accent {
+  color: #FD6464 !important;
+}
+
+.card-head  header {
+  font-family: "Exo";
+  font-weight: bold;
+}
+
+#main-menu li a span{
+  font-family: "Exo";
+}
+
+
+.font-exo{
+  font-family: "Exo";
+}
+
+.form-control {
+  font-size: 14px !important;
+}
+
+.card-head{
+  padding-top: 8px;
+}
+a.fa{
+  /*padding-top: 7px;*/
+}
+a.fa{
+  padding-top: 7px;
+}
+
+.unbilled-visits tbody tr  a.btn-icon-toggle i{
+  opacity:0;
+}
+
+.unbilled-visits tbody tr:hover a.btn-icon-toggle i{
+  opacity:1;
+
+}
+
+.form-group > label,
+.form-group .control-label {
+  font-size: 14px !important;
+}
+
+ul.gui-controls{
+  margin-bottom: 70px !important;
+  }
+
+table.unbilled-visits tbody td {
+  padding: 7px 10px 6px 10px;
+}
+.bill-sheet tbody tr td a.close-icon{
+  opacity:0;
+  margin-right: 2px;
+  cursor:pointer;
+}
+
+.bill-sheet tbody tr:hover td a.close-icon{
+  opacity:1;
+}
+
+.table-no-border td{
+  border-top:0 !important;
+}
+.profile-pic-col{
+    border-right: 1px solid #eee;
+    img{
+      margin: 0 auto;
+    }
+}
+
+.btn-add{
+    padding: 11px 14px;
+    margin-bottom: 15px;
+}
+
+.btn-save{
+  margin-bottom: 15px;
+}
+
+.text-center {
+  input[type="file"]{
+    margin: 0 auto;
+  }
+}
+
+.add-form-profile-btn{
+  margin: 10px 0;
+}
+
+.card{
+  .alert{
+    a.btn{
+      margin-left: 5px;
+    }
+  }
+}
+
+.people-table{
+  img.people-photo{
+    width: 124px;
+    float: left;
+   
+  }
+
+  .truncate {
+    width: 124px;
+  }
+  .display-name{
+    float: left;
+  }
+  td.people-info{
+    vertical-align: top !important;
+    span{
+      display: block;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 24px;
+    }
+    a{
+      color: #2196f3;
+    }
+  }
+}
+.profile-img{
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.card-body h1.profile-empty {
+  text-align: center !important;
+}
+
+.alert-error {
+
+}
+
+.alert-callout.alert-notice:before {
+  
+}
+
+.head-remove-btn {
+  margin-left: 10px !important;
+  margin-top: 3px !important;
+}
+
+
+// modal animation display
+.modal{
+  .modal-content{
+    -webkit-animation: showSweetAlert 0.3s;
+    -moz-animation: showSweetAlert 0.3s;
+    animation: showSweetAlert 0.3s;
+  }
+}
+
+// updates
+
+.form-label {
+  color: @text-color;
+  padding-bottom: 5px;
+  text-align: right;
+}
+
+.deactivate-btn {
+  text-align: center;
+}
+
+
+.select2-search-choice-close:hover {
+  background: transparent !important;
+  text-decoration: none;
+
+}
+
+.select2-search-choice-close:before {
+  color:  #BDBDBD !important;
+}
+
+
+.select2-search-choice:hover{
+  border: 1px solid @brand-primary !important;
+  .select2-search-choice-close:before{
+    color:  @brand-primary !important;
+  }
+}
+
+
+.select2-search-choice {
+  border: 1px solid #E1E1E1 !important;
+  background: transparent !important;
+  color: black !important;
+}
+
+.add-section-btn{
+  /*margin-left: 10px;*/
+}
+
+
+
+.list-chats {
+  padding: 8px;
+  // background: #89C2E1;
+  border-radius: 2px;
+}
+
+.offcanvas .table {
+  border-bottom: 1px solid gray !important;
+  margin-bottom: 20px !important;
+}
+
+.checkbox,.checkbox-inline {
+  font-size: 12px;
+}
+
+.table-responsive {
+  overflow: hidden;
+}
+
+// Mixin for generating new styles
+.alert-styles(@color) {
+  #gradient > .vertical(@start-color: @color; @end-color: darken(@color, 7.5%));
+  border-color: darken(@color, 15%);
+}
+
+.alert-callout {
+  &.alert-primary:before {
+    background: @brand-primary;
+  }
+} 
+
+
+.table tr:first-child td {
+  border-top: none;
+}
+
+.inner-table {
+  background-color: transparent !important;
+  tr {
+    padding: 2px 8px !important;
+    border-top: 0px !important;
+    td{
+      padding: 2px 8px !important;
+      border-top: 0px !important;
+    }
+  }
+}
+
+table .condensed-table{
+  thead th, tbody td{
+    font-size: 14px; 
+    padding: 5px 5px;
+  }
+}
+
+.form-control.input-xs{
+  height: 24px;
+  padding: 0 0;
+  border-radius: 0px;
+  font-size: 1em;
+}
+
+.rates-table th, .rates-table td { 
+  border-top: none !important; 
+}
+
+.boolean-field{
+  top:  0.7em;
+  position: relative;
+}
+
+.dl-edit dt {
+  margin-top: 7px !important;
+}
+
+.dl-edit .btn-danger {
+  margin-top: 5px;
+}
+
+.dl-horizontal dt {
+  color: #969a9c !important; 
+}
+
+.style-primary .tools {
+  margin-right: 10px;
+}
+
+.style-primary .select2-container.form-control {
+  padding: 0px 5px;
+  width: 200px;
+}
+
+.style-primary .select2-container.form-control a {
+  color: #fff !important;
+}
+
+.select2-dropdown-open .select2-choice {
+  background: transparent !important;
+}
+
+ul.style-default-light {
+  background:transparent !important; //new update................
+}
+
+.tab-content .tab-pane .dl-horizontal dd .hide-overflow {
+  width: 70%;
+  overflow: hidden;
+  
+}
+
+
+.multiple-instances{
+  width: 50px !important;
+}
+
+.trunc-hover-show {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.trunc-hover-show:hover {
+    overflow: visible;
+}
+
+
+.table-inline-form{
+  margin-bottom: 0px !important;
+}
+//..............................datepicker..............................
+
+.date {
+  position: relative !important;
+}
+
+#ui-datepicker-div {
+  border: #ccc 1px solid;
+  box-shadow: 0 1px 2px 0px #B5B5B5;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+  border:none !important;
+  background: none !important;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 30px;
+  line-height: 23px;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default:hover {
+  color: #0b80c1;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight {
+  color: #fff;
+  background: #0b80c1 !important;
+}
+
+.ui-widget-header {
+  background: none !important;
+  color: #0b80c1;
+  border:none !important;
+}
+
+.ui-datepicker th {
+  color: #98999A; 
+  font-weight: normal !important;
+}
+
+.ui-icon, .ui-widget-content .ui-icon {
+  background: none !important;
+}
+
+.ui-icon.ui-icon-circle-triangle-e:after {
+  font-family: "FontAwsome";
+  color: black;
+  content: "\f061";
+}
+//................................buttons...................................
+.dt-button {
+  box-shadow: 1px 1px 2px #B0B0B0;
+  margin-right: 10px;
+  text-align: center !important;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none !important;
+  padding: 5px;
+}
+
+.dt-button:hover {
+  color: #0b80c1;
+}
+
+.card-head .select2-container.form-control {
+  border: none;
+}
+
+.btn-accent {
+  background-color: #FD6464 !important;
+  border-color:#FD6464 !important; 
+}
+
+.btn-accent:hover {
+  background-color: #E15050 !important;
+  border-color: #E15050 !important;
+}
+
+//.............................footer.........................
+.full-content .section-action {
+  left: 0 !important;
+  background: #fff !important;
+  z-index: 2222;
+}
+
+//...........................sidebar.........................
+#menubar.menubar-inverse:before {
+  background: #083852 !important;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  border-bottom: none;
+  }
+#menubar .menubar-scroll-panel {
+  min-height: 0;
+}
+
+.offcanvas-pane .dt-buttons {
+  float: left;
+}
+
+//..........................pluse1 btn.........................
+.pulse1 {
+  -webkit-animation: pulse1 1s linear infinite;
+  -moz-animation: pulse1 1s linear infinite;
+  -ms-animation: pulse1 1s linear infinite;
+  animation: pulse1 1s linear infinite;
+}
+
+@keyframes "pulse1" {
+ 0% {
+    color: rgba(11, 128, 193, 1);
+ }
+ 90% {
+    color: rgba(43,171,242,0.0);
+ }
+ 100% {
+    color: rgba(43,171,242,1.0);
+ }
+}
+
+ @-moz-keyframes "pulse1" {
+ 0% {
+   color: rgba(11, 128, 193, 1);
+ }
+ 90% {
+   color: rgba(43,171,242,0.0);
+ }
+ 100% {
+   color: rgba(43,171,242,1.0);
+ }
+
+}
+
+@-webkit-keyframes "pulse1" {
+ 0% {
+   color: rgba(11, 128, 193, 1);
+ }
+ 90% {
+   color: rgba(43,171,242,0.0);
+ }
+ 100% {
+   color: rgba(43,171,242,1.0);
+ }
+
+}
+
+@-ms-keyframes "pulse1" {
+ 0% {
+   color: rgba(11, 128, 193, 1);
+ }
+ 90% {
+   color: rgba(43,171,242,0.0);
+ }
+ 100% {
+   color: rgba(43,171,242,1.0);
+ }
+
+}
+//..............datatable.......................
+
+.bills-summary-datatable tbody tr:hover {
+  cursor: pointer !important;
+  background-color: #D0EEFF !important;
+}
+
+.menubar-pin #menubar {
+  width: 250px;
+}
+
+table.dataTable tbody td {
+  font-size: 14px;
+}
+
+form#new_bill table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+form#new_bill table input[type='text'] {
+  border: none;
+  width: 100%;
+}
+
+form#new_bill table thead tr th {
+  padding-bottom: 10px;
+}
+
+form#new_bill table tbody {
+  margin-bottom: 0px;
+  border-top: 2px solid rgba(189, 192, 193, 0.2);
+  border-bottom: 2px solid rgba(189, 192, 193, 0.2);
+}
+
+form#new_bill table tbody tr td:last-of-type {
+  text-align: right;
+}
+
+form#new_bill table .select2-container .select2-choice .select2-arrow {
+  margin-right: 20px;
+}
+
+form#new_bill input[type='submit'] {
+  margin-top: 10px;
+}
+
+.gui-controls li.gui-folder > a .title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+#menubar:before {
+  background: transparent;
+}
+
+.gui-controls > li ul > li > a:active,
+.gui-controls > li ul > li > a.active {
+  background: #EEE;
+}
+
+.collapsed-group, .expanded-group{
+  cursor: pointer;
+  font-weight: 700;
+}
+.collapsed-group:before {
+  content: '\f101 ';
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 5px;
+  bottom: 2px;
+  position: relative;
+}
+.expanded-group:before {
+  content: '\f103 ';
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 5px;
+  bottom: 2px;
+  position: relative;
+  
+}
+
+.payment-rates .dl-horizontal {
+  margin-bottom: 0;
+}
+
+.payment-rates .dl-horizontal input.form-control {
+  height: 37px
+}
+
+dl.dl-horizontal dd input[type="file"],
+dl.dl-horizontal dd .checkbox {
+  margin-top: 10px;
+}
+
+.select2-container {
+  border-bottom: 1px solid #E2E2E2;
+}
+.menubar-fixed-panel > div {
+  padding: 0;
+}
+
+#logo img {
+  float: right;
+  margin-right: 20px;
+}
+
+.menubar-toggle {
+  margin-left: 15px;
+}
+
+#footer-copyright {
+  padding-left: 20px;
+}
+
+#footer-copyright span {
+  color: #C8C8C8;
+}
+
+body.menubar-pin #header {
+  left: 0 !important;
+}
+
+
+
+#notification-panel i.fa {
+  color: #FFF;
+}
+
+li.dropdown .profile-info {
+  color: #FFF;
+}
+
+li.dropdown.open .profile-info {
+  color: #000;
+}
+
+body.menubar-pin .menubar-first #header {
+  left: 0;
+  padding-left: 10px;
+}
+
+
+.header-nav-profile .dropdown > a:after {
+  color: #FFF;
+}
+
+.btn-floating-action.btn-lg {
+  line-height: 42px;
+}
+
+#back-button {
+  margin-right: 10px;
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+.people-table img.people-photo {
+  height: 124px;
+}
+
+#new_bill td {
+  vertical-align: inherit;
+}
+
+@media (max-width: 1367px) {
+  .dl-horizontal dt {
+    width: 100%;
+    float: left;
+    text-align: left;
+  }
+
+  .dl-horizontal dd {
+    margin-left: 0;
+  }
+}
+
+#s2id_claim-type {
+  display: block !important;
+}
+
+#new_bill input,
+#new_bill textarea,
+#new_bill .select2-container {
+  width: 100% !important;
+}
+  
+.payroll_statistics_links a {
+  background-color: #0b80c1;
+  color: #FFF;
+  padding: 5px 10px;
+  margin-right: 10px;
+}

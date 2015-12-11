@@ -1,0 +1,13 @@
+.input-group
+  - rs = v.reimbursements_visits.sort_by { |v| v.reimbursement.id }
+  - rs.each do |r|
+    .row
+      - if r.action_count > 0
+        
+        %span.input-group-addon.text-xs
+          - if r.reimbursement.value_type == 1
+            = r.reimbursement.title
+          - else
+            = "#{r.reimbursement.title} x#{r.action_count}"
+        .input-group-content
+          = r.comment             

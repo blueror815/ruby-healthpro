@@ -1,0 +1,11 @@
+- input_mask = nil
+- if field.field_type.input_mask
+  - input_mask = field.field_type.try(:input_mask)
+  - field_class = "#{ f.object_name.parameterize }-#{ field.id }"
+  = f.text_field field.id , class: "form-control #{ field_class }"
+  :javascript
+    $('.#{ field_class }').inputmask("#{ input_mask }");
+- else
+  = f.text_field field.id , class: "form-control"
+  .help-block
+    = input_mask

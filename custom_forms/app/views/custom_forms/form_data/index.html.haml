@@ -1,0 +1,19 @@
+%h1 Listing form_data
+%section.content
+  .row
+    .col-md-12
+      %h3.box-title Form Types
+    .box-body
+      %table#form_types.table.table-bordered.table-striped
+        %thead
+          %tr
+            %th form
+            %th Controls
+        - current_user.form_data.includes(:custom_form).each do |form_datum|
+          %tr
+            %td= form_datum.custom_form.try(:title)
+            %td.text-center
+              = link_to 'Edit', edit_custom_form_form_datum_path(@custom_form, form_datum)
+              = link_to 'Show', custom_form_form_datum_path(@custom_form, form_datum)
+= link_to 'New Form datum', new_custom_form_form_datum_path(@custom_form)
+

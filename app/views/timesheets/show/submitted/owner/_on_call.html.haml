@@ -1,0 +1,26 @@
+.card
+  .card-head
+    %header.text-lg
+      On Call
+    - if @timesheet.user == current_user and @timesheet.state == "created"
+      .tools
+        = link_to new_on_call_path(user_id: current_user.id, timesheet_id: @timesheet.id, progress_state: 'pending') , class: 'pull-right btn btn-floating-action ink-reaction btn-info btn-xs', "data-remote":"true" do 
+          %i.fa.fa-plus
+  .card-body#on_call_table
+    - if on_calls_line_items and !on_calls_line_items.empty?
+      %table#unbilled-visits-datatable.table.table-condensed.text-sm{"cellspacing":"0"}
+        %thead 
+          %tr
+            %th.col-md-1 State
+            %th.col-md-2 Date
+            %th.col-md-6 Notes
+            %th.col-md-1.text-right Actions
+        %tbody
+          - on_calls_line_items.map(&:payable).each do |on_call|
+            %tr
+              = render "timesheets/show/submitted/owner/on_call_row", on_call: on_call
+    - else
+      Click (+) to log On Call entries to this timesheet
+
+
+

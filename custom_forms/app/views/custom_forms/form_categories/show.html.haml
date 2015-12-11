@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @form_category.name
+
+= link_to 'Edit', edit_form_category_path(@form_category)
+\|
+= link_to 'Back', form_categories_path

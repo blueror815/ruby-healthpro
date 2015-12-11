@@ -1,0 +1,10 @@
+%dl.dl-horizontal
+
+  %dt Date
+  %dd=  v.date.strftime("%e, %b, %y") if v.date 
+
+  %dt Time In
+  %dd=  v.time_in.strftime('%H:%m %p') if v.time_in 
+
+  %dt Time Out
+  %dd=  v.time_out.strftime('%H:%m %p') if v.time_out

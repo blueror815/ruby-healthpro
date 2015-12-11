@@ -1,0 +1,25 @@
+= form_for @reimbursement_timesheet do |f|
+  - if @reimbursement_timesheet.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@reimbursement_timesheet.errors.count, "error")} prohibited this reimbursement_timesheet from being saved:"
+      %ul
+        - @reimbursement_timesheet.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :reimbursement_id
+    = f.number_field :reimbursement_id
+  .field
+    = f.label :timesheet_id
+    = f.number_field :timesheet_id
+  .field
+    = f.label :progress_state
+    = f.text_field :progress_state
+  .field
+    = f.label :action_count
+    = f.number_field :action_count
+  .field
+    = f.label :comment
+    = f.text_field :comment
+  .actions
+    = f.submit 'Save'

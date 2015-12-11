@@ -1,0 +1,35 @@
+- form_id = "permissions-form"
+= form_tag submission_path, :method => :put, :id => form_id do
+  .row
+    .col-md-12
+      .card.card-underline
+        .card-head
+          %header.text-xl 
+            People Permissions
+        .card-body
+          .table-responsive
+            %table.table.table-hover#people-datatable
+              %thead
+                %tr
+                  %th.text-md Name
+                  - @permissions.each do |permission|
+                    %th.text-md= permission.action_name.humanize
+              %tbody
+                - @roles.where('name != ?', 'admin').each do |role|
+                  = fields_for "roles[#{role.id}]", OpenStruct.new(@roles_permissions[role.id.to_s]) do |f|
+                    %tr.text-sm
+                      %td
+                        = role.name
+                      - @permissions.each do |permission|
+                        %td
+                          .checkbox.checkbox-styled
+                            %label
+                              = f.check_box permission.id
+  .style-primary
+    - content_for :footer do
+      = section_submit_action "Submit", form_id
+      
+:javascript
+  $(function(){
+    $("#people-datatable").DataTable({});
+  });

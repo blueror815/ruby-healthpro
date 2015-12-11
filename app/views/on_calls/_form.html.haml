@@ -1,0 +1,18 @@
+= form_for @on_call do |f|
+  - if @on_call.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@on_call.errors.count, "error")} prohibited this on_call from being saved:"
+      %ul
+        - @on_call.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :date
+    = f.datetime_select :date
+  .field
+    = f.label :note
+    = f.text_field :note
+  .actions
+    = f.submit 'Save'
+
+

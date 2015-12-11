@@ -1,0 +1,4 @@
+class ChangePaymentRatesPriceDefaultValue < ActiveRecord::Migration
+  def change
+  end
+end

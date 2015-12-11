@@ -1,0 +1,2 @@
+$("#{'#' + get_commentable_id(@comment.commentable) + '-comments'}").replaceWith("#{j render(partial: 'comments/comments', locals: {commentable: @comment.commentable}) }");
+$("#{'#' + get_commentable_id(@comment.commentable) + '-comments-form textarea' }").val('');

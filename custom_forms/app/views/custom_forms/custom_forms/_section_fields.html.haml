@@ -1,0 +1,82 @@
+.card.card-underline
+  .card-head
+    %header
+      = f.hidden_field :_destroy, { class: 'destroy-field', value: false }
+      = f.hidden_field :id
+      = f.text_field :title, placeholder: 'Section name', class: 'form-control'
+    .tools
+      .btn-group
+        %a.btn.btn-floating-action.ink-reaction.btn-info.btn-xs.fa.fa-gear{"data-target" => "#edit-section#{f.object_name.parameterize}", "data-toggle" => "modal", onclick: 'event.preventDefault();'}
+        = link_to_remove_section_field '<i class="fa fa-trash-o"></i>'.html_safe, '.card.card-underline'
+        = link_to '', form_section_path(f.object.id || 0), method: :delete, remote: :true, class: 'hide'
+
+  .card-body
+    .clearfix
+    .box-body
+      %table.table.table-no-border.fields-table
+        %tr
+          %th{:style => "width: 35%"} Field
+          %th{:style => "width: 35%"} Alias
+          %th{:style => "width: 35%"} Required
+          %th{:style => "width: 35%"} Display
+          %th{:style => "width: 15%"} Controls
+        - fields = f.object.section_fields.any? ? f.object.section_fields : f.object.section_fields.build
+        = f.fields_for :section_fields, fields do |field|
+          = render 'fields', f: field
+    / /.box-body
+    .card-actionbar
+      .card-actionbar-row
+        = link_to_add_fields "Add field",f , :section_fields, "fields", 'section_fields'
+  .modal{id: "edit-section#{f.object_name.parameterize}"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} &times;
+          %h4.modal-title Edit Field
+        .modal-body
+          %table.table.table-bordered
+            %thead
+              %tr
+                %th Roles
+                %th.text-center Create
+                %th.text-center Edit
+                %th.text-center View
+            %tbody
+              - @user_roles.each_with_index do |user_role, index|
+                %tr
+                  %td= user_role
+                  = f.fields_for "permissions[#{user_role}]", OpenStruct.new(f.object.permissions[user_role]) do |permission|
+                    - @user_abilities.each do |ability|
+                      %td.text-center
+                        .checkbox.checkbox-styled
+                          %label
+                            = permission.check_box ability
+        .modal-footer
+          %button.btn.btn-default.pull-left{"data-dismiss" => "modal", :type => "button"} Close
+
+:javascript
+  $(function(){
+    update_order_fields();
+
+    $('.fields-table').bind('rowChange', function(event){
+      update_order_fields();
+    });
+
+    $('.fields-table').sortable({
+      axis: 'y',
+      items: '.field',
+      cursor: 'move',
+
+      stop: function(e, ui) {
+        update_order_fields();
+      }
+    });
+
+    function update_order_fields(){
+      $('.order-field').each(function(){
+        var position = $(this).parent().parent().prevAll('tr').length - 1;
+        $(this).val(position);
+      });
+    }
+  });

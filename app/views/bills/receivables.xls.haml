@@ -1,0 +1,122 @@
+!!! XML
+%Workbook{:xmlns => "urn:schemas-microsoft-com:office:spreadsheet", "xmlns:html" => "http://www.w3.org/TR/REC-html40", "xmlns:o" => "urn:schemas-microsoft-com:office:office", "xmlns:ss" => "urn:schemas-microsoft-com:office:spreadsheet", "xmlns:x" => "urn:schemas-microsoft-com:office:excel"}
+  %Worksheet{"ss:Name" => "receivables"}
+  - if !params[:export_summary] || params[:export_summary] == "true"
+    %table
+      %tr
+        %td
+        %td
+        %td Insurence company
+        %td Amount
+        %td 0-10 days
+        %td 11-20 days
+        %td 21-30 days
+        %td 31-60 days
+        %td 60+ days
+      - @bills.each do |claim, bills|
+        - bills_by_company = bills.group_by{ |bill| bill.insurance_company.try(:name) }
+        %tr
+          %td
+          %td
+            = claim
+          %td
+          %td
+            = number_to_currency bills.map(&:receivable_amount).reduce(:+)
+          %td
+            = interval_amount_sum(bills, 10, 0)
+          %td
+            = interval_amount_sum(bills, 20, 11)
+          %td
+            = interval_amount_sum(bills, 30, 21)
+          %td
+            = interval_amount_sum(bills, 60, 31)
+          %td
+            = number_to_currency bills.select{ |b| b.date < (params[:to] - 60.days) }.map(&:receivable_amount).reduce(:+)
+        - bills_by_company.each do |company, records|
+          %tr
+            %td
+            %td
+            %td
+              = company
+            %td
+              = number_to_currency records.map(&:receivable_amount).reduce(:+).to_f
+            %td
+              = interval_amount_sum(records, 10, 0)
+            %td
+              = interval_amount_sum(records, 20, 11)
+            %td
+              = interval_amount_sum(records, 30, 21)
+            %td
+              = interval_amount_sum(records, 60, 31)
+            %td
+              = number_to_currency records.select{ |b| b.date < (params[:to] - 60.days) }.map(&:receivable_amount).reduce(:+)
+      %tr
+        %td
+        %td Total
+        %td
+        %td
+          = number_to_currency @bills.values.flatten.map(&:receivable_amount).reduce(:+).to_f
+        %td 
+          = interval_amount_sum(@bills.values.flatten, 10, 0)
+        %td
+          = interval_amount_sum(@bills.values.flatten, 20, 11)
+        %td
+          = interval_amount_sum(@bills.values.flatten, 30, 21)
+        %td
+          = interval_amount_sum(@bills.values.flatten, 60, 31)
+        %td
+          = number_to_currency @bills.values.flatten.select{ |b| b.date < (params[:to] - 60.days) }.map(&:receivable_amount).reduce(:+)
+
+    %br
+    %br
+    %br
+  
+  - if !params[:export_summary] || params[:export_summary] == "false"
+    %table
+      %tr
+        %td
+          %date{"ss:Type" => "String"} ID
+        %td
+          %date{"ss:Type" => "String"} Start Date
+        %td
+          %date{"ss:Type" => "String"} End Date
+        %td
+          %date{"ss:Type" => "String"} Claim Type
+        %td
+          %date{"ss:Type" => "String"} Payor
+        %td
+          %date{"ss:Type" => "String"} Patient Name
+        %td
+          %date{"ss:Type" => "String"} Billed Amt.
+        %td
+          %date{"ss:Type" => "String"} Bill Date
+        %td
+          %date{"ss:Type" => "String"} Paid Amt.
+        %td
+          %date{"ss:Type" => "String"} Paid Date
+        %td
+          %date{"ss:Type" => "String"} Notes
+      - @bills.values.flatten.each do |bill|
+        %tr
+          %td
+            %date{"ss:Type" => "String"}= bill.id
+          %td
+            %date{"ss:Type" => "Number"}= bill.claim_start_date
+          %td
+            %date{"ss:Type" => "Number"}= bill.claim_end_date
+          %td
+            %date{"ss:Type" => "String"}= bill.claim_type.name
+          %td
+            %date{"ss:Type" => "String"}= bill.insurance_company.name
+          %td
+            %date{"ss:Type" => "String"}= bill.patient.display_name
+          %td
+            %date{"ss:Type" => "Number"}= bill.amount
+          %td
+            %date{"ss:Type" => "Number"}= bill.date
+          %td
+            %date{"ss:Type" => "Number"}= bill.paied_amount
+          %td
+            %date{"ss:Type" => "Number"}= bill.payment_date
+          %td
+            %date{"ss:Type" => "String"}= bill.note

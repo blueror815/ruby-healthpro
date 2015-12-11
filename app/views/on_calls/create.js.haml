@@ -1,0 +1,5 @@
+- if @on_call.errors.any?
+  $('#on_call-errors').html("#{escape_javascript(render('on_calls/errors', errors: @on_call.errors)).html_safe}")
+- else
+  $("#on_call_modal").modal('hide');
+  window.location.reload()

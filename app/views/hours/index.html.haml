@@ -1,0 +1,38 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover.people-table#myTable.display#hours-datatable
+          %thead
+            %tr
+              %th Progress state
+              %th Hours type
+              %th Date
+              %th Time in
+              %th Time out
+              %th Total Hours
+              %th Controls
+
+          %tbody
+            - @hours.each do |hour|
+              %tr
+                %td= hour.progress_state
+                %td= hour.hour_type_id
+                %td= date hour.date
+                %td= time hour.from
+                %td= time hour.to
+                %td= formated_time hour.hours      
+                %td.text-center
+                  = link_to '<i class="fa fa-eye"></i>'.html_safe, hour, class: "btn ink-reaction btn-icon-toggle btn-primary btn-xs"
+  
+  - content_for :footer do
+    - if can? :edit, Visit
+      = section_floating_action "plus", new_hour_path, "New hour path"
+
+  - content_for :header_title do 
+    Hours
+
+:javascript
+  $(function(){
+    $("#hours-datatable").DataTable({});
+  });

@@ -1,0 +1,25 @@
+:plain
+  option = $('select#custom_form_id').find('option').filter(':selected')[0]
+  $('select#custom_form_ids').find('option[value="' + $(option).val() + '"]').attr('selected','selected');
+  $(option).remove();
+
+  //item_count = parseInt($('#form-tabs li a').last().attr('href').replace(/[^\d.]/g, '')) + 1;
+
+  $('#form-tabs').append("#{j render 'users/edit/form_tab'}");
+
+  $("#form-panes").append("#{j render 'custom_forms/form_data/edit/new_form', user_forms_form: ActionView::Helpers::FormBuilder.new("user[form_data_attributes]", @form_datum, self, {index: params[:form_data_count]})}");
+
+  $("#form-tabs").on("click", "a", function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+  });
+
+  $('select').select2();
+
+  $('#form-tabs li a').last().tab('show');
+
+  $('#form-tabs').trigger('tabChange');
+  
+  $('#date input, .datePickerField').datepicker({
+    format: 'YYYY/MM/DD'
+  });

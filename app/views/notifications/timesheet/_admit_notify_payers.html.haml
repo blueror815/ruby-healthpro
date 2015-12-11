@@ -1,0 +1,10 @@
+= link_to main_app.mark_as_read_notifications_path(notification_ids: notifications.map(&:id), redirect_path: main_app.timesheets_path(:anchor => "admitted")) do
+  .notification-element
+    = image_tag notifications.first.senders.first.image, class: 'img-circle img-responsive pull-left width-1'
+    %span.text-primary= notifications.map{|notification| notification.senders.map(&:display_name)}.uniq.flatten.to_sentence
+    admitted 
+    %span.text-medium
+      = (notifications.count > 1 ? 'timesheets of ' : 'timesheet of ') + summurize(notifications.map{|notification| notification.notifiable.user.display_name}.flatten)
+    Click for more details.
+    %br
+    %span.opacity-50= notifications.first.updated_at

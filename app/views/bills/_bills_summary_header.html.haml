@@ -1,0 +1,6 @@
+.card.card-underline
+  .card-head
+    %header.text-lg.text-primary
+      Bills Summary
+    .tools
+      = link_to "", reports_bills_path(format: :xls, from: params[:from], to: params[:to]), class: 'btn btn-floating-action ink-reaction btn-accent btn-xs fa fa-download'

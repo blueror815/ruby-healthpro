@@ -1,0 +1,29 @@
+.card.card-collapsed
+  .card-head
+    %header.text-sm
+      Comments
+    .tools
+      %a.btn.btn-toggle-icon.btn-collapse
+        %i.fa.fa-angle-up
+  .card-body{style: "display:none;"}
+    .row
+      = render partial: 'comments/comments', locals: {commentable: commentable}
+    
+    
+
+    = form_for [commentable, ::Comment.new], html: {id: "#{get_commentable_id(commentable) + '-comments-form'}"}, remote: true do |f|
+      .row
+        .col-md-12
+          .text-md Add comment
+      .row
+        .col-md-12
+          = f.text_area :content, class: 'form-control autosize', :placeholder => "Leave a comment", rows: "4", required: true
+      .card-actionbar
+        .card-actionbar-row
+          = f.button 'Post comment', class: 'btn btn-primary'
+
+
+
+
+
+

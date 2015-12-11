@@ -1,0 +1,17 @@
+.card.card-underline
+  .card-head
+    %header.text-lg
+      User Information
+    / end .tools
+  / end .card-head
+  .card-body
+    %dl.dl-horizontal
+      = dl_item @user.email, "Email"
+      = dl_item @user.username, "Username"
+      = dl_item @user.job_type.try(:title).humanize, "Job"
+      = dl_item @user.role.try(:name).humanize, "Role"
+      = dl_item @user.availabilities.map(&:name).join(', '), "Availability"
+      = dl_item @user.deactivated? ? "Inactive" : "Active", "Status"
+      = dl_item @user.departments.map(&:name).join(', '), "Departments"
+      = dl_item @user.agencies.map(&:name).join(', '), "Agencies"
+      = dl_item @user.coverage_areas.map(&:name).join(', '), "Coverage Areas"

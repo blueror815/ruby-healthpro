@@ -1,0 +1,19 @@
+
+- editable = (v.user == current_user) and (@timesheet.state == "created") 
+- editable_class = editable ? "" : "form-control-static"
+
+
+= form_for v , class: "visit_form", remote: true do |builder|
+  %dl.dl-horizontal
+    %dt.text-default-light Date
+    %dd= builder.text_field :date, class: "form-control input-sm #{editable_class}"
+    %dt.text-default-light
+      Time In
+    %dd
+      = builder.time_field :time_in, class: "form-control time-input input-sm #{editable_class}"
+
+    %dt.text-default-light
+      Time Out
+    %dd
+      = builder.time_field :time_out, class: "form-control time-input input-sm #{editable_class}"
+

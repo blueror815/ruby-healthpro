@@ -1,0 +1,78 @@
+.card.card-underline
+  .card-head
+    %header.text-lg
+      Billsheet
+  .card-body
+    %table.table.table-hover.bill-sheet
+      %thead
+        %tr
+          %thead.text-left{:style=> "padding-left:29px"}
+            %th Item
+            %th.text-right Price ($)
+      %tbody
+        %tr 
+          %td.text-md Salary
+          %td.text-right= number_to_currency(@timesheet.user.fixed_salery)
+          - if @user_bonus
+            %tr
+              %td
+                .text-accent.text-md Bonus
+              %td.text-right= @user_bonus.payable.price
+        - if @admitted_visits
+          - if @admitted_visits.any?
+            %tr
+              %td
+                .text-accent.text-md Visits
+              %td.text-sm
+          - @admitted_visits.each do |visit|
+            %tr
+              %td.text-sm= link_to billed_visit_title(visit), main_app.visit_path(visit)
+              %td.text-right.text-sm= number_to_currency visit.total_price
+
+              
+        - if @admitted_hours 
+          - if @admitted_hours.any?
+            %tr
+              %td
+                .text-accent.text-md Hours 
+          - @admitted_hours.each do |hour|
+            %tr
+              %td.text-sm= link_to billed_hour_title(hour), main_app.hour_path(hour)
+              %td.text-right.text-sm= number_to_currency hour.total_price
+        - if @approved_on_calls 
+          - if @approved_on_calls.any?
+            %tr
+              %td
+                .text-accent.text-md On Call 
+              %td.text-sm= ""
+          - @approved_on_calls.each do |on_call|
+            %tr
+              %td.text-sm= on_call.payable.date.strftime("%Y/%m/%d")
+              %td.text-right.text-sm= number_to_currency(on_call.payable.user.on_call_price)
+              
+        - if @approved_reimb 
+          - if @approved_reimb.any?
+            %tr
+              %td
+                .text-accent.text-md Reimbursements 
+              %td= ""
+          - @approved_reimb.each do |reimb|
+            %tr
+              %td.text-sm= reimb.payable.reimbursement.title
+              %td.text-right.text-sm
+                = reimbursement_price(reimb)
+        %tr
+          %td
+            %strong.text-accent Total
+          %td
+        - total_price_hash = {}
+        - total_price_hash[:fixed_salery] = @timesheet.user.fixed_salery if @timesheet.user.fixed_salery
+        - total_price_hash[:visits] = @admitted_visits if @pending_visits
+        - total_price_hash[:hours] = @admitted_hours if @pending_hours      
+        - total_price_hash[:on_call] = @approved_on_calls if @pending_on_calls
+        - total_price_hash[:reimb] = @approved_reimb if @pending_reimb
+        - total_price_hash[:bonus] = @user_bonus.payable.price if @user_bonus
+        %tr
+          %td
+          %td.text-right
+            %strong.text-accent= number_to_currency calculate_total_price(total_price_hash)

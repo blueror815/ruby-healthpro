@@ -1,0 +1,50 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+      %h4#simpleModalLabel.modal-title Hours
+    .modal-body
+      = form_for @hour, remote:true do |f|
+        = f.hidden_field :assignee_id
+        = f.hidden_field :timesheet_id
+        = f.hidden_field :progress_state
+        = hidden_field_tag :timesheet_id , @timesheet_id if @timesheet_id
+        #hour-errors
+          = render "hours/errors", errors: @hour.errors
+
+        .form-horizontal
+          .form-group
+            = f.label :date, class: "col-sm-2 control-label"
+            .col-sm-10#date.date
+              = f.text_field :date, class: 'form-control', :value => Date.today
+              .form-control-line
+          .form-group
+            = f.label :hour_type, class: "col-sm-2 control-label"
+            .col-sm-10
+
+              = f.select :hour_type_id, options_from_collection_for_select(HourType.all, :id, :title,  HourType.all.empty? ? 0 : HourType.first.id), {:include_blank => true}, {class: "form-control", onchange: 'get_dependant_data(this)'}
+              .form-control-line
+          .form-group
+            = f.label :from, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.time_field :from, class: 'form-control time-mask', id: 'from-field'
+              .form-control-line
+          .form-group
+            = f.label :to, class: "col-sm-2 control-label"
+            .col-sm-10
+              = f.time_field :to, class: 'form-control time-mask', id: 'to-field'
+              .form-control-line
+          = f.fields_for :comments, @hour.comments.new do |comment|
+            = comment.hidden_field :user_id, value: current_user.id
+            .form-group
+              = comment.label :comment, class: "col-sm-2 control-label"
+              .col-sm-10
+                = comment.text_area :content, class: 'form-control ', placeholder: "Leave a comment", rows: "4"
+                .form-control-line
+        .card-actionbar
+          .deactivate-btn.card-title
+          = f.submit "Save", class: 'save-form btn btn-info pull-right'
+
+
+
+

@@ -1,0 +1,58 @@
+= form_for @hour do |f|
+  .card
+    .card-body
+      .row
+        .col-md-6
+          %table.table-no-border
+            %tr
+              %td.table-right-col
+                - if @hour.errors.any?
+                  #error_explanation
+                    .alert.alert-callout.alert-info.no-margin
+                      %h2= "#{pluralize(@hour.errors.count, "error")} prohibited this form from being saved:"
+                      %ul
+                        - @hour.errors.full_messages.each do |msg|
+                          %li= msg
+        .row
+          .col-md-12
+            .form-horizontal
+              .form-group
+                = f.label :hour_type, class: "col-sm-1 control-label text-md"
+                .col-sm-11
+                  = f.select :hour_type_id, options_from_collection_for_select(HourType.all, :id, :title, @hour.hour_type_id), {:include_blank => true}, {class: "form-control", onchange: 'get_dependant_data(this)'}
+                  .form-control-line
+              .form-group
+                = f.label :from, class: "col-sm-1 control-label text-md"
+                .col-sm-11
+                  = f.time_field :from, class: 'form-control time-mask', id: 'from-field'
+                  .form-control-line
+              .form-group
+                = f.label :to, class: "col-sm-1 control-label text-md"
+                .col-sm-11
+                  = f.time_field :to, class: 'form-control time-mask', id: 'to-field'
+                  .form-control-line
+              - if can? :administrate, Hour  
+                .form-group
+                  = f.label :assignee_id, class: "col-sm-1 control-label text-md"
+                  .col-sm-11
+                    = f.select :assignee_id, options_from_collection_for_select(User.all, :id, :display_name, @hour.assignee_id), {:include_blank => true}, {class: "form-control"}
+                    .form-control-line
+              - else
+                = f.hidden_field :assignee_id, value: current_user.id
+              .form-group
+                = f.label :date, class: "col-sm-1 control-label text-md"
+                .col-sm-11#date.input-group.date
+                  = f.text_field :date, class: 'form-control'
+                  .form-control-line
+              = f.fields_for :comments, @hour.comments.new do |comment|
+                = comment.hidden_field :user_id, value: current_user.id
+                .form-group
+                  = comment.label :comment, class: "col-sm-1 control-label text-md"
+                  .col-sm-11
+                    = comment.text_area :content, class: 'form-control col-sm-1', :placeholder => "Leave a comment", rows: "4"
+
+  - content_for :footer do
+    = section_submit_action "Submit", f.options[:html][:id]
+    = section_action "reply", hours_path, "Visit types"
+
+

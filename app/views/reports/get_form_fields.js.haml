@@ -1,0 +1,4 @@
+$("#field_type_ids").empty()
+- @field_types.each do |field_type|
+  $("#field_type_ids").append("<option value='#{field_type.id}'>#{field_type.humanized_name}</option>")
+$("#field_type_ids").select2("val", "");

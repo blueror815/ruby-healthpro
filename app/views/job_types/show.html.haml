@@ -1,0 +1,47 @@
+%section.content
+  / Your Page Content Here
+  .row
+    .col-md-12
+      / DIRECT CHAT SUCCESS
+      .box.box-success
+        .box-header.with-border
+          %h3.box-title Job Type
+          / .box-tools.pull-right
+          /   %button.btn.btn-box-tool{"data-widget" => "collapse"}
+          /     %i.fa.fa-minus
+          /   %button.btn.btn-box-tool{"data-widget" => "remove"}
+          /     %i.fa.fa-times
+        / /.box-header
+        .box-body
+          .row
+            .col-md-6
+              %table{style: 'width:100%'}
+                %tr
+                  %td.table-right-col
+                    %b job_class
+                  %td 
+                    = @job_type.job_class
+                %tr
+                  %td.table-right-col
+                    %b payment methods
+                  %td 
+                    = @job_type.payment_method_ids.map{|i| JobType::PAYMENT_METHODS[i]}.to_sentence
+                %tr
+                  %td.table-right-col
+                    = link_to 'Edit', edit_job_type_path(@job_type)
+                  %td 
+                    = link_to 'Back', job_types_path
+
+          .box-body
+            .row
+              .col-md-6 
+                %b Document Types 
+                %table
+                  %thead
+                    %tr
+                      %td name
+                  %tbody
+                    - @job_type.document_types.each do |dt|
+                      %tr
+                        %td= dt.document_name
+                = link_to 'New Document type', new_document_type_path(job_type_id: @job_type.id)

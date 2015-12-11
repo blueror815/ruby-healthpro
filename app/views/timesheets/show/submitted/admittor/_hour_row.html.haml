@@ -1,0 +1,21 @@
+%td= state_badge hour.progress_state
+%td= date hour.date
+%td= time hour.from
+%td= time hour.to
+%td= distance_of_time_in_words(hour.from, hour.to)
+%td= hour.try(:comments).try(:first).try(:content)
+%td.text-right
+  - if hour.progress_state == "pending"
+    %a.btn.btn-xs.text-success{href: update_task_state_path(id: @timesheet.id, task_id: [hour.id], state: 'approved', user_id: @timesheet.user.id, task_type: 'hour'), "data-remote": true}
+      %i.fa.fa-check
+
+    %a.btn.btn-xs.text-danger{href: update_task_state_path(id: @timesheet.id, task_id: [hour.id], state: 'rejected', user_id: @timesheet.user.id, task_type: 'hour'), "data-remote": true}
+      %i.fa.fa-times
+
+  - else
+    %a.btn.btn-xs.text-danger{href: update_task_state_path(id: @timesheet.id, task_id: [hour.id], state: 'pending', user_id: @timesheet.user.id, task_type: 'hour'), "data-remote": true}
+      %i.fa.fa-minus-circle
+
+  %a.btn.btn-xs.ink-reaction.text-primary{class: ("pulse1" unless hour.comments.empty?), href: "#offcanvas-hour-#{hour.id}-comments" , "data-toggle": "offcanvas", "data-backdrop": "false"}
+    %i.fa.fa-comment
+

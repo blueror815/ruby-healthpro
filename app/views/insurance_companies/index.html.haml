@@ -1,0 +1,14 @@
+.section-body
+  .card.card-underline
+    .card-body
+      .table-responsive
+        %table.table.table-hover#insurance-companies{"data-source" => insurance_companies_path(format: :json)}
+          %thead
+            %tr
+              %th Name
+              %th Description
+
+- content_for :header_title do
+  Insurance companies
+
+

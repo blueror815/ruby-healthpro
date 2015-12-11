@@ -1,0 +1,15 @@
+- template_dirs = [custom_forms.custom_forms_path, custom_forms.forms_path, custom_forms.form_categories_path]
+- if can? :read, JobType
+  %li.gui-folder
+    %a{:class => ('active' if request.path.match ".*(#{template_dirs.join '|'})" ) , :href => 'javascript:void'}
+      .gui-icon
+        %i.fa.fa-paperclip.fa-fw
+      %span.title Templates
+    %ul
+      - if can? :read, CustomForms::CustomForm
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: custom_forms.custom_forms_path, folder_item_title: 'Schemas'}
+      - if can? :read, CustomForms::FieldType
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: custom_forms.field_types_path, folder_item_title: 'Field Types'}
+      = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: custom_forms.forms_path, folder_item_title: 'Instances'}
+      - if can? :read, FormCategory
+        = render partial: 'layouts/sidebar_folder_item', locals: {folder_item_path: custom_forms.form_categories_path, folder_item_title: 'Categories'}
